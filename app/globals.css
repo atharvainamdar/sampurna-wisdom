@@ -1875,3 +1875,59 @@ button { cursor: pointer; }
     bottom: 4px !important;
   }
 }
+
+/* Readability and crisp video thumbnail fixes */
+.daily-reader,
+.daily-mode-block-read .daily-reader,
+.daily-reader.daily-inline-player {
+  font-weight: 400 !important;
+}
+.daily-reader p,
+.daily-mode-block-read .daily-reader p {
+  font-weight: 400 !important;
+  color: #27383d !important;
+}
+.daily-reader strong,
+.daily-reader b {
+  font-weight: 800 !important;
+}
+.daily-video-thumbnail {
+  position: relative;
+  width: min(900px, 100%);
+  aspect-ratio: 16 / 9;
+  margin: 0 auto;
+  overflow: hidden;
+  border-radius: 12px;
+  background: #0f201d;
+  box-shadow: 0 18px 42px rgba(10, 37, 31, .16);
+}
+.daily-video-thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: saturate(1.04) contrast(1.02);
+}
+.daily-video-play {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  display: grid;
+  place-items: center;
+  width: 76px;
+  height: 76px;
+  border-radius: 999px;
+  color: #fff;
+  background: linear-gradient(135deg, #e3241d, #c91410);
+  box-shadow: 0 16px 34px rgba(0,0,0,.24), inset 0 1px 0 rgba(255,255,255,.22);
+  transform: translate(-50%, -50%);
+}
+.daily-video-play svg { margin-left: 4px; }
+.daily-video-thumbnail::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgba(255,255,255,.22);
+  border-radius: inherit;
+  pointer-events: none;
+}

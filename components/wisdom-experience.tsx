@@ -192,8 +192,10 @@ function ModePanel({ post, mode, language, autoplay = false }: { post: WisdomPos
   }
   if (mode === 'watch') {
     const videoUrl = media.videoUrl || post.media.en.videoUrl;
-    const embed = getYouTubeEmbedUrl(videoUrl);
-    return <div className="daily-video-panel daily-inline-player">{embed ? <iframe src={autoplay ? autoplayEmbed(embed, true) : embed} title={post.title[language]} allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen /> : null}</div>;
+    const videoId = getYouTubeId(videoUrl);
+    if (!videoId) return <div className="daily-video-panel daily-inline-player" />;
+    const embed = getYouTubeEmbedUrl(videoId);
+    return <div className="daily-video-panel daily-inline-player">{autoplay ? <iframe src={autoplayEmbed(embed, true)} title={post.title[language]} allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen /> : <div className="daily-video-thumbnail" aria-label={post.title[language]}><Image src={getYouTubeThumbnailUrl(videoId)} alt={post.title[language]} width={1280} height={720} /><span className="daily-video-play"><Play size={34} fill="currentColor" /></span></div>}</div>;
   }
   if (mode === 'listen') {
     const audio = media.audioUrl || post.media.en.audioUrl;
@@ -206,8 +208,9 @@ function ModeCardPreview({ post, mode, language, isHovering }: { post: WisdomPos
   const media = post.media[language];
   if (mode === 'watch') {
     const videoUrl = media.videoUrl || post.media.en.videoUrl;
-    const embed = getYouTubeEmbedUrl(videoUrl);
-    return <span className="daily-card-preview daily-card-preview-video">{isHovering && embed ? <iframe src={autoplayEmbed(embed, true)} title={post.title[language]} allow="autoplay; encrypted-media; picture-in-picture" /> : <><Image src="/legacy-assets/ramesh-inamdar.jpg" alt="" width={320} height={180} /><span className="preview-play"><Play size={18} fill="currentColor" /></span></>}</span>;
+    const videoId = getYouTubeId(videoUrl);
+    const embed = videoId ? getYouTubeEmbedUrl(videoId) : null;
+    return <span className="daily-card-preview daily-card-preview-video">{isHovering && embed ? <iframe src={autoplayEmbed(embed, true)} title={post.title[language]} allow="autoplay; encrypted-media; picture-in-picture" /> : videoId ? <><Image src={getYouTubeThumbnailUrl(videoId)} alt="" width={320} height={180} /><span className="preview-play"><Play size={18} fill="currentColor" /></span></> : null}</span>;
   }
   if (mode === 'listen') {
     return <span className={`daily-card-preview daily-card-preview-audio ${isHovering ? 'is-hovering' : ''}`}><span className="waveform">{Array.from({ length: 22 }, (_, index) => <i key={index} />)}</span><span className="audio-line"><Play size={13} fill="currentColor" /> <b /> <small>12:45</small></span></span>;
@@ -268,10 +271,16 @@ function ReferenceFooter({ language }: { language: Language }) {
   return <footer className="reference-footer"><a href="https://fabselfhelp.com" target="_blank" rel="noreferrer"><Globe2 size={24} /><span>{copy.website[language]}<small>fabselfhelp.com</small></span></a><a href={`mailto:${BRAND.email}`}><Mail size={24} /><span>{copy.email[language]}<small>{BRAND.email}</small></span></a><a href={`https://wa.me/${BRAND.whatsapp}`} target="_blank" rel="noreferrer"><Phone size={24} /><span>{copy.contact[language]}<small>{BRAND.phone}</small></span></a></footer>;
 }
 
-function getYouTubeEmbedUrl(url?: string) {
-  if (!url) return null;
-  const id = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/|youtube\.com\/shorts\/)([^&?/]+)/)?.[1];
-  return id ? `https://www.youtube.com/embed/${id}?rel=0&modestbranding=1` : null;
+function getYouTubeId(url?: string) {
+  return url?.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/|youtube\.com\/shorts\/)([^&?/]+)/)?.[1] || null;
+}
+
+function getYouTubeEmbedUrl(id: string) {
+  return `https://www.youtube.com/embed/${id}?rel=0&modestbranding=1`;
+}
+
+function getYouTubeThumbnailUrl(id: string) {
+  return `https://i.ytimg.com/vi/${id}/maxresdefault.jpg`;
 }
 
 function autoplayEmbed(embed: string, muted = false) {
