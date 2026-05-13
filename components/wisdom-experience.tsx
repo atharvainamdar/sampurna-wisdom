@@ -100,8 +100,8 @@ function DailyContentPage({ language, posts, initialDate, initialMode, initialMo
   const modes: Mode[] = ['read', 'watch', 'listen', 'pdf'];
   const activeMode = initialMode && modes.includes(initialMode) ? initialMode : 'read';
   const currentMonth = monthStart(parseMonth(initialMonth) || parseDate(selectedDate));
+  const selectedMode = initialExpandedMode || activeMode;
   const [hoverMode, setHoverMode] = useState<Mode | null>(null);
-  const [expandedMode, setExpandedMode] = useState<Mode | null>(initialExpandedMode || null);
 
   return (
     <>
@@ -135,30 +135,30 @@ function DailyContentPage({ language, posts, initialDate, initialMode, initialMo
                   <h2>{selectedPost.title[language]}</h2>
                   <p>{selectedPost.excerpt[language]}</p>
                 </div>
-                <div className="daily-mode-tabs">
+                <div className="daily-mode-stack">
                   {modes.map((mode) => {
                     const meta = modeMeta[mode];
                     const Icon = meta.icon;
                     return (
-                      <Link
+                      <section
                         key={mode}
-                        className={`daily-mode-card daily-mode-card-${mode} ${expandedMode === mode || (!expandedMode && activeMode === mode) ? 'active' : ''}`}
-                        href={dailyHref(language, selectedDate, mode, monthKey(currentMonth))}
+                        className={`daily-mode-block daily-mode-block-${mode} ${selectedMode === mode ? 'active' : ''}`}
                         onMouseEnter={() => setHoverMode(mode)}
                         onMouseLeave={() => setHoverMode(null)}
                         onFocus={() => setHoverMode(mode)}
                         onBlur={() => setHoverMode(null)}
-                        onClick={() => setExpandedMode(mode)}
                       >
-                        <span className="daily-mode-icon"><Icon size={28} /></span>
-                        <span className="daily-mode-copy"><strong>{copy[meta.label][language]}</strong><small>{copy[meta.subtitle][language]}</small></span>
-                        <ModeCardPreview post={selectedPost} mode={mode} language={language} isHovering={hoverMode === mode} />
-                        <em>{copy[meta.action][language]} →</em>
-                      </Link>
+                        <Link className="daily-mode-block-head" href={dailyHref(language, selectedDate, mode, monthKey(currentMonth))}>
+                          <span className="daily-mode-icon"><Icon size={26} /></span>
+                          <span className="daily-mode-copy"><strong>{copy[meta.label][language]}</strong><small>{copy[meta.subtitle][language]}</small></span>
+                          <ModeCardPreview post={selectedPost} mode={mode} language={language} isHovering={hoverMode === mode} />
+                          <em>{copy[meta.action][language]} →</em>
+                        </Link>
+                        <ModePanel post={selectedPost} mode={mode} language={language} autoplay={false} />
+                      </section>
                     );
                   })}
                 </div>
-                <ModePanel post={selectedPost} mode={expandedMode || activeMode} language={language} autoplay={Boolean(expandedMode) || activeMode === 'watch' || activeMode === 'listen'} />
               </>
             ) : <LockedPanel language={language} hasPost={Boolean(selectedPost)} />}
           </article>
@@ -169,7 +169,7 @@ function DailyContentPage({ language, posts, initialDate, initialMode, initialMo
       <section className="daily-calendar-secondary" id="daily-calendar-secondary" aria-label={copy.calendarTitle[language]}>
         <a className="calendar-close" href="#daily-content">× Close</a>
         <div className="daily-calendar-secondary-head"><span>{copy.unlockNote[language]}</span><h2>{copy.calendarTitle[language]}</h2><p className="calendar-selected-date"><CalendarDays size={18} /> {new Date(`${selectedDate}T00:00:00`).toLocaleDateString(localeFor(language), { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</p><p>{copy.chooseDay[language]}</p></div>
-        <CalendarPanel language={language} postsByDate={postsByDate} selectedDate={selectedDate} currentMonth={currentMonth} activeMode={expandedMode || activeMode} />
+        <CalendarPanel language={language} postsByDate={postsByDate} selectedDate={selectedDate} currentMonth={currentMonth} activeMode={selectedMode} />
       </section>
     </>
   );
