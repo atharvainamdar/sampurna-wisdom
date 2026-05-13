@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
         return request.cookies.getAll();
       },
       setAll(cookiesToSet) {
-        cookiesToSet.forEach(({ name, value, options }) => response.cookies.set(name, value, { ...options, path: '/', secure: true, sameSite: 'lax' }));
+        cookiesToSet.forEach(({ name, value, options }) => response.cookies.set(name, value, { ...options, path: '/', secure: true, sameSite: 'none' }));
       },
     },
   });
@@ -49,7 +49,7 @@ export async function POST(request: NextRequest) {
       httpOnly: true,
       maxAge: data.session.expires_in,
       path: '/',
-      sameSite: 'lax',
+      sameSite: 'none',
       secure: true,
     });
   }
