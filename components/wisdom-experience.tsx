@@ -3,8 +3,8 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import { BookOpen, FlaskConical, Globe2, Headphones, Leaf, Mail, Menu, Phone, Play, Sprout, Video, type LucideIcon } from 'lucide-react';
+import { useMemo, useState } from 'react';
+import { BookOpen, FlaskConical, Globe2, Headphones, Leaf, Mail, Menu, Phone, Play, Search, Sprout, Video, type LucideIcon } from 'lucide-react';
 import { BRAND, HERITAGE_COPY, LANGUAGES, Language, LEGACY_ASSETS, PILLARS, TRUST_STATS, WisdomPost, getPillar } from '@/lib/content';
 import { localizedPath } from '@/lib/i18n';
 
@@ -52,6 +52,10 @@ const copy = {
   newsletter: { en: 'Get membership / updates', hi: 'सदस्यता / अपडेट प्राप्त करें', mr: 'सदस्यता घ्या / अपडेट मिळवा' },
   website: { en: 'Website', hi: 'वेबसाइट', mr: 'वेबसाईट' },
   email: { en: 'Email', hi: 'ईमेल', mr: 'ईमेल' },
+  aboutTitle: { en: 'About Sampurna Samruddhi Upasana', hi: 'संपूर्ण समृद्धि उपासना के बारे में', mr: 'संपूर्ण समृद्धी उपासना बद्दल' },
+  aboutSubtitle: { en: 'A simple mission: make complete prosperity wisdom available to every family.', hi: 'एक सरल मिशन: संपूर्ण समृद्धि का ज्ञान हर परिवार तक पहुँचाना।', mr: 'एक साधे ध्येय: संपूर्ण समृद्धीचे ज्ञान प्रत्येक कुटुंबापर्यंत पोहोचवणे.' },
+  search: { en: 'Search topics, health, money, fasting...', hi: 'विषय, आरोग्य, धन, उपवास खोजें...', mr: 'विषय, आरोग्य, धन, उपवास शोधा...' },
+  noAudio: { en: 'Audio files are being added. Until then, use the video and blog library.', hi: 'ऑडियो फाइलें जोड़ी जा रही हैं। तब तक वीडियो और ब्लॉग लाइब्रेरी देखें।', mr: 'ऑडिओ फाईल्स जोडल्या जात आहेत. तोपर्यंत व्हिडिओ आणि ब्लॉग लायब्ररी वापरा.' },
   contact: { en: 'Contact', hi: 'संपर्क', mr: 'संपर्क' },
 } satisfies Record<string, Record<Language, string>>;
 
@@ -59,14 +63,30 @@ const featureIcons = [FlaskConical, BookOpen, Sprout, Leaf];
 
 export function WisdomExperience({ focus, initialLanguage = 'mr', posts }: { focus: Focus; initialLanguage?: Language; posts: WisdomPost[] }) {
   const [language, setLanguage] = useState<Language>(initialLanguage);
-  const todayPost = posts[0];
-  const videoPost = posts[0];
-  const audioPost = posts[1] || posts[0];
-  const blogPost = posts[2] || posts[0];
+  const [query, setQuery] = useState('');
+  const visiblePosts = useMemo(() => searchPosts(posts, query, language), [posts, query, language]);
 
   return (
     <main className="reference-shell">
       <ReferenceHeader focus={focus} language={language} setLanguage={setLanguage} />
+      {focus === 'today' ? <HomePage language={language} posts={posts} /> : null}
+      {focus === 'library' ? <ArchivePage kind="video" language={language} query={query} setQuery={setQuery} posts={visiblePosts.filter((post) => hasVideo(post, language))} /> : null}
+      {focus === 'community' ? <ArchivePage kind="audio" language={language} query={query} setQuery={setQuery} posts={visiblePosts.filter((post) => hasAudio(post, language))} /> : null}
+      {focus === 'pillars' ? <ArchivePage kind="blog" language={language} query={query} setQuery={setQuery} posts={visiblePosts} /> : null}
+      {focus === 'about' ? <AboutPage language={language} /> : null}
+      <ReferenceFooter language={language} />
+    </main>
+  );
+}
+
+function HomePage({ language, posts }: { language: Language; posts: WisdomPost[] }) {
+  const todayPost = posts[0];
+  const videoPost = posts.find((post) => hasVideo(post, language)) || posts[0];
+  const audioPost = posts.find((post) => hasAudio(post, language)) || posts[1] || posts[0];
+  const blogPost = posts[2] || posts[0];
+
+  return (
+    <>
       <section className="reference-hero">
         <div className="hero-leaf"><Leaf size={28} /> {copy.eyebrow[language]}</div>
         <div className="reference-hero-copy">
@@ -82,54 +102,64 @@ export function WisdomExperience({ focus, initialLanguage = 'mr', posts }: { foc
             <Link href={`/${language}/library`} className="outline-cta">{copy.free[language]}</Link>
           </div>
         </div>
-        <div className="reference-founder-visual">
-          <div className="founder-photo-card">
-            <Image src="/legacy-assets/dad_photo.jpg" alt={copy.founderOne[language]} width={520} height={620} priority />
-            <Image src="/legacy-assets/mom_photo.jpg" alt={copy.founderTwo[language]} width={420} height={560} priority />
-          </div>
-          <div className="founder-name-strip">
-            <div><strong>{copy.founderOne[language]}</strong><span>({copy.founderOneRole[language]})</span></div>
-            <div><strong>{copy.founderTwo[language]}</strong><span>({copy.founderTwoRole[language]})</span></div>
-          </div>
-        </div>
+        <FounderVisual language={language} />
       </section>
 
       <section className="reference-free-section">
-        <div className="ornament-heading">
-          <span />
-          <div><h2>{copy.freeContent[language]}</h2><p>{copy.freeContentSub[language]}</p></div>
-          <span />
-        </div>
+        <SectionHeading title={copy.freeContent[language]} subtitle={copy.freeContentSub[language]} />
         <div className="content-category-grid">
-          <ContentCategory kind="video" icon={Video} language={language} title={copy.video[language]} subtitle={copy.videoSub[language]} post={videoPost} cta={copy.allVideos[language]} />
-          <ContentCategory kind="audio" icon={Headphones} language={language} title={copy.audio[language]} subtitle={copy.audioSub[language]} post={audioPost} cta={copy.allAudio[language]} />
-          <ContentCategory kind="blog" icon={BookOpen} language={language} title={copy.blog[language]} subtitle={copy.blogSub[language]} post={blogPost} cta={copy.allArticles[language]} />
+          <ContentCategory kind="video" icon={Video} language={language} title={copy.video[language]} subtitle={copy.videoSub[language]} post={videoPost} cta={copy.allVideos[language]} href={`/${language}/library`} />
+          <ContentCategory kind="audio" icon={Headphones} language={language} title={copy.audio[language]} subtitle={copy.audioSub[language]} post={audioPost} cta={copy.allAudio[language]} href={`/${language}/community`} />
+          <ContentCategory kind="blog" icon={BookOpen} language={language} title={copy.blog[language]} subtitle={copy.blogSub[language]} post={blogPost} cta={copy.allArticles[language]} href={`/${language}/pillars`} />
         </div>
       </section>
+      <FeatureRow language={language} />
+    </>
+  );
+}
 
-      <section className="reference-trust-row" aria-label={copy.features[language]}>
-        {[copy.featureScience, copy.featureSimple, copy.featureFree, copy.featureCare].map((item, index) => {
-          const Icon = featureIcons[index];
-          return <div key={item[language]}><Icon size={34} /><span>{item[language]}</span></div>;
-        })}
-      </section>
+function ArchivePage({ kind, language, query, setQuery, posts }: { kind: 'video' | 'audio' | 'blog'; language: Language; query: string; setQuery: (query: string) => void; posts: WisdomPost[] }) {
+  const title = kind === 'video' ? copy.video[language] : kind === 'audio' ? copy.audio[language] : copy.blog[language];
+  const subtitle = kind === 'video' ? copy.videoSub[language] : kind === 'audio' ? copy.audioSub[language] : copy.blogSub[language];
+  const Icon = kind === 'video' ? Video : kind === 'audio' ? Headphones : BookOpen;
 
-      <section className="reference-pillars">
-        {PILLARS.map((pillar) => (
-          <Link href={`/${language}/pillars`} key={pillar.slug} style={{ '--tone': pillar.tone } as React.CSSProperties}>
-            <Image src={LEGACY_ASSETS[pillar.slug]} alt={pillar.name[language]} width={180} height={100} />
-            <strong>{pillar.name[language]}</strong>
-            <span>{pillar.description[language]}</span>
-          </Link>
-        ))}
-      </section>
+  return (
+    <section className="archive-page">
+      <SectionHeading title={title} subtitle={subtitle} />
+      <div className="archive-search"><Search size={18} /><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder={copy.search[language]} /></div>
+      {posts.length ? <div className="archive-grid">{posts.map((post) => <ArchiveCard key={post.id} kind={kind} icon={Icon} post={post} language={language} />)}</div> : <p className="empty-state">{copy.noAudio[language]}</p>}
+    </section>
+  );
+}
 
-      <section className="reference-legacy-stats">
-        {TRUST_STATS.map((stat) => <div key={stat.value}><strong>{stat.value}</strong><span>{stat.label[language]}</span></div>)}
-      </section>
+function AboutPage({ language }: { language: Language }) {
+  return (
+    <section className="about-page-functional">
+      <FounderVisual language={language} />
+      <div>
+        <span className="hero-leaf compact"><Leaf size={22} /> {copy.eyebrow[language]}</span>
+        <h1>{copy.aboutTitle[language]}</h1>
+        <p>{copy.aboutSubtitle[language]}</p>
+        <p>{HERITAGE_COPY.founderIntro[language]}</p>
+        <p>{HERITAGE_COPY.mission[language]}</p>
+      </div>
+      <FeatureRow language={language} />
+    </section>
+  );
+}
 
-      <ReferenceFooter language={language} />
-    </main>
+function FounderVisual({ language }: { language: Language }) {
+  return (
+    <div className="reference-founder-visual">
+      <div className="founder-photo-card">
+        <Image src="/legacy-assets/dad_photo.jpg" alt={copy.founderOne[language]} width={520} height={620} priority />
+        <Image src="/legacy-assets/mom_photo.jpg" alt={copy.founderTwo[language]} width={420} height={560} priority />
+      </div>
+      <div className="founder-name-strip">
+        <div><strong>{copy.founderOne[language]}</strong><span>({copy.founderOneRole[language]})</span></div>
+        <div><strong>{copy.founderTwo[language]}</strong><span>({copy.founderTwoRole[language]})</span></div>
+      </div>
+    </div>
   );
 }
 
@@ -137,7 +167,7 @@ function ModePill({ icon: Icon, title, subtitle }: { icon: LucideIcon; title: st
   return <div className="mode-pill"><span><Icon size={24} /></span><div><strong>{title}</strong><small>{subtitle}</small></div></div>;
 }
 
-function ContentCategory({ kind, icon: Icon, title, subtitle, post, cta, language }: { kind: 'video' | 'audio' | 'blog'; icon: LucideIcon; title: string; subtitle: string; post: WisdomPost; cta: string; language: Language }) {
+function ContentCategory({ kind, icon: Icon, title, subtitle, post, cta, href, language }: { kind: 'video' | 'audio' | 'blog'; icon: LucideIcon; title: string; subtitle: string; post: WisdomPost; cta: string; href: string; language: Language }) {
   const pillar = getPillar(post.pillar);
   return (
     <article className={`category-card ${kind}`} style={{ '--tone': pillar.tone } as React.CSSProperties}>
@@ -150,9 +180,59 @@ function ContentCategory({ kind, icon: Icon, title, subtitle, post, cta, languag
       <div className="category-preview">
         {kind === 'audio' ? <div className="audio-widget"><Play size={18} /><span /><small>00:00 / 24:30</small></div> : <Image src={LEGACY_ASSETS[post.pillar]} alt={post.title[language]} width={280} height={150} />}
       </div>
-      <Link href={`/${language}/wisdom/${post.id}`}>{cta} →</Link>
+      <Link href={href}>{cta} →</Link>
     </article>
   );
+}
+
+
+function ArchiveCard({ kind, icon: Icon, post, language }: { kind: 'video' | 'audio' | 'blog'; icon: LucideIcon; post: WisdomPost; language: Language }) {
+  const pillar = getPillar(post.pillar);
+  return (
+    <Link className={`archive-card ${kind}`} href={`/${language}/wisdom/${post.id}`} style={{ '--tone': pillar.tone } as React.CSSProperties}>
+      <div className="category-icon"><Icon size={28} /></div>
+      <div>
+        <span>{new Date(post.date).toLocaleDateString(language === 'en' ? 'en-IN' : language === 'hi' ? 'hi-IN-u-nu-deva' : 'mr-IN')}</span>
+        <h3>{post.title[language]}</h3>
+        <p>{post.excerpt[language]}</p>
+      </div>
+      <Preview kind={kind} post={post} language={language} />
+    </Link>
+  );
+}
+
+function Preview({ kind, post, language }: { kind: 'video' | 'audio' | 'blog'; post: WisdomPost; language: Language }) {
+  if (kind === 'audio') return <div className="audio-widget"><Play size={18} /><span /><small>00:00 / 24:30</small></div>;
+  return <Image src={LEGACY_ASSETS[post.pillar]} alt={post.title[language]} width={320} height={170} />;
+}
+
+function SectionHeading({ title, subtitle }: { title: string; subtitle: string }) {
+  return <div className="ornament-heading"><span /><div><h2>{title}</h2><p>{subtitle}</p></div><span /></div>;
+}
+
+function FeatureRow({ language }: { language: Language }) {
+  return (
+    <section className="reference-trust-row" aria-label={copy.features[language]}>
+      {[copy.featureScience, copy.featureSimple, copy.featureFree, copy.featureCare].map((item, index) => {
+        const Icon = featureIcons[index];
+        return <div key={item[language]}><Icon size={34} /><span>{item[language]}</span></div>;
+      })}
+    </section>
+  );
+}
+
+function hasVideo(post: WisdomPost, language: Language) {
+  return Boolean(post.media[language].videoUrl || post.media.en.videoUrl);
+}
+
+function hasAudio(post: WisdomPost, language: Language) {
+  return Boolean(post.media[language].audioUrl || post.media.en.audioUrl);
+}
+
+function searchPosts(posts: WisdomPost[], query: string, language: Language) {
+  const q = query.trim().toLowerCase();
+  if (!q) return posts;
+  return posts.filter((post) => [post.title[language], post.excerpt[language], post.body[language], ...post.tags].join(' ').toLowerCase().includes(q));
 }
 
 function ReferenceHeader({ focus, language, setLanguage }: { focus: Focus; language: Language; setLanguage: (language: Language) => void }) {

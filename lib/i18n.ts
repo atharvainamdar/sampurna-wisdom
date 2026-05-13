@@ -9,5 +9,10 @@ export function requireLanguage(value: string): Language {
 }
 
 export function localizedPath(language: Language, focus: 'today' | 'library' | 'pillars' | 'about' | 'community') {
-  return focus === 'today' ? `/${language}` : `/${language}/${focus}`;
+  if (focus === 'today') return `/${language}`;
+  if (focus === 'library') return `/${language}/videos`;
+  if (focus === 'community') return `/${language}/audio`;
+  if (focus === 'pillars') return `/${language}/blog`;
+  return `/${language}/${focus}`;
 }
+
