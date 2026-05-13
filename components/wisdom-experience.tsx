@@ -140,7 +140,6 @@ function DailyContentPage({ language, posts, initialDate, initialMode, initialMo
                         <div className="daily-mode-block-head">
                           <span className="daily-mode-icon"><Icon size={26} /></span>
                           <span className="daily-mode-copy"><strong>{copy[meta.label][language]}</strong><small>{copy[meta.subtitle][language]}</small></span>
-                          <ModeCardPreview post={selectedPost} mode={mode} language={language} isHovering={hoverMode === mode} />
                         </div>
                         <ModePanel post={selectedPost} mode={mode} language={language} autoplay={hoverMode === 'watch' && mode === 'watch'} />
                       </section>

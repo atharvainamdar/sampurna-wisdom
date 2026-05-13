@@ -1745,3 +1745,71 @@ button { cursor: pointer; }
     linear-gradient(90deg, rgba(255,253,247,.99) 0%, rgba(255,253,247,.9) 30%, rgba(255,253,247,.42) 58%, rgba(255,253,247,.08) 100%),
     url('/legacy-assets/daily-wisdom-hero.svg') center / cover no-repeat !important;
 }
+
+/* Centered homepage composition and no right-side preview boxes */
+.daily-home-hero {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+  min-height: 315px !important;
+  padding: 34px clamp(22px, 5vw, 72px) 58px !important;
+  background:
+    linear-gradient(90deg, rgba(255,253,247,.88) 0%, rgba(255,253,247,.72) 34%, rgba(255,253,247,.44) 62%, rgba(255,253,247,.7) 100%),
+    url('/legacy-assets/daily-wisdom-hero.svg') center / cover no-repeat !important;
+}
+.daily-home-copy {
+  width: min(760px, 100%) !important;
+  max-width: 760px !important;
+  margin: 0 auto !important;
+  text-align: center !important;
+}
+.daily-home-copy .about-kicker {
+  justify-content: center !important;
+}
+.daily-home-copy h1 {
+  max-width: 760px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+.daily-home-copy p {
+  max-width: 520px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+.daily-mode-block-head {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 12px !important;
+  text-align: left !important;
+}
+.daily-mode-block-head .daily-card-preview {
+  display: none !important;
+}
+.daily-mode-block-head .daily-mode-copy {
+  flex: 0 1 auto !important;
+}
+.daily-mode-block-read .daily-reader.daily-inline-player {
+  text-align: left !important;
+}
+.daily-mode-block-read .daily-reader.daily-inline-player h3 {
+  margin-left: auto !important;
+  margin-right: auto !important;
+  text-align: center !important;
+}
+.daily-mode-block-read .daily-reader.daily-inline-player h3::after {
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+.daily-mode-block-read .daily-reader p {
+  max-width: 780px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+.daily-mode-block-read .daily-reader.daily-inline-player::before {
+  left: calc(50% - 430px) !important;
+}
+@media (max-width: 980px) {
+  .daily-mode-block-read .daily-reader.daily-inline-player::before { left: 18px !important; }
+}
