@@ -78,18 +78,18 @@ const modeMeta: Record<Mode, { icon: LucideIcon; label: keyof typeof copy; subti
 
 const featureIcons = [FlaskConical, BookOpen, Sprout, Leaf];
 
-export function WisdomExperience({ focus, initialLanguage = 'mr', posts, initialDate, initialMode, initialMonth }: { focus: Focus; initialLanguage?: Language; posts: WisdomPost[]; initialDate?: string; initialMode?: Mode; initialMonth?: string }) {
+export function WisdomExperience({ focus, initialLanguage = 'mr', posts, initialDate, initialMode, initialMonth, initialExpandedMode }: { focus: Focus; initialLanguage?: Language; posts: WisdomPost[]; initialDate?: string; initialMode?: Mode; initialMonth?: string; initialExpandedMode?: Mode }) {
   const [language, setLanguage] = useState<Language>(initialLanguage);
   return (
     <main className="reference-shell daily-reference-shell">
       <ReferenceHeader focus={focus} language={language} setLanguage={setLanguage} />
-      {focus === 'about' ? <AboutPage language={language} /> : <DailyContentPage language={language} posts={posts} initialDate={initialDate} initialMode={initialMode} initialMonth={initialMonth} />}
+      {focus === 'about' ? <AboutPage language={language} /> : <DailyContentPage language={language} posts={posts} initialDate={initialDate} initialMode={initialMode} initialMonth={initialMonth} initialExpandedMode={initialExpandedMode} />}
       <ReferenceFooter language={language} />
     </main>
   );
 }
 
-function DailyContentPage({ language, posts, initialDate, initialMode, initialMonth }: { language: Language; posts: WisdomPost[]; initialDate?: string; initialMode?: Mode; initialMonth?: string }) {
+function DailyContentPage({ language, posts, initialDate, initialMode, initialMonth, initialExpandedMode }: { language: Language; posts: WisdomPost[]; initialDate?: string; initialMode?: Mode; initialMonth?: string; initialExpandedMode?: Mode }) {
   const sortedPosts = useMemo(() => [...posts].sort((a, b) => b.date.localeCompare(a.date)), [posts]);
   const postsByDate = useMemo(() => new Map(sortedPosts.map((post) => [post.date, post])), [sortedPosts]);
   const initialPost = useMemo(() => sortedPosts.find((post) => isUnlocked(post.date)) || sortedPosts[0], [sortedPosts]);
@@ -100,40 +100,74 @@ function DailyContentPage({ language, posts, initialDate, initialMode, initialMo
   const modes: Mode[] = ['read', 'watch', 'listen', 'pdf'];
   const activeMode = initialMode && modes.includes(initialMode) ? initialMode : 'read';
   const currentMonth = monthStart(parseMonth(initialMonth) || parseDate(selectedDate));
+  const [hoverMode, setHoverMode] = useState<Mode | null>(null);
+  const [expandedMode, setExpandedMode] = useState<Mode | null>(initialExpandedMode || null);
 
   return (
     <>
-      <section className="daily-section-shell" id="daily-content">
-        <div className="daily-section-heading"><h2>{copy.todayContent[language]}</h2><div className="heading-ornament"><span /></div><p>{copy.unlockNote[language]}</p></div>
-        <div className="daily-console">
-        <CalendarPanel language={language} postsByDate={postsByDate} selectedDate={selectedDate} currentMonth={currentMonth} activeMode={activeMode} />
-        <article className="daily-content-card">
-          {selectedPost && selectedUnlocked ? (
-            <>
-              <div className="daily-card-head" style={{ '--tone': getPillar(selectedPost.pillar).tone } as React.CSSProperties}>
-                <span className="date-pill"><CalendarDays size={14} /> {new Date(`${selectedPost.date}T00:00:00`).toLocaleDateString(localeFor(language), { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</span>
-                <h2>{selectedPost.title[language]}</h2>
-                <p>{selectedPost.excerpt[language]}</p>
-              </div>
-              <div className="daily-mode-tabs">
-                {modes.map((mode) => {
-                  const meta = modeMeta[mode];
-                  const Icon = meta.icon;
-                  return (
-                    <Link key={mode} className={`daily-mode-card daily-mode-card-${mode} ${activeMode === mode ? 'active' : ''}`} href={dailyHref(language, selectedDate, mode, monthKey(currentMonth))}>
-                      <span className="daily-mode-icon"><Icon size={28} /></span>
-                      <span className="daily-mode-copy"><strong>{copy[meta.label][language]}</strong><small>{copy[meta.subtitle][language]}</small></span>
-                      <em>{copy[meta.action][language]} →</em>
-                    </Link>
-                  );
-                })}
-              </div>
-              <ModePanel post={selectedPost} mode={activeMode} language={language} />
-              <Link className="full-day-link" href={`/${language}/wisdom/${selectedPost.id}`}>{copy.fullPage[language]} →</Link>
-            </>
-          ) : <LockedPanel language={language} hasPost={Boolean(selectedPost)} />}
-        </article>
+      <section className="daily-home-hero">
+        <div className="daily-home-copy">
+          <div className="about-kicker"><Leaf size={18} /> {copy.eyebrow[language]}</div>
+          <h1>{copy.titleA[language]} <span>{copy.titleB[language]}</span></h1>
+          <p>{copy.subtitle[language]}</p>
+          <div className="daily-home-actions">
+            <a href="#daily-content"><Play size={16} /> {copy.start[language]}</a>
+            <a href="#daily-calendar-secondary">How it works</a>
+          </div>
         </div>
+        <div className="daily-home-guides">
+          <span>— Guided by</span>
+          <div className="daily-guide-photos">
+            <figure><Image src="/legacy-assets/dad_photo.jpg" alt={copy.founderOne[language]} width={360} height={280} priority /><figcaption><strong>{copy.founderOne[language]}</strong><small>{copy.founderOneRole[language]}</small></figcaption></figure>
+            <figure><Image src="/legacy-assets/mom_photo.jpg" alt={copy.founderTwo[language]} width={360} height={280} priority /><figcaption><strong>{copy.founderTwo[language]}</strong><small>{copy.founderTwoRole[language]}</small></figcaption></figure>
+          </div>
+        </div>
+      </section>
+
+      <section className="daily-section-shell daily-home-content" id="daily-content">
+        <div className="daily-home-content-card">
+          <div className="daily-section-heading"><div className="heading-ornament"><span /></div><h2>{copy.todayContent[language]}</h2>{selectedPost ? <p><CalendarDays size={15} /> {new Date(`${selectedPost.date}T00:00:00`).toLocaleDateString(localeFor(language), { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</p> : null}</div>
+          <article className="daily-content-card">
+            {selectedPost && selectedUnlocked ? (
+              <>
+                <div className="daily-card-head" style={{ '--tone': getPillar(selectedPost.pillar).tone } as React.CSSProperties}>
+                  <span className="date-pill"><CalendarDays size={14} /> {new Date(`${selectedPost.date}T00:00:00`).toLocaleDateString(localeFor(language), { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</span>
+                  <h2>{selectedPost.title[language]}</h2>
+                  <p>{selectedPost.excerpt[language]}</p>
+                </div>
+                <div className="daily-mode-tabs">
+                  {modes.map((mode) => {
+                    const meta = modeMeta[mode];
+                    const Icon = meta.icon;
+                    return (
+                      <Link
+                        key={mode}
+                        className={`daily-mode-card daily-mode-card-${mode} ${expandedMode === mode || (!expandedMode && activeMode === mode) ? 'active' : ''}`}
+                        href={dailyHref(language, selectedDate, mode, monthKey(currentMonth))}
+                        onMouseEnter={() => setHoverMode(mode)}
+                        onMouseLeave={() => setHoverMode(null)}
+                        onFocus={() => setHoverMode(mode)}
+                        onBlur={() => setHoverMode(null)}
+                        onClick={() => setExpandedMode(mode)}
+                      >
+                        <span className="daily-mode-icon"><Icon size={28} /></span>
+                        <span className="daily-mode-copy"><strong>{copy[meta.label][language]}</strong><small>{copy[meta.subtitle][language]}</small></span>
+                        <ModeCardPreview post={selectedPost} mode={mode} language={language} isHovering={hoverMode === mode} />
+                        <em>{copy[meta.action][language]} →</em>
+                      </Link>
+                    );
+                  })}
+                </div>
+                <ModePanel post={selectedPost} mode={expandedMode || activeMode} language={language} autoplay={Boolean(expandedMode) || activeMode === 'watch' || activeMode === 'listen'} />
+              </>
+            ) : <LockedPanel language={language} hasPost={Boolean(selectedPost)} />}
+          </article>
+        </div>
+      </section>
+
+      <section className="daily-calendar-secondary" id="daily-calendar-secondary">
+        <div className="daily-calendar-secondary-head"><span>{copy.unlockNote[language]}</span><h2>{copy.calendarTitle[language]}</h2><p>{copy.chooseDay[language]}</p></div>
+        <CalendarPanel language={language} postsByDate={postsByDate} selectedDate={selectedDate} currentMonth={currentMonth} activeMode={expandedMode || activeMode} />
       </section>
       <FeatureRow language={language} />
     </>
@@ -162,22 +196,38 @@ function CalendarPanel({ language, postsByDate, selectedDate, currentMonth, acti
   );
 }
 
-function ModePanel({ post, mode, language }: { post: WisdomPost; mode: Mode; language: Language }) {
+function ModePanel({ post, mode, language, autoplay = false }: { post: WisdomPost; mode: Mode; language: Language; autoplay?: boolean }) {
   const media = post.media[language];
   if (mode === 'read') {
     const body = post.body[language];
-    return <div className="daily-reader">{body ? body.split('\n').filter(Boolean).map((line) => <p key={line.slice(0, 48)}>{line}</p>) : <p>{copy.noContent[language]}</p>}</div>;
+    return <div className="daily-reader daily-inline-player">{body ? body.split('\n').filter(Boolean).map((line) => <p key={line.slice(0, 48)}>{line}</p>) : <p>{copy.noContent[language]}</p>}</div>;
   }
   if (mode === 'watch') {
     const videoUrl = media.videoUrl || post.media.en.videoUrl;
     const embed = getYouTubeEmbedUrl(videoUrl);
-    return <div className="daily-video-panel">{embed ? <iframe src={embed} title={post.title[language]} allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen /> : null}<a href={videoUrl || BRAND.youtube} target="_blank" rel="noreferrer">{copy.openVideo[language]}</a></div>;
+    return <div className="daily-video-panel daily-inline-player">{embed ? <iframe src={autoplay ? autoplayEmbed(embed) : embed} title={post.title[language]} allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen /> : null}<a href={videoUrl || BRAND.youtube} target="_blank" rel="noreferrer">{copy.openVideo[language]}</a></div>;
   }
   if (mode === 'listen') {
     const audio = media.audioUrl || post.media.en.audioUrl;
-    return <div className="daily-audio-panel">{audio ? <audio controls src={audio} /> : <p>{copy.noAudio[language]}</p>}</div>;
+    return <div className="daily-audio-panel daily-inline-player">{audio ? <audio controls autoPlay={autoplay} src={audio} /> : <p>{copy.noAudio[language]}</p>}</div>;
   }
-  return <div className="daily-resource-panel">{media.resources.length ? media.resources.map((resource) => <a href={resource.url} key={resource.url} target="_blank" rel="noreferrer"><Download size={18} /> {resource.label}</a>) : <p>{copy.noPdf[language]}</p>}</div>;
+  return <div className="daily-resource-panel daily-inline-player">{media.resources.length ? media.resources.map((resource) => <a href={resource.url} key={resource.url} target="_blank" rel="noreferrer"><Download size={18} /> {resource.label}</a>) : <p>{copy.noPdf[language]}</p>}</div>;
+}
+
+function ModeCardPreview({ post, mode, language, isHovering }: { post: WisdomPost; mode: Mode; language: Language; isHovering: boolean }) {
+  const media = post.media[language];
+  if (mode === 'watch') {
+    const videoUrl = media.videoUrl || post.media.en.videoUrl;
+    const embed = getYouTubeEmbedUrl(videoUrl);
+    return <span className="daily-card-preview daily-card-preview-video">{isHovering && embed ? <iframe src={autoplayEmbed(embed, true)} title={post.title[language]} allow="autoplay; encrypted-media; picture-in-picture" /> : <><Image src="/legacy-assets/ramesh-inamdar.jpg" alt="" width={320} height={180} /><span className="preview-play"><Play size={18} fill="currentColor" /></span></>}</span>;
+  }
+  if (mode === 'listen') {
+    return <span className={`daily-card-preview daily-card-preview-audio ${isHovering ? 'is-hovering' : ''}`}><span className="waveform">{Array.from({ length: 22 }, (_, index) => <i key={index} />)}</span><span className="audio-line"><Play size={13} fill="currentColor" /> <b /> <small>12:45</small></span></span>;
+  }
+  if (mode === 'pdf') {
+    return <span className="daily-card-preview daily-card-preview-pdf"><span className="pdf-cover"><strong>{post.title[language]}</strong><small>PDF</small></span></span>;
+  }
+  return <span className={`daily-card-preview daily-card-preview-blog ${isHovering ? 'is-hovering' : ''}`}><span className="book-preview"><i /><b /></span></span>;
 }
 
 function LockedPanel({ language, hasPost }: { language: Language; hasPost: boolean }) {
@@ -232,7 +282,11 @@ function ReferenceFooter({ language }: { language: Language }) {
 function getYouTubeEmbedUrl(url?: string) {
   if (!url) return null;
   const id = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/|youtube\.com\/shorts\/)([^&?/]+)/)?.[1];
-  return id ? `https://www.youtube-nocookie.com/embed/${id}?rel=0&modestbranding=1` : null;
+  return id ? `https://www.youtube.com/embed/${id}?rel=0&modestbranding=1` : null;
+}
+
+function autoplayEmbed(embed: string, muted = false) {
+  return `${embed}&autoplay=1&playsinline=1${muted ? '&mute=1&controls=0' : ''}`;
 }
 
 function isUnlocked(date: string) {

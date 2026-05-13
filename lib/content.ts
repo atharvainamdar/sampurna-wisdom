@@ -147,7 +147,7 @@ export const DEFAULT_POSTS: WisdomPost[] = [
     },
     media: {
       en: {
-        videoUrl: BRAND.youtube,
+        videoUrl: 'https://youtu.be/sP8zu0f-vk0',
         audioUrl: '#english-audio',
         resources: [
           { label: 'English reflection worksheet', url: '#english-pdf', kind: 'pdf' },
@@ -155,7 +155,7 @@ export const DEFAULT_POSTS: WisdomPost[] = [
         ],
       },
       hi: {
-        videoUrl: BRAND.youtube,
+        videoUrl: 'https://youtu.be/sP8zu0f-vk0',
         audioUrl: '#hindi-audio',
         resources: [
           { label: 'हिन्दी चिंतन पत्रक', url: '#hindi-pdf', kind: 'pdf' },
@@ -163,7 +163,7 @@ export const DEFAULT_POSTS: WisdomPost[] = [
         ],
       },
       mr: {
-        videoUrl: BRAND.youtube,
+        videoUrl: 'https://youtu.be/sP8zu0f-vk0',
         audioUrl: '#marathi-audio',
         resources: [
           { label: 'मराठी चिंतन पत्रक', url: '#marathi-pdf', kind: 'pdf' },
