@@ -20,7 +20,7 @@ const copy = {
   eyebrow: { en: 'Health • Knowledge • Prosperity • Sadhana', hi: 'आरोग्य • ज्ञान • समृद्धि • साधना', mr: 'आरोग्य • ज्ञान • समृद्धी • साधना' },
   titleA: { en: 'Wisdom practice for a', hi: 'आरोग्यदायी जीवनासाठी', mr: 'आरोग्यदायी जीवनासाठी' },
   titleB: { en: 'healthy, prosperous life', hi: 'ज्ञानाची उपासना', mr: 'ज्ञानाची उपासना' },
-  subtitle: { en: 'Every day unlocks one set of guidance: reading, video, audio, and resources for that day only.', hi: 'हर दिन केवल उसी दिन का मार्गदर्शन खुलता है: लेख, वीडियो, ऑडियो और संसाधन।', mr: 'दररोज फक्त त्या दिवसाचे मार्गदर्शन उघडते: लेख, व्हिडिओ, ऑडिओ आणि साधने.' },
+  subtitle: { en: 'Every day unlocks one simple guidance set: a readable blog and a video for that day only.', hi: 'हर दिन केवल उसी दिन का सरल मार्गदर्शन खुलता है: लेख और वीडियो।', mr: 'दररोज फक्त त्या दिवसाचे सोपे मार्गदर्शन उघडते: लेख आणि व्हिडिओ.' },
   start: { en: 'Start today', hi: 'आज शुरू करें', mr: 'आज सुरू करा' },
   free: { en: 'Free daily content', hi: 'निःशुल्क दैनिक सामग्री', mr: 'मोफत दैनिक साहित्य' },
   read: { en: 'Blog', hi: 'ब्लॉग', mr: 'ब्लॉग' },
@@ -148,13 +148,12 @@ function DailyContentPage({ language, posts, initialDate, initialMode, initialMo
                         onFocus={() => setHoverMode(mode)}
                         onBlur={() => setHoverMode(null)}
                       >
-                        <Link className="daily-mode-block-head" href={dailyHref(language, selectedDate, mode, monthKey(currentMonth))}>
+                        <div className="daily-mode-block-head">
                           <span className="daily-mode-icon"><Icon size={26} /></span>
                           <span className="daily-mode-copy"><strong>{copy[meta.label][language]}</strong><small>{copy[meta.subtitle][language]}</small></span>
                           <ModeCardPreview post={selectedPost} mode={mode} language={language} isHovering={hoverMode === mode} />
-                          <em>{copy[meta.action][language]} →</em>
-                        </Link>
-                        <ModePanel post={selectedPost} mode={mode} language={language} autoplay={false} />
+                        </div>
+                        <ModePanel post={selectedPost} mode={mode} language={language} autoplay={hoverMode === 'watch' && mode === 'watch'} />
                       </section>
                     );
                   })}
@@ -206,7 +205,7 @@ function ModePanel({ post, mode, language, autoplay = false }: { post: WisdomPos
   if (mode === 'watch') {
     const videoUrl = media.videoUrl || post.media.en.videoUrl;
     const embed = getYouTubeEmbedUrl(videoUrl);
-    return <div className="daily-video-panel daily-inline-player">{embed ? <iframe src={autoplay ? autoplayEmbed(embed) : embed} title={post.title[language]} allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen /> : null}<a href={videoUrl || BRAND.youtube} target="_blank" rel="noreferrer">{copy.openVideo[language]}</a></div>;
+    return <div className="daily-video-panel daily-inline-player">{embed ? <iframe src={autoplay ? autoplayEmbed(embed, true) : embed} title={post.title[language]} allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen /> : null}</div>;
   }
   if (mode === 'listen') {
     const audio = media.audioUrl || post.media.en.audioUrl;
