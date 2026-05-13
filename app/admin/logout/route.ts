@@ -1,11 +1,13 @@
-import { redirect } from 'next/navigation';
-import { createSupabaseServerClient, hasSupabaseEnv } from '@/lib/supabase/server';
+import { NextResponse } from 'next/server';
+import { ADMIN_TOKEN_COOKIE, createSupabaseServerClient, hasSupabaseEnv } from '@/lib/supabase/server';
 
-export async function GET() {
+export async function GET(request: Request) {
   if (hasSupabaseEnv()) {
     const supabase = await createSupabaseServerClient();
     await supabase.auth.signOut();
   }
 
-  redirect('/admin/login');
+  const response = NextResponse.redirect(new URL('/admin/login', request.url));
+  response.cookies.delete(ADMIN_TOKEN_COOKIE);
+  return response;
 }

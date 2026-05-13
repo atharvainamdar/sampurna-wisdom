@@ -1,4 +1,4 @@
-import { createSupabaseServerClient, hasSupabaseEnv } from '@/lib/supabase/server';
+import { createSupabaseServerClient, getAdminAccessToken, hasSupabaseEnv } from '@/lib/supabase/server';
 
 export type AdminGate =
   | { status: 'missing-env' }
@@ -10,7 +10,8 @@ export async function getAdminGate(): Promise<AdminGate> {
   if (!hasSupabaseEnv()) return { status: 'missing-env' };
 
   const supabase = await createSupabaseServerClient();
-  const { data: userData } = await supabase.auth.getUser();
+  const adminToken = await getAdminAccessToken();
+  const { data: userData } = adminToken ? await supabase.auth.getUser(adminToken) : await supabase.auth.getUser();
   const user = userData.user;
 
   if (!user) return { status: 'signed-out' };
