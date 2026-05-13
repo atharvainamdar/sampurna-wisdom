@@ -1,11 +1,8 @@
 'use client';
 
 import { FormEvent, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { createSupabaseBrowserClient } from '@/lib/supabase/browser';
 
 export function LoginForm() {
-  const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
@@ -17,16 +14,20 @@ export function LoginForm() {
     setMessage('');
 
     try {
-      const supabase = createSupabaseBrowserClient();
-      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      const response = await fetch('/admin/login/auth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+        credentials: 'same-origin',
+      });
+      const result = (await response.json()) as { ok: boolean; message?: string };
 
-      if (error) {
-        setMessage(error.message);
+      if (!response.ok || !result.ok) {
+        setMessage(result.message || 'Login failed.');
         return;
       }
 
-      router.push('/admin/content');
-      router.refresh();
+      window.location.assign('/admin/content');
     } catch (error) {
       setMessage(error instanceof Error ? error.message : 'Login failed.');
     } finally {
