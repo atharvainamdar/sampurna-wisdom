@@ -52,6 +52,7 @@ Never commit database passwords, service-role keys, or Supabase personal access 
 ## Local development
 
 Deployment trigger: latest Sampurna Wisdom preview.
+Owner deployment trigger after language polish.
 
 ```bash
 npm install
