@@ -1131,3 +1131,38 @@ button { cursor: pointer; }
   .daily-home-content .daily-reader { margin: 0 22px 16px; padding: 14px 20px 14px 46px; font-size: .95rem; line-height: 1.45; }
   .daily-video-panel.daily-inline-player iframe { min-height: 300px; }
 }
+
+/* About page + calendar placement corrections for normal 100% desktop zoom */
+@media (min-width: 981px) {
+  .about-premium-page .reference-header { height: 72px; min-height: 72px; padding: 8px 46px; }
+  .about-premium-page .reference-brand img { width: 50px; height: 50px; }
+  .about-premium-page .reference-brand strong { font-size: 1.42rem; }
+  .about-premium-page .reference-brand span { font-size: .76rem; }
+  .about-premium-page .reference-header nav a { padding: 22px 0 15px; font-size: .92rem; }
+  .about-premium-page .reference-actions select,
+  .about-premium-page .reference-actions a { min-height: 42px; }
+  .about-quote-bar { min-height: 28px; padding: 5px 18px; font-size: .86rem; }
+  .about-premium-hero { grid-template-columns: minmax(420px, 46%) minmax(430px, 1fr); gap: 52px; align-items: center; padding: 42px 68px 22px; }
+  .about-photo-stage.combined-founder-art { max-width: 600px; justify-self: center; border-radius: 22px; box-shadow: 0 20px 58px rgba(4,35,28,.14); }
+  .about-photo-stage.combined-founder-art img { border-radius: 22px; }
+  .about-story-panel { padding: 0; }
+  .about-story-panel::after { width: 38%; top: 6%; opacity: .038; }
+  .about-story-panel .about-kicker { font-size: .78rem; letter-spacing: .18em; }
+  .about-story-panel h1 { margin: 14px 0 16px; font-size: clamp(3.15rem, 4.25vw, 4.35rem); line-height: .96; letter-spacing: -.048em; }
+  .about-story-panel p { max-width: 680px; font-size: .98rem; line-height: 1.5; margin: 0 0 10px; }
+  .about-story-panel .lead { font-size: 1rem; }
+  .about-signature { margin-top: 16px; font-size: 1.28rem; }
+  .about-signature small { margin-left: 26px; font-size: .66rem; }
+  .about-premium-page > .reference-trust-row { margin: 0 68px 34px; transform: translateY(8px); }
+
+  .daily-calendar-secondary { width: min(1080px, calc(100vw - 64px)); margin: -16px auto 34px; display: grid; grid-template-columns: minmax(0, 1fr) 338px; align-items: center; justify-content: initial; gap: 28px; padding: 22px 28px; border: 1px solid rgba(13,95,78,.1); border-top: 0; border-radius: 0 0 22px 22px; background: rgba(255,255,255,.92); box-shadow: 0 22px 58px rgba(56,45,25,.08); }
+  .daily-calendar-secondary-head { max-width: none; margin: 0; text-align: left; }
+  .daily-calendar-secondary-head span { display: inline-block; margin-bottom: 4px; font-size: .72rem; line-height: 1.35; }
+  .daily-calendar-secondary-head h2 { margin: 4px 0 6px; font-size: 1.85rem; }
+  .daily-calendar-secondary-head p { max-width: 360px; font-size: .94rem; }
+  .daily-calendar-secondary .daily-calendar-card { width: 338px; margin: 0; box-shadow: none; }
+}
+@media (min-width: 981px) {
+  .daily-calendar-secondary { align-items: start; padding-top: 20px; padding-bottom: 20px; }
+  .daily-calendar-secondary-head { padding-top: 8px; }
+}
