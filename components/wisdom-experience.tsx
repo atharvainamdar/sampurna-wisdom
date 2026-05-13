@@ -3,343 +3,186 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useMemo, useState } from 'react';
-import { ArrowUpRight, BookOpen, CalendarDays, CheckCircle2, Download, Headphones, Library, Menu, Mic2, Play, Search, Settings2, Share2, Sparkles, UploadCloud, Youtube, type LucideIcon } from 'lucide-react';
+import { useState } from 'react';
+import { BookOpen, FlaskConical, Globe2, Headphones, Leaf, Mail, Menu, Phone, Play, Sprout, Video, type LucideIcon } from 'lucide-react';
 import { BRAND, HERITAGE_COPY, LANGUAGES, Language, LEGACY_ASSETS, PILLARS, TRUST_STATS, WisdomPost, getPillar } from '@/lib/content';
 import { localizedPath } from '@/lib/i18n';
 
 type Focus = 'today' | 'library' | 'pillars' | 'about' | 'community';
-type Mode = 'read' | 'watch' | 'listen' | 'download';
 
-const nav: Array<{ href: string; key: Focus; label: Record<Language, string> }> = [
-  { href: '/today', key: 'today', label: { en: 'Today', hi: 'आज', mr: 'आज' } },
-  { href: '/library', key: 'library', label: { en: 'Library', hi: 'लाइब्रेरी', mr: 'लायब्ररी' } },
-  { href: '/pillars', key: 'pillars', label: { en: 'Pillars', hi: 'स्तंभ', mr: 'स्तंभ' } },
-  { href: '/about', key: 'about', label: { en: 'About', hi: 'परिचय', mr: 'परिचय' } },
-  { href: '/community', key: 'community', label: { en: 'Community', hi: 'समुदाय', mr: 'समुदाय' } },
+const nav: Array<{ key: Focus; label: Record<Language, string> }> = [
+  { key: 'today', label: { en: 'Home', hi: 'मुख्यपृष्ठ', mr: 'मुख्यपृष्ठ' } },
+  { key: 'about', label: { en: 'About', hi: 'आमच्याबद्दल', mr: 'आमच्याबद्दल' } },
+  { key: 'library', label: { en: 'Videos', hi: 'व्हिडिओ', mr: 'व्हिडिओ' } },
+  { key: 'community', label: { en: 'Audio', hi: 'ऑडिओ', mr: 'ऑडिओ' } },
+  { key: 'pillars', label: { en: 'Blog', hi: 'ब्लॉग', mr: 'ब्लॉग' } },
 ];
 
-const modeCopy: Record<Mode, { label: Record<Language, string>; icon: LucideIcon }> = {
-  read: { label: { en: 'Read', hi: 'पढ़ें', mr: 'वाचा' }, icon: BookOpen },
-  watch: { label: { en: 'Watch', hi: 'देखें', mr: 'पाहा' }, icon: Play },
-  listen: { label: { en: 'Listen', hi: 'सुनें', mr: 'ऐका' }, icon: Headphones },
-  download: { label: { en: 'Download', hi: 'डाउनलोड', mr: 'डाउनलोड' }, icon: Download },
-};
-
-const uiCopy = {
-  freeForever: { en: 'Free forever', hi: 'हमेशा निःशुल्क', mr: 'कायम मोफत' },
-  heroTitleA: { en: 'Daily wisdom for', hi: 'संपूर्ण समृद्धि के लिए', mr: 'संपूर्ण समृद्धीसाठी' },
-  heroTitleB: { en: 'complete prosperity', hi: 'दैनिक ज्ञान', mr: 'दैनिक ज्ञान' },
-  heroTitleC: { en: 'delivered with ease.', hi: 'सहज रूप से।', mr: 'सहजतेने.' },
-  openToday: { en: "Open today's wisdom", hi: 'आज का ज्ञान खोलें', mr: 'आजचे ज्ञान उघडा' },
-  youtube: { en: 'YouTube channel', hi: 'यूट्यूब चैनल', mr: 'यूट्यूब चॅनल' },
-  daysFree: { en: 'days of free wisdom', hi: 'दिनों का निःशुल्क ज्ञान', mr: 'दिवसांचे मोफत ज्ञान' },
-  heritageKicker: { en: '20 years of Sampurna Samruddhi wisdom', hi: 'संपूर्ण समृद्धि ज्ञान के २० वर्ष', mr: 'संपूर्ण समृद्धी ज्ञानाची २० वर्षे' },
-  todayKicker: { en: "Today's free wisdom", hi: 'आज का निःशुल्क ज्ञान', mr: 'आजचे मोफत ज्ञान' },
-  reflection: { en: "Today's reflection", hi: 'आज का चिंतन', mr: 'आजचे चिंतन' },
-  videoTitle: { en: 'Video wisdom connects here', hi: 'वीडियो ज्ञान यहाँ जुड़ता है', mr: 'व्हिडिओ ज्ञान येथे जोडले जाते' },
-  videoText: { en: 'Dad can paste separate YouTube links for English, Hindi, and Marathi. Users only see the video for their selected language.', hi: 'पिताजी अंग्रेज़ी, हिन्दी और मराठी के लिए अलग-अलग यूट्यूब लिंक जोड़ सकते हैं। उपयोगकर्ता केवल अपनी चुनी हुई भाषा का वीडियो देखेंगे।', mr: 'बाबा इंग्रजी, हिन्दी आणि मराठीसाठी वेगवेगळे यूट्यूब लिंक जोडू शकतात. वापरकर्त्यांना त्यांच्या निवडलेल्या भाषेचाच व्हिडिओ दिसेल.' },
-  openVideo: { en: 'Open video', hi: 'वीडियो खोलें', mr: 'व्हिडिओ उघडा' },
-  audioTitle: { en: 'Audio pravachan-ready', hi: 'ऑडियो प्रवचन के लिए तैयार', mr: 'ऑडिओ प्रवचनासाठी तयार' },
-  audioText: { en: 'Admin uploads separate audio for each language, so Marathi users hear Marathi, Hindi users hear Hindi, and English users hear English.', hi: 'एडमिन हर भाषा के लिए अलग ऑडियो जोड़ सकता है, इसलिए हिन्दी उपयोगकर्ता हिन्दी, मराठी उपयोगकर्ता मराठी और अंग्रेज़ी उपयोगकर्ता अंग्रेज़ी सुनेंगे।', mr: 'अ‍ॅडमिन प्रत्येक भाषेसाठी वेगळा ऑडिओ जोडू शकतो, त्यामुळे मराठी वापरकर्ते मराठी, हिन्दी वापरकर्ते हिन्दी आणि इंग्रजी वापरकर्ते इंग्रजी ऐकतील.' },
-  uploadSlots: { en: 'Separate PPT/PDF/audio upload slots per language', hi: 'हर भाषा के लिए अलग PPT/PDF/ऑडियो अपलोड स्थान', mr: 'प्रत्येक भाषेसाठी वेगळे PPT/PDF/ऑडिओ अपलोड स्थान' },
-  share: { en: 'Share on WhatsApp', hi: 'व्हाट्सऐप पर साझा करें', mr: 'व्हॉट्सअ‍ॅपवर शेअर करा' },
-  markRead: { en: 'Mark as read', hi: 'पढ़ा हुआ चिह्नित करें', mr: 'वाचले म्हणून चिन्हांकित करा' },
-  libraryKicker: { en: 'Wisdom library', hi: 'ज्ञान लाइब्रेरी', mr: 'ज्ञान लायब्ररी' },
-  libraryTitle: { en: 'Every message stays free and searchable.', hi: 'हर संदेश निःशुल्क और खोजने योग्य रहेगा।', mr: 'प्रत्येक संदेश मोफत आणि शोधता येण्यासारखा राहील.' },
-  searchPlaceholder: { en: 'Search wealth, health, family, source...', hi: 'धन, स्वास्थ्य, परिवार, स्रोत खोजें...', mr: 'संपत्ती, आरोग्य, कुटुंब, स्रोत शोधा...' },
-  pillarKicker: { en: 'The 5-pillar framework', hi: '५ स्तंभों का फ्रेमवर्क', mr: '५ स्तंभांचे फ्रेमवर्क' },
-  pillarTitle: { en: 'Indian wisdom, organized for daily life.', hi: 'भारतीय ज्ञान, दैनिक जीवन के लिए व्यवस्थित।', mr: 'भारतीय ज्ञान, दैनंदिन जीवनासाठी व्यवस्थित.' },
-  adminCms: { en: 'Admin CMS', hi: 'एडमिन CMS', mr: 'अ‍ॅडमिन CMS' },
-  createTomorrow: { en: "Create tomorrow's wisdom", hi: 'कल का ज्ञान बनाएँ', mr: 'उद्याचे ज्ञान तयार करा' },
-  date: { en: 'Date', hi: 'तारीख', mr: 'तारीख' },
-  contentModes: { en: 'Content modes', hi: 'सामग्री प्रकार', mr: 'सामग्री प्रकार' },
-  publishStatus: { en: 'Publish status', hi: 'प्रकाशन स्थिति', mr: 'प्रकाशन स्थिती' },
-  draft: { en: 'Draft', hi: 'ड्राफ्ट', mr: 'मसुदा' },
-  schedule: { en: 'Schedule for 6:00 AM', hi: 'सुबह ६:०० बजे के लिए शेड्यूल करें', mr: 'सकाळी ६:०० वाजता शेड्यूल करा' },
-  builtForDad: { en: 'Built for your dad', hi: 'पिताजी के लिए बनाया गया', mr: 'बाबांसाठी बनवलेले' },
-  noDeveloper: { en: 'No developer required for daily updates.', hi: 'दैनिक अपडेट के लिए डेवलपर की ज़रूरत नहीं।', mr: 'दैनिक अपडेटसाठी डेव्हलपरची गरज नाही.' },
-  adminText: { en: 'The admin panel lets him add blogs, YouTube links, audio, PPT/PDF, language versions, thumbnails, and scheduling from a simple mobile-friendly dashboard.', hi: 'एडमिन पैनल से वे सरल मोबाइल-फ्रेंडली डैशबोर्ड में ब्लॉग, यूट्यूब लिंक, ऑडियो, PPT/PDF, भाषा संस्करण, थंबनेल और शेड्यूलिंग जोड़ सकते हैं।', mr: 'अ‍ॅडमिन पॅनेलमधून ते सोप्या मोबाइल-फ्रेंडली डॅशबोर्डवर ब्लॉग, यूट्यूब लिंक, ऑडिओ, PPT/PDF, भाषा आवृत्ती, थंबनेल आणि शेड्यूलिंग जोडू शकतात.' },
-  workflow: { en: 'Draft → preview → publish workflow', hi: 'ड्राफ्ट → प्रीव्यू → प्रकाशित प्रक्रिया', mr: 'मसुदा → पूर्वावलोकन → प्रकाशित प्रक्रिया' },
-  calendar: { en: 'Calendar view for daily wisdom', hi: 'दैनिक ज्ञान के लिए कैलेंडर दृश्य', mr: 'दैनिक ज्ञानासाठी कॅलेंडर दृश्य' },
-  mediaLibrary: { en: 'Media library for audio, PPT, PDF, and images', hi: 'ऑडियो, PPT, PDF और चित्रों के लिए मीडिया लाइब्रेरी', mr: 'ऑडिओ, PPT, PDF आणि चित्रांसाठी मीडिया लायब्ररी' },
-  policies: { en: 'Admin-only Supabase policies from day one', hi: 'पहले दिन से केवल एडमिन के लिए Supabase सुरक्षा नियम', mr: 'पहिल्या दिवसापासून फक्त अ‍ॅडमिनसाठी Supabase सुरक्षा नियम' },
-  footerExtra: { en: 'Built mobile-first for Indian families.', hi: 'भारतीय परिवारों के लिए मोबाइल-फर्स्ट बनाया गया।', mr: 'भारतीय कुटुंबांसाठी मोबाइल-फर्स्ट बनवलेले.' },
+const copy = {
+  eyebrow: { en: 'Health • Knowledge • Prosperity • Sadhana', hi: 'आरोग्य • ज्ञान • समृद्धि • साधना', mr: 'आरोग्य • ज्ञान • समृद्धी • साधना' },
+  titleA: { en: 'Wisdom practice for a', hi: 'आरोग्यदायी जीवनासाठी', mr: 'आरोग्यदायी जीवनासाठी' },
+  titleB: { en: 'healthy, prosperous life', hi: 'ज्ञानाची उपासना', mr: 'ज्ञानाची उपासना' },
+  subtitle: {
+    en: 'Free guidance for health, longevity, mental peace, and prosperous living through a scientific and spiritual lens.',
+    hi: 'आरोग्य, दीर्घायुष्य, मानसिक शांति और समृद्ध जीवन के लिए वैज्ञानिक और साधना-आधारित निःशुल्क मार्गदर्शन।',
+    mr: 'वैज्ञानिक दृष्टिकोनातून आरोग्य, दीर्घायुष्य, मानसिक शांतता आणि समृद्ध जीवनासाठी मोफत मार्गदर्शन.',
+  },
+  start: { en: 'Start listening now', hi: 'अभी सुनना शुरू करें', mr: 'आत्ताच सुरुवात करा' },
+  free: { en: 'All content is free', hi: 'सभी सामग्री निःशुल्क है', mr: 'सर्व साहित्य मोफत आहे' },
+  video: { en: 'Video', hi: 'व्हिडिओ', mr: 'व्हिडिओ' },
+  videoSub: { en: 'Knowledge videos', hi: 'ज्ञानवर्धी व्हिडिओ', mr: 'ज्ञानवर्धी व्हिडिओ' },
+  audio: { en: 'Audio', hi: 'ऑडिओ', mr: 'ऑडिओ' },
+  audioSub: { en: 'Listen and learn', hi: 'सुनें और सीखें', mr: 'ऐका आणि शिका' },
+  blog: { en: 'Blog', hi: 'ब्लॉग', mr: 'ब्लॉग' },
+  blogSub: { en: 'Simple articles and notes', hi: 'सरल लेख और जानकारी', mr: 'सखोल लेख व माहिती' },
+  founderOne: { en: 'Shri. Ramesh Inamdar', hi: 'श्री. रमेश इनामदार', mr: 'श्री. रमेश इनामदार' },
+  founderOneRole: { en: 'Founder', hi: 'संस्थापक', mr: 'संस्थापक' },
+  founderTwo: { en: 'Smt. Sujata Inamdar', hi: 'सौ. सुजाता इनामदार', mr: 'सौ. सुजाता इनामदार' },
+  founderTwoRole: { en: 'Co-founder', hi: 'सह-संस्थापक', mr: 'सह-संस्थापक' },
+  freeContent: { en: 'Our free content', hi: 'हमारी निःशुल्क सामग्री', mr: 'आमचे मोफत साहित्य' },
+  freeContentSub: { en: 'Selected topics for a healthy and joyful life', hi: 'स्वस्थ और आनंदमय जीवन के लिए चुने हुए विषय', mr: 'तुमच्या आरोग्यदायी आणि आनंदी जीवनासाठी निवडक विषय' },
+  allVideos: { en: 'View all videos', hi: 'सभी वीडियो देखें', mr: 'सर्व व्हिडिओ पहा' },
+  allAudio: { en: 'Listen to all audio', hi: 'सभी ऑडियो सुनें', mr: 'सर्व ऑडिओ ऐका' },
+  allArticles: { en: 'Read all articles', hi: 'सभी लेख पढ़ें', mr: 'सर्व लेख वाचा' },
+  features: { en: 'Our speciality', hi: 'हमारी विशेषताएँ', mr: 'आमची वैशिष्ट्ये' },
+  featureScience: { en: 'Scientific and research-based information', hi: 'वैज्ञानिक और शोध-आधारित जानकारी', mr: 'वैज्ञानिक आणि संशोधनआधारित माहिती' },
+  featureSimple: { en: 'Simple guidance in your own language', hi: 'सरल भाषा में मार्गदर्शन', mr: 'सोप्या भाषेत सखोल मार्गदर्शन' },
+  featureFree: { en: '100% free and accessible to everyone', hi: '१००% निःशुल्क और सभी के लिए उपलब्ध', mr: '100% मोफत आणि सर्वांसाठी उपलब्ध' },
+  featureCare: { en: 'Your health, your responsibility', hi: 'आपका स्वास्थ्य, आपकी ज़िम्मेदारी', mr: 'आपले आरोग्य, आपली जबाबदारी' },
+  newsletter: { en: 'Get membership / updates', hi: 'सदस्यता / अपडेट प्राप्त करें', mr: 'सदस्यता घ्या / अपडेट मिळवा' },
+  website: { en: 'Website', hi: 'वेबसाइट', mr: 'वेबसाईट' },
+  email: { en: 'Email', hi: 'ईमेल', mr: 'ईमेल' },
+  contact: { en: 'Contact', hi: 'संपर्क', mr: 'संपर्क' },
 } satisfies Record<string, Record<Language, string>>;
 
+const featureIcons = [FlaskConical, BookOpen, Sprout, Leaf];
 
-export function WisdomExperience({ focus, initialLanguage = 'en', posts }: { focus: Focus; initialLanguage?: Language; posts: WisdomPost[] }) {
+export function WisdomExperience({ focus, initialLanguage = 'mr', posts }: { focus: Focus; initialLanguage?: Language; posts: WisdomPost[] }) {
   const [language, setLanguage] = useState<Language>(initialLanguage);
-  const [activeMode, setActiveMode] = useState<Mode>('read');
-  const [query, setQuery] = useState('');
   const todayPost = posts[0];
-  const pillar = getPillar(todayPost.pillar);
-  const currentMedia = todayPost.media[language];
-  const filteredPosts = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    if (!q) return posts;
-    return posts.filter((post) =>
-      [post.title[language], post.excerpt[language], post.body[language], ...post.tags].join(' ').toLowerCase().includes(q)
-    );
-  }, [language, posts, query]);
+  const videoPost = posts[0];
+  const audioPost = posts[1] || posts[0];
+  const blogPost = posts[2] || posts[0];
 
   return (
-    <main className="site-shell">
-      <div className="aura aura-one" />
-      <div className="aura aura-two" />
-      <Header focus={focus} language={language} setLanguage={setLanguage} />
-
-      <section className="hero-grid section-pad" id="today">
-        <div className="hero-copy reveal">
-          <div className="eyebrow"><Sparkles size={16} /> {HERITAGE_COPY.heroBadge[language]} • {uiCopy.freeForever[language]}</div>
-          <h1>
-            {uiCopy.heroTitleA[language]} <span>{uiCopy.heroTitleB[language]}</span>, {uiCopy.heroTitleC[language]}
-          </h1>
-          <p>{HERITAGE_COPY.heroDescription[language]}</p>
-          <p className="founder-line">{HERITAGE_COPY.founderIntro[language]}</p>
-          <div className="hero-actions">
-            <Link className="primary-action" href={`/${language}/wisdom/${todayPost.id}`}>{uiCopy.openToday[language]} <ArrowUpRight size={18} /></Link>
-            <a className="secondary-action" href={BRAND.youtube} target="_blank" rel="noreferrer">{uiCopy.youtube[language]}</a>
+    <main className="reference-shell">
+      <ReferenceHeader focus={focus} language={language} setLanguage={setLanguage} />
+      <section className="reference-hero">
+        <div className="hero-leaf"><Leaf size={28} /> {copy.eyebrow[language]}</div>
+        <div className="reference-hero-copy">
+          <h1>{copy.titleA[language]} <span>{copy.titleB[language]}</span></h1>
+          <p>{copy.subtitle[language]}</p>
+          <div className="hero-mode-row">
+            <ModePill icon={Video} title={copy.video[language]} subtitle={copy.videoSub[language]} />
+            <ModePill icon={Headphones} title={copy.audio[language]} subtitle={copy.audioSub[language]} />
+            <ModePill icon={BookOpen} title={copy.blog[language]} subtitle={copy.blogSub[language]} />
           </div>
-          <div className="legacy-stats" aria-label="Sampurna Samruddhi history">
-            {TRUST_STATS.map((stat) => (
-              <div key={stat.value}>
-                <strong>{stat.value}</strong>
-                <span>{stat.label[language]}</span>
-              </div>
-            ))}
+          <div className="hero-actions clean-actions">
+            <Link href={`/${language}/wisdom/${todayPost.id}`} className="green-cta"><Play size={18} /> {copy.start[language]}</Link>
+            <Link href={`/${language}/library`} className="outline-cta">{copy.free[language]}</Link>
           </div>
         </div>
-
-        <div className="hero-orbit reveal delay-1" aria-hidden="true">
-          <div className="orbit-ring" />
-          <div className="daily-seal">
-            <span>{BRAND.siteNameDevanagari}</span>
-            <strong>365</strong>
-            <small>{uiCopy.daysFree[language]}</small>
+        <div className="reference-founder-visual">
+          <div className="founder-photo-card">
+            <Image src="/legacy-assets/dad_photo.jpg" alt={copy.founderOne[language]} width={520} height={620} priority />
+            <Image src="/legacy-assets/mom_photo.jpg" alt={copy.founderTwo[language]} width={420} height={560} priority />
           </div>
-          {PILLARS.map((item, index) => (
-            <div className={`orbit-chip chip-${index}`} key={item.slug} style={{ '--tone': item.tone } as React.CSSProperties}>
-              <b>{item.symbol}</b>
-              <span>{item.name[language]}</span>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section className="heritage-stage section-pad">
-        <div className="founder-card reveal">
-          <Image src={LEGACY_ASSETS.founder} alt={`${BRAND.founder} - Sampurna Samruddhi founder`} width={260} height={260} />
-          <div>
-            <span className="section-kicker">{uiCopy.heritageKicker[language]}</span>
-            <h2>{BRAND.founder}</h2>
-            <p>{HERITAGE_COPY.mission[language]}</p>
-            <p>{HERITAGE_COPY.dailyGift[language]}</p>
+          <div className="founder-name-strip">
+            <div><strong>{copy.founderOne[language]}</strong><span>({copy.founderOneRole[language]})</span></div>
+            <div><strong>{copy.founderTwo[language]}</strong><span>({copy.founderTwoRole[language]})</span></div>
           </div>
         </div>
       </section>
 
-      <section className="today-stage section-pad" id="wisdom-card">
-        <div className="section-heading reveal">
-          <span className="section-kicker"><CalendarDays size={15} /> {uiCopy.todayKicker[language]}</span>
-          <h2>{todayPost.title[language]}</h2>
-          <p>{todayPost.excerpt[language]}</p>
+      <section className="reference-free-section">
+        <div className="ornament-heading">
+          <span />
+          <div><h2>{copy.freeContent[language]}</h2><p>{copy.freeContentSub[language]}</p></div>
+          <span />
         </div>
-
-        <article className="wisdom-card reveal delay-1">
-          <div className="wisdom-top" style={{ '--pillar': pillar.tone } as React.CSSProperties}>
-            <div>
-              <span className="pillar-pill">{pillar.name[language]} • {pillar.english}</span>
-              <h3>{todayPost.title[language]}</h3>
-            </div>
-            <div className="date-block">
-              <span>May</span>
-              <strong>13</strong>
-            </div>
-          </div>
-
-          <div className="mode-tabs" role="tablist" aria-label="Content modes">
-            {(Object.keys(modeCopy) as Mode[]).map((mode) => {
-              const Icon = modeCopy[mode].icon;
-              return (
-                <button key={mode} className={activeMode === mode ? 'active' : ''} onClick={() => setActiveMode(mode)}>
-                  <Icon size={17} /> {modeCopy[mode].label[language]}
-                </button>
-              );
-            })}
-          </div>
-
-          <div className="wisdom-body">
-            {activeMode === 'read' && (
-              <div className="reader-panel devanagari-aware">
-                <p>{todayPost.body[language]}</p>
-                <div className="reflection-box">
-                  <Mic2 size={18} />
-                  <div>
-                    <span>{uiCopy.reflection[language]}</span>
-                    <strong>{todayPost.reflection[language]}</strong>
-                  </div>
-                </div>
-              </div>
-            )}
-            {activeMode === 'watch' && (
-              <div className="media-panel">
-                <Youtube size={34} />
-                <h4>{uiCopy.videoTitle[language]}</h4>
-                <p>{uiCopy.videoText[language]}</p>
-                <a href={currentMedia.videoUrl || BRAND.youtube} target="_blank" rel="noreferrer">{uiCopy.openVideo[language]} <ArrowUpRight size={16} /></a>
-              </div>
-            )}
-            {activeMode === 'listen' && (
-              <div className="media-panel audio-wave">
-                <Headphones size={34} />
-                <h4>{uiCopy.audioTitle[language]}</h4>
-                <p>{uiCopy.audioText[language]}</p>
-                <div className="wave-bars">{Array.from({ length: 22 }).map((_, i) => <span key={i} style={{ '--i': i } as React.CSSProperties} />)}</div>
-              </div>
-            )}
-            {activeMode === 'download' && (
-              <div className="download-grid">
-                {currentMedia.resources.map((resource) => (
-                  <a href={resource.url} key={resource.label} className="download-tile">
-                    <Download size={20} />
-                    <span>{resource.kind.toUpperCase()}</span>
-                    <strong>{resource.label}</strong>
-                  </a>
-                ))}
-                <div className="download-tile muted"><UploadCloud size={20} /><span>{language.toUpperCase()} Admin</span><strong>{uiCopy.uploadSlots[language]}</strong></div>
-              </div>
-            )}
-          </div>
-
-          <div className="wisdom-actions">
-            <a href={`https://wa.me/?text=${encodeURIComponent(todayPost.title[language] + ' — ' + BRAND.siteName)}`} target="_blank" rel="noreferrer"><Share2 size={17} /> {uiCopy.share[language]}</a>
-            <button><CheckCircle2 size={17} /> {uiCopy.markRead[language]}</button>
-          </div>
-        </article>
-      </section>
-
-      <section className="library-stage section-pad" id="library">
-        <div className="section-heading compact reveal">
-          <span className="section-kicker"><Library size={15} /> {uiCopy.libraryKicker[language]}</span>
-          <h2>{uiCopy.libraryTitle[language]}</h2>
-        </div>
-        <div className="search-card reveal delay-1">
-          <Search size={18} />
-          <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder={uiCopy.searchPlaceholder[language]} />
-          <Settings2 size={18} />
-        </div>
-        <div className="post-strip">
-          {filteredPosts.map((post, index) => {
-            const itemPillar = getPillar(post.pillar);
-            return (
-              <Link className="post-card reveal" href={`/${language}/wisdom/${post.id}`} style={{ '--delay': `${index * 80}ms`, '--pillar': itemPillar.tone } as React.CSSProperties} key={post.id}>
-                <span>{itemPillar.name[language]}</span>
-                <h3>{post.title[language]}</h3>
-                <p>{post.excerpt[language]}</p>
-                <small>{new Date(post.date).toLocaleDateString(language === 'en' ? 'en-IN' : language === 'hi' ? 'hi-IN-u-nu-deva' : 'mr-IN')}</small>
-              </Link>
-            );
-          })}
+        <div className="content-category-grid">
+          <ContentCategory kind="video" icon={Video} language={language} title={copy.video[language]} subtitle={copy.videoSub[language]} post={videoPost} cta={copy.allVideos[language]} />
+          <ContentCategory kind="audio" icon={Headphones} language={language} title={copy.audio[language]} subtitle={copy.audioSub[language]} post={audioPost} cta={copy.allAudio[language]} />
+          <ContentCategory kind="blog" icon={BookOpen} language={language} title={copy.blog[language]} subtitle={copy.blogSub[language]} post={blogPost} cta={copy.allArticles[language]} />
         </div>
       </section>
 
-      <section className="pillar-stage section-pad" id="pillars">
-        <div className="section-heading reveal">
-          <span className="section-kicker">{uiCopy.pillarKicker[language]}</span>
-          <h2>{uiCopy.pillarTitle[language]}</h2>
-        </div>
-        <div className="pillar-grid">
-          {PILLARS.map((item) => (
-            <div className="pillar-card reveal legacy-pillar-card" key={item.slug} style={{ '--tone': item.tone, background: item.gradient } as React.CSSProperties}>
-              <Image src={LEGACY_ASSETS[item.slug]} alt={`${item.name[language]} pillar`} width={480} height={240} />
-              <b>{item.symbol}</b>
-              <h3>{item.name[language]}</h3>
-              <span>{item.english}</span>
-              <p>{item.description[language]}</p>
-            </div>
-          ))}
-        </div>
+      <section className="reference-trust-row" aria-label={copy.features[language]}>
+        {[copy.featureScience, copy.featureSimple, copy.featureFree, copy.featureCare].map((item, index) => {
+          const Icon = featureIcons[index];
+          return <div key={item[language]}><Icon size={34} /><span>{item[language]}</span></div>;
+        })}
       </section>
 
-      <section className="admin-preview section-pad" id="admin">
-        <div className="admin-phone reveal">
-          <div className="phone-top" />
-          <span>{uiCopy.adminCms[language]}</span>
-          <h3>{uiCopy.createTomorrow[language]}</h3>
-          <label>{uiCopy.date[language]}</label>
-          <div className="fake-input">14 May 2026</div>
-          <label>{uiCopy.contentModes[language]}</label>
-          <div className="admin-toggles"><button>Blog</button><button>Video</button><button>Audio</button><button>PPT</button></div>
-          <label>{uiCopy.publishStatus[language]}</label>
-          <div className="publish-row"><span>{uiCopy.draft[language]}</span><strong>{uiCopy.schedule[language]}</strong></div>
-        </div>
-        <div className="admin-copy reveal delay-1">
-          <span className="section-kicker">{uiCopy.builtForDad[language]}</span>
-          <h2>{uiCopy.noDeveloper[language]}</h2>
-          <p>{uiCopy.adminText[language]}</p>
-          <ul>
-            <li>{uiCopy.workflow[language]}</li>
-            <li>{uiCopy.calendar[language]}</li>
-            <li>{uiCopy.mediaLibrary[language]}</li>
-            <li>{uiCopy.policies[language]}</li>
-          </ul>
-        </div>
+      <section className="reference-pillars">
+        {PILLARS.map((pillar) => (
+          <Link href={`/${language}/pillars`} key={pillar.slug} style={{ '--tone': pillar.tone } as React.CSSProperties}>
+            <Image src={LEGACY_ASSETS[pillar.slug]} alt={pillar.name[language]} width={180} height={100} />
+            <strong>{pillar.name[language]}</strong>
+            <span>{pillar.description[language]}</span>
+          </Link>
+        ))}
       </section>
 
-      <MobileDock focus={focus} language={language} />
-      <Footer language={language} />
+      <section className="reference-legacy-stats">
+        {TRUST_STATS.map((stat) => <div key={stat.value}><strong>{stat.value}</strong><span>{stat.label[language]}</span></div>)}
+      </section>
+
+      <ReferenceFooter language={language} />
     </main>
   );
 }
 
-function Header({ focus, language, setLanguage }: { focus: Focus; language: Language; setLanguage: (language: Language) => void }) {
-  const router = useRouter();
+function ModePill({ icon: Icon, title, subtitle }: { icon: LucideIcon; title: string; subtitle: string }) {
+  return <div className="mode-pill"><span><Icon size={24} /></span><div><strong>{title}</strong><small>{subtitle}</small></div></div>;
+}
 
+function ContentCategory({ kind, icon: Icon, title, subtitle, post, cta, language }: { kind: 'video' | 'audio' | 'blog'; icon: LucideIcon; title: string; subtitle: string; post: WisdomPost; cta: string; language: Language }) {
+  const pillar = getPillar(post.pillar);
   return (
-    <header className="top-nav">
-      <Link href="/" className="brand-mark">
-        <span>ॐ</span>
-        <div><strong>{BRAND.siteName}</strong><small>{BRAND.suffix}</small></div>
+    <article className={`category-card ${kind}`} style={{ '--tone': pillar.tone } as React.CSSProperties}>
+      <div className="category-icon"><Icon size={42} /></div>
+      <div className="category-copy">
+        <h3>{title}</h3>
+        <strong>{subtitle}</strong>
+        <p>{post.excerpt[language] || HERITAGE_COPY.dailyGift[language]}</p>
+      </div>
+      <div className="category-preview">
+        {kind === 'audio' ? <div className="audio-widget"><Play size={18} /><span /><small>00:00 / 24:30</small></div> : <Image src={LEGACY_ASSETS[post.pillar]} alt={post.title[language]} width={280} height={150} />}
+      </div>
+      <Link href={`/${language}/wisdom/${post.id}`}>{cta} →</Link>
+    </article>
+  );
+}
+
+function ReferenceHeader({ focus, language, setLanguage }: { focus: Focus; language: Language; setLanguage: (language: Language) => void }) {
+  const router = useRouter();
+  return (
+    <header className="reference-header">
+      <Link href={`/${language}`} className="reference-brand">
+        <Image src="/legacy-assets/logo.jpeg" alt={BRAND.siteName} width={62} height={62} />
+        <div><strong>Sampurna Samruddhi Upasana</strong><span>{BRAND.siteNameDevanagari}, समृद्ध आणि आनंदी जीवन</span></div>
       </Link>
       <nav>
         {nav.map((item) => <Link className={focus === item.key ? 'active' : ''} href={localizedPath(language, item.key)} key={item.key}>{item.label[language]}</Link>)}
       </nav>
-      <div className="nav-actions">
-        <select value={language} onChange={(event) => { const nextLanguage = event.target.value as Language; setLanguage(nextLanguage); router.push(localizedPath(nextLanguage, focus)); }} aria-label="Language">
+      <div className="reference-actions">
+        <select value={language} onChange={(event) => { const next = event.target.value as Language; setLanguage(next); router.push(localizedPath(next, focus)); }} aria-label="Language">
           {LANGUAGES.map((item) => <option value={item.code} key={item.code}>{item.native}</option>)}
         </select>
-        <button className="menu-button" aria-label="Open menu"><Menu size={19} /></button>
+        <a href={`https://wa.me/${BRAND.whatsapp}`} target="_blank" rel="noreferrer"><Mail size={16} /> {copy.newsletter[language]}</a>
+        <button><Menu size={24} /></button>
       </div>
     </header>
   );
 }
 
-
-function MobileDock({ focus, language }: { focus: Focus; language: Language }) {
+function ReferenceFooter({ language }: { language: Language }) {
   return (
-    <nav className="mobile-dock" aria-label="Mobile navigation">
-      {nav.slice(0, 4).map((item) => (
-        <Link className={focus === item.key ? 'active' : ''} href={localizedPath(language, item.key)} key={item.key}>
-          {item.label[language]}
-        </Link>
-      ))}
-    </nav>
-  );
-}
-
-function Footer({ language }: { language: Language }) {
-  return (
-    <footer className="site-footer">
-      <div>
-        <strong>{BRAND.siteName}</strong>
-        <p>{HERITAGE_COPY.footerTagline[language]} {uiCopy.footerExtra[language]}</p>
-      </div>
-      <div>
-        <a href={BRAND.youtube} target="_blank" rel="noreferrer">YouTube</a>
-        <a href={`mailto:${BRAND.email}`}>Email</a>
-        <a href={`https://wa.me/${BRAND.whatsapp}`} target="_blank" rel="noreferrer">WhatsApp</a>
-      </div>
+    <footer className="reference-footer">
+      <a href="https://fabselfhelp.com" target="_blank" rel="noreferrer"><Globe2 size={24} /><span>{copy.website[language]}<small>fabselfhelp.com</small></span></a>
+      <a href={`mailto:${BRAND.email}`}><Mail size={24} /><span>{copy.email[language]}<small>{BRAND.email}</small></span></a>
+      <a href={`https://wa.me/${BRAND.whatsapp}`} target="_blank" rel="noreferrer"><Phone size={24} /><span>{copy.contact[language]}<small>{BRAND.phone}</small></span></a>
     </footer>
   );
 }
