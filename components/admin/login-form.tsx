@@ -25,7 +25,7 @@ export function LoginForm() {
         return;
       }
 
-      router.push('/admin');
+      router.push('/admin/content');
       router.refresh();
     } catch (error) {
       setMessage(error instanceof Error ? error.message : 'Login failed.');
