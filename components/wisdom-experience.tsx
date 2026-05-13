@@ -168,12 +168,12 @@ export function WisdomExperience({ focus }: { focus: Focus }) {
           {filteredPosts.map((post, index) => {
             const itemPillar = getPillar(post.pillar);
             return (
-              <article className="post-card reveal" style={{ '--delay': `${index * 80}ms`, '--pillar': itemPillar.tone } as React.CSSProperties} key={post.id}>
+              <Link className="post-card reveal" href={`/${language}/wisdom/${post.id}`} style={{ '--delay': `${index * 80}ms`, '--pillar': itemPillar.tone } as React.CSSProperties} key={post.id}>
                 <span>{itemPillar.name[language]}</span>
                 <h3>{post.title[language]}</h3>
                 <p>{post.excerpt[language]}</p>
                 <small>{new Date(post.date).toLocaleDateString(language === 'en' ? 'en-IN' : language === 'hi' ? 'hi-IN-u-nu-deva' : 'mr-IN')}</small>
-              </article>
+              </Link>
             );
           })}
         </div>

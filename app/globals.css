@@ -359,3 +359,23 @@ button { cursor: pointer; }
   .calendar-day { min-height: 62px; border-radius: 13px; padding: 7px; }
   .calendar-day small { display: none; }
 }
+.wisdom-detail-shell { min-height: 100vh; padding: 18px; display: grid; place-items: start center; background: linear-gradient(135deg, #fff8e8, #f3dfc2); }
+.wisdom-detail-card { width: min(900px, 100%); margin: 28px auto; border: 1px solid var(--line); border-radius: 36px; background: rgba(255,250,240,.88); box-shadow: var(--shadow); padding: clamp(20px, 5vw, 48px); }
+.detail-back { display: inline-flex; align-items: center; gap: 8px; color: var(--muted); font-weight: 900; margin-bottom: 18px; }
+.detail-language-switcher { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; }
+.detail-language-switcher a { padding: 8px 12px; border-radius: 999px; border: 1px solid var(--line); background: rgba(255,255,255,.58); font-weight: 900; }
+.detail-language-switcher a.active { background: var(--ink); color: #fff; border-color: var(--ink); }
+.wisdom-detail-card h1 { margin: 18px 0 12px; font-family: var(--font-display), var(--font-devanagari); font-size: clamp(2.4rem, 8vw, 5.8rem); line-height: .95; letter-spacing: -.055em; }
+.detail-excerpt { color: var(--muted); font-size: 1.15rem; line-height: 1.75; max-width: 62ch; }
+.detail-body { margin-top: 24px; display: grid; gap: 18px; }
+.detail-body > p { margin: 0; font-size: clamp(1.1rem, 3vw, 1.38rem); line-height: 1.9; color: #35243c; }
+.detail-body aside { padding: 18px; border-radius: 24px; background: color-mix(in srgb, var(--pillar) 14%, white); border: 1px solid color-mix(in srgb, var(--pillar) 25%, transparent); }
+.detail-body aside strong, .detail-body aside span { display: block; }
+.detail-body aside strong { color: var(--pillar); margin-bottom: 8px; }
+.detail-media-grid { display: grid; gap: 12px; margin-top: 24px; }
+.detail-media-grid a { display: grid; gap: 6px; padding: 16px; border: 1px solid var(--line); border-radius: 22px; background: #fff8e8; }
+.detail-media-grid a svg { color: var(--pillar); }
+.detail-media-grid a strong { font-size: 1.05rem; }
+.detail-media-grid a span { color: var(--muted); font-weight: 700; line-height: 1.45; }
+.detail-share { display: inline-flex; align-items: center; justify-content: center; gap: 8px; margin-top: 22px; min-height: 48px; padding: 12px 18px; border-radius: 999px; color: #fff; background: #128c4a; font-weight: 900; }
+@media (min-width: 760px) { .detail-media-grid { grid-template-columns: repeat(3, 1fr); } }
