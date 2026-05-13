@@ -65,27 +65,28 @@ const modeMeta: Record<Mode, { icon: LucideIcon; label: keyof typeof copy; subti
 
 const featureIcons = [FlaskConical, BookOpen, Sprout, Leaf];
 
-export function WisdomExperience({ focus, initialLanguage = 'mr', posts }: { focus: Focus; initialLanguage?: Language; posts: WisdomPost[] }) {
+export function WisdomExperience({ focus, initialLanguage = 'mr', posts, initialDate, initialMode, initialMonth }: { focus: Focus; initialLanguage?: Language; posts: WisdomPost[]; initialDate?: string; initialMode?: Mode; initialMonth?: string }) {
   const [language, setLanguage] = useState<Language>(initialLanguage);
   return (
     <main className="reference-shell daily-reference-shell">
       <ReferenceHeader focus={focus} language={language} setLanguage={setLanguage} />
-      {focus === 'about' ? <AboutPage language={language} /> : <DailyContentPage language={language} posts={posts} />}
+      {focus === 'about' ? <AboutPage language={language} /> : <DailyContentPage language={language} posts={posts} initialDate={initialDate} initialMode={initialMode} initialMonth={initialMonth} />}
       <ReferenceFooter language={language} />
     </main>
   );
 }
 
-function DailyContentPage({ language, posts }: { language: Language; posts: WisdomPost[] }) {
+function DailyContentPage({ language, posts, initialDate, initialMode, initialMonth }: { language: Language; posts: WisdomPost[]; initialDate?: string; initialMode?: Mode; initialMonth?: string }) {
   const sortedPosts = useMemo(() => [...posts].sort((a, b) => b.date.localeCompare(a.date)), [posts]);
   const postsByDate = useMemo(() => new Map(sortedPosts.map((post) => [post.date, post])), [sortedPosts]);
   const initialPost = useMemo(() => sortedPosts.find((post) => isUnlocked(post.date)) || sortedPosts[0], [sortedPosts]);
-  const [selectedDate, setSelectedDate] = useState(initialPost?.date || todayKey());
-  const [currentMonth, setCurrentMonth] = useState(() => monthStart(parseDate(initialPost?.date || todayKey())));
-  const [activeMode, setActiveMode] = useState<Mode>('read');
+  const fallbackDate = initialPost?.date || todayKey();
+  const selectedDate = initialDate && postsByDate.has(initialDate) ? initialDate : fallbackDate;
   const selectedPost = postsByDate.get(selectedDate);
   const selectedUnlocked = selectedPost ? isUnlocked(selectedPost.date) : false;
   const modes: Mode[] = ['read', 'watch', 'listen', 'pdf'];
+  const activeMode = initialMode && modes.includes(initialMode) ? initialMode : 'read';
+  const currentMonth = monthStart(parseMonth(initialMonth) || parseDate(selectedDate));
 
   return (
     <>
@@ -94,14 +95,14 @@ function DailyContentPage({ language, posts }: { language: Language; posts: Wisd
         <div className="reference-hero-copy">
           <h1>{copy.titleA[language]} <span>{copy.titleB[language]}</span></h1>
           <p>{copy.subtitle[language]}</p>
-          <div className="hero-mode-row">{modes.map((mode) => <ModePill key={mode} mode={mode} language={language} onSelect={() => { setActiveMode(mode); document.getElementById('daily-content')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }} />)}</div>
+          <div className="hero-mode-row">{modes.map((mode) => <ModePill key={mode} mode={mode} language={language} date={selectedDate} month={monthKey(currentMonth)} />)}</div>
           <div className="hero-actions clean-actions"><a href="#daily-content" className="green-cta"><Play size={18} /> {copy.start[language]}</a><span className="outline-cta">{copy.free[language]}</span></div>
         </div>
         <FounderVisual language={language} />
       </section>
 
       <section className="daily-console" id="daily-content">
-        <CalendarPanel language={language} postsByDate={postsByDate} selectedDate={selectedDate} currentMonth={currentMonth} onMonthChange={setCurrentMonth} onSelectDate={(date) => { setSelectedDate(date); setActiveMode('read'); }} />
+        <CalendarPanel language={language} postsByDate={postsByDate} selectedDate={selectedDate} currentMonth={currentMonth} activeMode={activeMode} />
         <article className="daily-content-card">
           {selectedPost && selectedUnlocked ? (
             <>
@@ -113,7 +114,7 @@ function DailyContentPage({ language, posts }: { language: Language; posts: Wisd
               <div className="daily-mode-tabs">
                 {modes.map((mode) => {
                   const Icon = modeMeta[mode].icon;
-                  return <button key={mode} className={activeMode === mode ? 'active' : ''} onClick={() => setActiveMode(mode)}><Icon size={18} /> {copy[modeMeta[mode].label][language]}</button>;
+                  return <Link key={mode} className={activeMode === mode ? 'active' : ''} href={dailyHref(language, selectedDate, mode, monthKey(currentMonth))}><Icon size={18} /> {copy[modeMeta[mode].label][language]}</Link>;
                 })}
               </div>
               <ModePanel post={selectedPost} mode={activeMode} language={language} />
@@ -127,21 +128,22 @@ function DailyContentPage({ language, posts }: { language: Language; posts: Wisd
   );
 }
 
-function CalendarPanel({ language, postsByDate, selectedDate, currentMonth, onMonthChange, onSelectDate }: { language: Language; postsByDate: Map<string, WisdomPost>; selectedDate: string; currentMonth: Date; onMonthChange: (date: Date) => void; onSelectDate: (date: string) => void }) {
+function CalendarPanel({ language, postsByDate, selectedDate, currentMonth, activeMode }: { language: Language; postsByDate: Map<string, WisdomPost>; selectedDate: string; currentMonth: Date; activeMode: Mode }) {
   const days = calendarDays(currentMonth);
   const label = currentMonth.toLocaleDateString(localeFor(language), { month: 'long', year: 'numeric' });
   const weekDays = language === 'en' ? ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] : language === 'hi' ? ['रवि', 'सोम', 'मंगल', 'बुध', 'गुरु', 'शुक्र', 'शनि'] : ['रवि', 'सोम', 'मंगळ', 'बुध', 'गुरु', 'शुक्र', 'शनि'];
   return (
     <aside className="daily-calendar-card">
       <div className="calendar-card-top"><div><strong>{copy.calendarTitle[language]}</strong><small>{copy.unlockNote[language]}</small></div><CalendarDays size={26} /></div>
-      <div className="calendar-month-row"><button onClick={() => onMonthChange(addMonths(currentMonth, -1))} aria-label="Previous month"><ChevronLeft size={18} /></button><b>{label}</b><button onClick={() => onMonthChange(addMonths(currentMonth, 1))} aria-label="Next month"><ChevronRight size={18} /></button></div>
+      <div className="calendar-month-row"><Link href={dailyHref(language, selectedDate, activeMode, monthKey(addMonths(currentMonth, -1)))} aria-label="Previous month"><ChevronLeft size={18} /></Link><b>{label}</b><Link href={dailyHref(language, selectedDate, activeMode, monthKey(addMonths(currentMonth, 1)))} aria-label="Next month"><ChevronRight size={18} /></Link></div>
       <div className="calendar-grid-mini week-labels">{weekDays.map((day) => <span key={day}>{day}</span>)}</div>
       <div className="calendar-grid-mini">
         {days.map((date) => {
           const key = dateKey(date);
           const post = postsByDate.get(key);
           const unlocked = post ? isUnlocked(key) : false;
-          return <button key={key} disabled={!post || !unlocked} onClick={() => onSelectDate(key)} className={`${key === selectedDate ? 'active' : ''} ${post ? 'has-post' : ''} ${unlocked ? 'unlocked' : 'locked'} ${date.getMonth() !== currentMonth.getMonth() ? 'muted' : ''}`}><span>{date.getDate()}</span>{post && !unlocked ? <Lock size={11} /> : null}</button>;
+          const className = `${key === selectedDate ? 'active' : ''} ${post ? 'has-post' : ''} ${unlocked ? 'unlocked' : 'locked'} ${date.getMonth() !== currentMonth.getMonth() ? 'muted' : ''}`;
+          return post && unlocked ? <Link key={key} href={dailyHref(language, key, activeMode, monthKey(currentMonth))} className={className}><span>{date.getDate()}</span></Link> : <span key={key} className={className}><span>{date.getDate()}</span>{post ? <Lock size={11} /> : null}</span>;
         })}
       </div>
     </aside>
@@ -178,9 +180,9 @@ function FounderVisual({ language }: { language: Language }) {
   return <div className="reference-founder-visual"><div className="founder-photo-card"><Image src="/legacy-assets/dad_photo.jpg" alt={copy.founderOne[language]} width={520} height={620} priority /><Image src="/legacy-assets/mom_photo.jpg" alt={copy.founderTwo[language]} width={420} height={560} priority /></div><div className="founder-name-strip"><div><strong>{copy.founderOne[language]}</strong><span>({copy.founderOneRole[language]})</span></div><div><strong>{copy.founderTwo[language]}</strong><span>({copy.founderTwoRole[language]})</span></div></div></div>;
 }
 
-function ModePill({ mode, language, onSelect }: { mode: Mode; language: Language; onSelect?: () => void }) {
+function ModePill({ mode, language, date, month }: { mode: Mode; language: Language; date: string; month: string }) {
   const Icon = modeMeta[mode].icon;
-  return <button type="button" className="mode-pill" onClick={onSelect}><span><Icon size={24} /></span><div><strong>{copy[modeMeta[mode].label][language]}</strong><small>{copy[modeMeta[mode].subtitle][language]}</small></div></button>;
+  return <Link className="mode-pill" href={dailyHref(language, date, mode, month)}><span><Icon size={24} /></span><div><strong>{copy[modeMeta[mode].label][language]}</strong><small>{copy[modeMeta[mode].subtitle][language]}</small></div></Link>;
 }
 
 function FeatureRow({ language }: { language: Language }) {
@@ -212,6 +214,9 @@ function isUnlocked(date: string) {
 function todayKey() { return dateKey(new Date()); }
 function dateKey(date: Date) { return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`; }
 function parseDate(date: string) { return new Date(`${date}T00:00:00`); }
+function parseMonth(month?: string) { return month && /^\d{4}-\d{2}$/.test(month) ? new Date(`${month}-01T00:00:00`) : null; }
+function monthKey(date: Date) { return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`; }
+function dailyHref(language: Language, date: string, mode: Mode, month: string) { return `/${language}?date=${date}&mode=${mode}&month=${month}#daily-content`; }
 function monthStart(date: Date) { return new Date(date.getFullYear(), date.getMonth(), 1); }
 function addMonths(date: Date, amount: number) { return new Date(date.getFullYear(), date.getMonth() + amount, 1); }
 function calendarDays(month: Date) { const start = new Date(month.getFullYear(), month.getMonth(), 1); start.setDate(start.getDate() - start.getDay()); return Array.from({ length: 42 }, (_, index) => { const date = new Date(start); date.setDate(start.getDate() + index); return date; }); }

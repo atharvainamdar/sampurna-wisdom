@@ -642,24 +642,26 @@ button { cursor: pointer; }
 .calendar-card-top strong { font-size: 1.25rem; font-weight: 950; }
 .calendar-card-top small { margin-top: 5px; color: #687375; line-height: 1.35; font-weight: 700; }
 .calendar-month-row { display: flex; align-items: center; justify-content: space-between; margin: 10px 0 16px; }
-.calendar-month-row button { display: grid; place-items: center; width: 36px; height: 36px; border: 1px solid var(--ref-line); border-radius: 999px; background: #fff; color: var(--ref-green); }
+.calendar-month-row button, .calendar-month-row a { display: grid; place-items: center; width: 36px; height: 36px; border: 1px solid var(--ref-line); border-radius: 999px; background: #fff; color: var(--ref-green); }
 .calendar-month-row b { color: var(--ref-ink); font-size: 1.05rem; }
 .calendar-grid-mini { display: grid; grid-template-columns: repeat(7, 1fr); gap: 7px; }
 .calendar-grid-mini.week-labels { margin-bottom: 8px; color: #6a7779; font-size: .75rem; font-weight: 950; text-align: center; }
-.calendar-grid-mini button { position: relative; display: grid; place-items: center; min-height: 38px; border: 1px solid transparent; border-radius: 12px; background: #f2f5f3; color: #929b9d; font-weight: 900; }
-.calendar-grid-mini button.has-post { color: var(--ref-green); background: #eef8f4; border-color: #cce3da; cursor: pointer; }
-.calendar-grid-mini button.active { color: #fff; background: var(--ref-green); box-shadow: 0 8px 18px rgba(13,95,78,.22); }
-.calendar-grid-mini button.locked.has-post { color: #a58c52; background: #fff7e6; border-color: #ead8a8; cursor: not-allowed; }
-.calendar-grid-mini button.muted { opacity: .45; }
-.calendar-grid-mini button svg { position: absolute; right: 4px; top: 4px; }
+.calendar-grid-mini a { text-decoration: none; }
+.calendar-grid-mini button, .calendar-grid-mini a, .calendar-grid-mini > span { position: relative; display: grid; place-items: center; min-height: 38px; border: 1px solid transparent; border-radius: 12px; background: #f2f5f3; color: #929b9d; font-weight: 900; }
+.calendar-grid-mini button.has-post, .calendar-grid-mini a.has-post, .calendar-grid-mini > span.has-post { color: var(--ref-green); background: #eef8f4; border-color: #cce3da; cursor: pointer; }
+.calendar-grid-mini button.active, .calendar-grid-mini a.active, .calendar-grid-mini > span.active { color: #fff; background: var(--ref-green); box-shadow: 0 8px 18px rgba(13,95,78,.22); }
+.calendar-grid-mini button.locked.has-post, .calendar-grid-mini a.locked.has-post, .calendar-grid-mini > span.locked.has-post { color: #a58c52; background: #fff7e6; border-color: #ead8a8; cursor: not-allowed; }
+.calendar-grid-mini button.muted, .calendar-grid-mini a.muted, .calendar-grid-mini > span.muted { opacity: .45; }
+.calendar-grid-mini button svg, .calendar-grid-mini a svg, .calendar-grid-mini > span svg { position: absolute; right: 4px; top: 4px; }
 .daily-content-card { overflow: hidden; min-height: 560px; }
 .daily-card-head { padding: clamp(22px, 4vw, 34px); background: linear-gradient(135deg, color-mix(in srgb, var(--tone) 14%, #fff), #fff); border-bottom: 1px solid var(--ref-line); }
 .daily-card-head span { color: var(--tone); font-weight: 950; }
 .daily-card-head h2 { margin: 10px 0; color: var(--ref-ink); font-size: clamp(1.8rem, 4vw, 3.25rem); line-height: 1.06; font-weight: 950; letter-spacing: -.035em; }
 .daily-card-head p { max-width: 820px; color: #516064; line-height: 1.62; font-weight: 700; }
 .daily-mode-tabs { display: flex; flex-wrap: wrap; gap: 10px; padding: 18px clamp(18px, 3vw, 30px); border-bottom: 1px solid var(--ref-line); background: #fbfdfc; }
-.daily-mode-tabs button { display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--ref-line); border-radius: 999px; padding: 11px 17px; background: #fff; color: var(--ref-green); font-weight: 950; }
-.daily-mode-tabs button.active { background: var(--ref-green); color: #fff; border-color: var(--ref-green); }
+.daily-mode-tabs a { text-decoration: none; }
+.daily-mode-tabs button, .daily-mode-tabs a { display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--ref-line); border-radius: 999px; padding: 11px 17px; background: #fff; color: var(--ref-green); font-weight: 950; }
+.daily-mode-tabs button.active, .daily-mode-tabs a.active { background: var(--ref-green); color: #fff; border-color: var(--ref-green); }
 .daily-reader { padding: clamp(22px, 4vw, 34px); color: #334147; font-size: 1.05rem; line-height: 1.8; font-weight: 650; }
 .daily-reader p { margin: 0 0 18px; }
 .daily-video-panel, .daily-audio-panel, .daily-resource-panel, .locked-day-panel { padding: clamp(22px, 4vw, 34px); }
