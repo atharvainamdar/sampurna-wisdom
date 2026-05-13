@@ -189,17 +189,8 @@ function AboutPage({ language }: { language: Language }) {
     <section className="about-premium-page">
       <div className="about-quote-bar">✧ — “{copy.birthright[language]}” — <strong>Sampurna Samruddhi Upasana</strong></div>
       <div className="about-premium-hero">
-        <div className="about-photo-stage">
-          <div className="about-arch" />
-          <div className="about-logo-medallion"><Image src="/legacy-assets/logo.jpeg" alt={BRAND.siteName} width={120} height={120} /></div>
-          <div className="about-people-row">
-            <div className="about-person-photo"><Image src="/legacy-assets/dad_photo.jpg" alt={copy.founderOne[language]} width={520} height={620} priority /></div>
-            <div className="about-person-photo"><Image src="/legacy-assets/mom_photo.jpg" alt={copy.founderTwo[language]} width={430} height={560} priority /></div>
-          </div>
-          <div className="about-name-glass">
-            <div><span>{copy.founderOne[language]}</span><small>{copy.founderOneRole[language]} & Self Help Coach</small></div>
-            <div><span>{copy.founderTwo[language]}</span><small>{copy.founderTwoRole[language]}</small></div>
-          </div>
+        <div className="about-photo-stage combined-founder-art">
+          <Image src="/legacy-assets/inamdar-self-help-coaching.png" alt={`${copy.founderOne[language]} and ${copy.founderTwo[language]}`} width={1567} height={1004} priority />
         </div>
         <div className="about-story-panel">
           <div className="about-kicker"><Leaf size={18} /> {copy.eyebrow[language]}</div>
