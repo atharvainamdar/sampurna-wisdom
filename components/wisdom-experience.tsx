@@ -78,10 +78,10 @@ const modeMeta: Record<Mode, { icon: LucideIcon; label: keyof typeof copy; subti
 
 const featureIcons = [FlaskConical, BookOpen, Sprout, Leaf];
 
-export function WisdomExperience({ focus, initialLanguage = 'mr', posts, initialDate, initialMode, initialMonth, initialExpandedMode }: { focus: Focus; initialLanguage?: Language; posts: WisdomPost[]; initialDate?: string; initialMode?: Mode; initialMonth?: string; initialExpandedMode?: Mode }) {
+export function WisdomExperience({ focus, initialLanguage = 'en', posts, initialDate, initialMode, initialMonth, initialExpandedMode }: { focus: Focus; initialLanguage?: Language; posts: WisdomPost[]; initialDate?: string; initialMode?: Mode; initialMonth?: string; initialExpandedMode?: Mode }) {
   const [language, setLanguage] = useState<Language>(initialLanguage);
   return (
-    <main className="reference-shell daily-reference-shell">
+    <main className="reference-shell daily-reference-shell" lang={language}>
       <ReferenceHeader focus={focus} language={language} setLanguage={setLanguage} />
       {focus === 'about' ? <AboutPage language={language} /> : <DailyContentPage language={language} posts={posts} initialDate={initialDate} initialMode={initialMode} initialMonth={initialMonth} initialExpandedMode={initialExpandedMode} />}
       <ReferenceFooter language={language} />
@@ -268,7 +268,7 @@ function ReferenceHeader({ focus, language, setLanguage }: { focus: Focus; langu
 }
 
 function ReferenceFooter({ language }: { language: Language }) {
-  return <footer className="reference-footer"><a href="https://fabselfhelp.com" target="_blank" rel="noreferrer"><Globe2 size={24} /><span>{copy.website[language]}<small>fabselfhelp.com</small></span></a><a href={`mailto:${BRAND.email}`}><Mail size={24} /><span>{copy.email[language]}<small>{BRAND.email}</small></span></a><a href={`https://wa.me/${BRAND.whatsapp}`} target="_blank" rel="noreferrer"><Phone size={24} /><span>{copy.contact[language]}<small>{BRAND.phone}</small></span></a></footer>;
+  return <footer className="reference-footer"><Link href={`/${language}`}><Globe2 size={24} /><span>{copy.website[language]}<small>sampurna-wisdom</small></span></Link><a href={`mailto:${BRAND.email}`}><Mail size={24} /><span>{copy.email[language]}<small>{BRAND.email}</small></span></a><a href={`https://wa.me/${BRAND.whatsapp}`} target="_blank" rel="noreferrer"><Phone size={24} /><span>{copy.contact[language]}<small>{BRAND.phone}</small></span></a></footer>;
 }
 
 function getYouTubeId(url?: string) {

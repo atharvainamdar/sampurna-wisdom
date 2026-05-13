@@ -1931,3 +1931,22 @@ button { cursor: pointer; }
   border-radius: inherit;
   pointer-events: none;
 }
+
+/* Reliable Hindi/Marathi rendering on Vercel and mobile browsers */
+.daily-reference-shell[lang="hi"],
+.daily-reference-shell[lang="mr"],
+.daily-reference-shell[lang="hi"] *,
+.daily-reference-shell[lang="mr"] * {
+  font-family: var(--font-devanagari), var(--font-body), system-ui, sans-serif !important;
+}
+
+.daily-reference-shell[lang="hi"] .daily-home-copy h1,
+.daily-reference-shell[lang="mr"] .daily-home-copy h1,
+.daily-reference-shell[lang="hi"] .daily-section-heading h2,
+.daily-reference-shell[lang="mr"] .daily-section-heading h2,
+.daily-reference-shell[lang="hi"] .daily-reader h3,
+.daily-reference-shell[lang="mr"] .daily-reader h3 {
+  letter-spacing: 0 !important;
+  line-height: 1.12 !important;
+}
+
