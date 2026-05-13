@@ -325,3 +325,37 @@ button { cursor: pointer; }
   .field-grid { grid-template-columns: repeat(3, 1fr); }
   .field-grid .wide { grid-column: 1 / -1; }
 }
+.admin-tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 22px; }
+.admin-tabs a { padding: 10px 13px; border-radius: 999px; background: rgba(255,255,255,.62); border: 1px solid var(--line); font-weight: 900; color: var(--ink); }
+.compact-admin-hero h1 { font-size: clamp(2.2rem, 6vw, 5rem); }
+.single-board { grid-template-columns: 1fr; }
+.calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; }
+.calendar-grid b { text-align: center; color: var(--muted); font-size: .78rem; }
+.calendar-day { min-height: 86px; border: 1px solid var(--line); border-radius: 18px; background: #fff8e8; display: grid; align-content: space-between; padding: 10px; text-align: left; }
+.calendar-day span { font-weight: 900; font-size: 1.15rem; }
+.calendar-day small { font-weight: 900; color: var(--muted); }
+.calendar-day.published { background: color-mix(in srgb, #1f8f69 14%, white); }
+.calendar-day.scheduled { background: color-mix(in srgb, #d99218 16%, white); }
+.calendar-day.draft { background: color-mix(in srgb, #7449a8 14%, white); }
+.calendar-day.empty { opacity: .52; border-style: dashed; }
+.language-editor-grid { display: grid; gap: 12px; }
+.language-editor { display: grid; gap: 10px; padding: 14px; border: 1px solid var(--line); border-radius: 24px; background: #fff8e8; }
+.language-editor strong { color: var(--gold); }
+.language-editor span { color: var(--muted); font-weight: 900; }
+.language-editor input, .language-editor textarea { width: 100%; border: 1px solid var(--line); border-radius: 16px; background: #fffdf7; padding: 12px; outline: none; font-weight: 700; }
+.language-editor textarea { min-height: 132px; resize: vertical; }
+.editor-pillars { margin-top: 18px; }
+.expanded-media-grid { width: 100%; }
+.expanded-media-grid button { min-height: 210px; padding: 20px; text-align: center; }
+.expanded-media-grid strong, .expanded-media-grid span { display: block; }
+.expanded-media-grid span { color: var(--muted); line-height: 1.55; font-weight: 700; }
+.settings-grid label { text-transform: none; letter-spacing: 0; font-size: .9rem; }
+@media (min-width: 860px) {
+  .language-editor-grid { grid-template-columns: repeat(3, 1fr); }
+  .expanded-media-grid { grid-template-columns: repeat(4, 1fr); }
+}
+@media (max-width: 560px) {
+  .calendar-grid { gap: 5px; }
+  .calendar-day { min-height: 62px; border-radius: 13px; padding: 7px; }
+  .calendar-day small { display: none; }
+}
