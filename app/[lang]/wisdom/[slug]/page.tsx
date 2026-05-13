@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { ArrowLeft, Download, Headphones, Play, Share2 } from 'lucide-react';
 import { BRAND, DEFAULT_POSTS, getPillar, LANGUAGES, Language } from '@/lib/content';
+import { getPublishedWisdomPost, getShareText } from '@/lib/cms/public-content';
 
 const isLanguage = (value: string): value is Language => LANGUAGES.some((language) => language.code === value);
 
@@ -12,8 +13,8 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }: { params: Promise<{ lang: string; slug: string }> }): Promise<Metadata> {
   const { lang: rawLang, slug } = await params;
-  const post = DEFAULT_POSTS.find((item) => item.id === slug);
   const lang = isLanguage(rawLang) ? rawLang : 'en';
+  const post = await getPublishedWisdomPost(slug);
 
   if (!post) return {};
 
@@ -38,7 +39,7 @@ export default async function WisdomDetailPage({ params }: { params: Promise<{ l
   const { lang: rawLang, slug } = await params;
   if (!isLanguage(rawLang)) notFound();
 
-  const post = DEFAULT_POSTS.find((item) => item.id === slug);
+  const post = await getPublishedWisdomPost(slug);
   if (!post) notFound();
 
   const language = rawLang;
@@ -48,7 +49,7 @@ export default async function WisdomDetailPage({ params }: { params: Promise<{ l
   return (
     <main className="wisdom-detail-shell">
       <article className="wisdom-detail-card" style={{ '--pillar': pillar.tone } as React.CSSProperties}>
-        <Link href="/library" className="detail-back"><ArrowLeft size={17} /> Library</Link>
+        <Link href={`/${language}/library`} className="detail-back"><ArrowLeft size={17} /> Library</Link>
         <div className="detail-language-switcher">
           {LANGUAGES.map((item) => (
             <Link className={item.code === language ? 'active' : ''} href={`/${item.code}/wisdom/${post.id}`} key={item.code}>{item.native}</Link>
@@ -59,10 +60,12 @@ export default async function WisdomDetailPage({ params }: { params: Promise<{ l
         <p className="detail-excerpt">{post.excerpt[language]}</p>
         <div className="detail-body devanagari-aware">
           <p>{post.body[language]}</p>
-          <aside>
-            <strong>Reflection</strong>
-            <span>{post.reflection[language]}</span>
-          </aside>
+          {post.reflection[language] ? (
+            <aside>
+              <strong>Reflection</strong>
+              <span>{post.reflection[language]}</span>
+            </aside>
+          ) : null}
         </div>
         <section className="detail-media-grid">
           <a href={media.videoUrl || BRAND.youtube} target="_blank" rel="noreferrer"><Play size={19} /><strong>Video</strong><span>{language.toUpperCase()} wisdom video</span></a>
@@ -71,7 +74,7 @@ export default async function WisdomDetailPage({ params }: { params: Promise<{ l
             <a href={resource.url} key={resource.url}><Download size={19} /><strong>{resource.kind.toUpperCase()}</strong><span>{resource.label}</span></a>
           ))}
         </section>
-        <a className="detail-share" href={`https://wa.me/?text=${encodeURIComponent(post.title[language] + ' — ' + BRAND.siteName)}`} target="_blank" rel="noreferrer"><Share2 size={18} /> Share with family</a>
+        <a className="detail-share" href={`https://wa.me/?text=${encodeURIComponent(getShareText(post, language))}`} target="_blank" rel="noreferrer"><Share2 size={18} /> Share with family</a>
       </article>
     </main>
   );

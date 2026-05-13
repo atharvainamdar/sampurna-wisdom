@@ -1,10 +1,11 @@
 'use client';
 
+import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useMemo, useState } from 'react';
 import { ArrowUpRight, BookOpen, CalendarDays, CheckCircle2, Download, Headphones, Library, Menu, Mic2, Play, Search, Settings2, Share2, Sparkles, UploadCloud, Youtube, type LucideIcon } from 'lucide-react';
-import { BRAND, DEFAULT_POSTS, HERITAGE_COPY, LANGUAGES, Language, LEGACY_ASSETS, PILLARS, TRUST_STATS, getPillar, todayPost } from '@/lib/content';
+import { BRAND, HERITAGE_COPY, LANGUAGES, Language, LEGACY_ASSETS, PILLARS, TRUST_STATS, WisdomPost, getPillar } from '@/lib/content';
 import { localizedPath } from '@/lib/i18n';
 
 type Focus = 'today' | 'library' | 'pillars' | 'about' | 'community';
@@ -25,19 +26,20 @@ const modeCopy: Record<Mode, { label: Record<Language, string>; icon: LucideIcon
   download: { label: { en: 'Download', hi: 'डाउनलोड', mr: 'डाउनलोड' }, icon: Download },
 };
 
-export function WisdomExperience({ focus, initialLanguage = 'en' }: { focus: Focus; initialLanguage?: Language }) {
+export function WisdomExperience({ focus, initialLanguage = 'en', posts }: { focus: Focus; initialLanguage?: Language; posts: WisdomPost[] }) {
   const [language, setLanguage] = useState<Language>(initialLanguage);
   const [activeMode, setActiveMode] = useState<Mode>('read');
   const [query, setQuery] = useState('');
+  const todayPost = posts[0];
   const pillar = getPillar(todayPost.pillar);
   const currentMedia = todayPost.media[language];
   const filteredPosts = useMemo(() => {
     const q = query.trim().toLowerCase();
-    if (!q) return DEFAULT_POSTS;
-    return DEFAULT_POSTS.filter((post) =>
+    if (!q) return posts;
+    return posts.filter((post) =>
       [post.title[language], post.excerpt[language], post.body[language], ...post.tags].join(' ').toLowerCase().includes(q)
     );
-  }, [language, query]);
+  }, [language, posts, query]);
 
   return (
     <main className="site-shell">
@@ -85,7 +87,7 @@ export function WisdomExperience({ focus, initialLanguage = 'en' }: { focus: Foc
 
       <section className="heritage-stage section-pad">
         <div className="founder-card reveal">
-          <img src={LEGACY_ASSETS.founder} alt={`${BRAND.founder} - Sampurna Samruddhi founder`} />
+          <Image src={LEGACY_ASSETS.founder} alt={`${BRAND.founder} - Sampurna Samruddhi founder`} width={260} height={260} />
           <div>
             <span className="section-kicker">20 years of Sampurna Samruddhi wisdom</span>
             <h2>{BRAND.founder}</h2>
@@ -208,7 +210,7 @@ export function WisdomExperience({ focus, initialLanguage = 'en' }: { focus: Foc
         <div className="pillar-grid">
           {PILLARS.map((item) => (
             <div className="pillar-card reveal legacy-pillar-card" key={item.slug} style={{ '--tone': item.tone, background: item.gradient } as React.CSSProperties}>
-              <img src={LEGACY_ASSETS[item.slug]} alt={`${item.name[language]} pillar`} />
+              <Image src={LEGACY_ASSETS[item.slug]} alt={`${item.name[language]} pillar`} width={480} height={240} />
               <b>{item.symbol}</b>
               <h3>{item.name[language]}</h3>
               <span>{item.english}</span>

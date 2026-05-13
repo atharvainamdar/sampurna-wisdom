@@ -1,5 +1,7 @@
 import { WisdomExperience } from '@/components/wisdom-experience';
+import { getPublishedWisdomPosts } from '@/lib/cms/public-content';
 
-export default function CommunityPage() {
-  return <WisdomExperience focus="community" />;
+export default async function Page() {
+  const posts = await getPublishedWisdomPosts();
+  return <WisdomExperience focus="community" posts={posts} />;
 }
