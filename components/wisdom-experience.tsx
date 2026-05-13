@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useMemo, useState } from 'react';
 import { ArrowUpRight, BookOpen, CalendarDays, CheckCircle2, Download, Headphones, Library, Menu, Mic2, Play, Search, Settings2, Share2, Sparkles, UploadCloud, Youtube, type LucideIcon } from 'lucide-react';
-import { BRAND, DEFAULT_POSTS, LANGUAGES, Language, PILLARS, getPillar, todayPost } from '@/lib/content';
+import { BRAND, DEFAULT_POSTS, HERITAGE_COPY, LANGUAGES, Language, LEGACY_ASSETS, PILLARS, TRUST_STATS, getPillar, todayPost } from '@/lib/content';
 import { localizedPath } from '@/lib/i18n';
 
 type Focus = 'today' | 'library' | 'pillars' | 'about' | 'community';
@@ -47,16 +47,23 @@ export function WisdomExperience({ focus, initialLanguage = 'en' }: { focus: Foc
 
       <section className="hero-grid section-pad" id="today">
         <div className="hero-copy reveal">
-          <div className="eyebrow"><Sparkles size={16} /> Free forever • Daily at 6 AM • English / हिन्दी / मराठी</div>
+          <div className="eyebrow"><Sparkles size={16} /> {HERITAGE_COPY.heroBadge[language]} • Free forever</div>
           <h1>
             Daily wisdom for <span>complete prosperity</span>, delivered with ease.
           </h1>
-          <p>
-            A mobile-first wisdom library by {BRAND.team}. Read, watch, listen, and download your father&apos;s daily guidance without login walls or subscriptions.
-          </p>
+          <p>{HERITAGE_COPY.heroDescription[language]}</p>
+          <p className="founder-line">{HERITAGE_COPY.founderIntro[language]}</p>
           <div className="hero-actions">
             <Link className="primary-action" href={`/${language}/wisdom/${todayPost.id}`}>Open today&apos;s wisdom <ArrowUpRight size={18} /></Link>
             <a className="secondary-action" href={BRAND.youtube} target="_blank" rel="noreferrer">YouTube channel</a>
+          </div>
+          <div className="legacy-stats" aria-label="Sampurna Samruddhi history">
+            {TRUST_STATS.map((stat) => (
+              <div key={stat.value}>
+                <strong>{stat.value}</strong>
+                <span>{stat.label[language]}</span>
+              </div>
+            ))}
           </div>
         </div>
 
@@ -73,6 +80,18 @@ export function WisdomExperience({ focus, initialLanguage = 'en' }: { focus: Foc
               <span>{item.name[language]}</span>
             </div>
           ))}
+        </div>
+      </section>
+
+      <section className="heritage-stage section-pad">
+        <div className="founder-card reveal">
+          <img src={LEGACY_ASSETS.founder} alt={`${BRAND.founder} - Sampurna Samruddhi founder`} />
+          <div>
+            <span className="section-kicker">20 years of Sampurna Samruddhi wisdom</span>
+            <h2>{BRAND.founder}</h2>
+            <p>{HERITAGE_COPY.mission[language]}</p>
+            <p>{HERITAGE_COPY.dailyGift[language]}</p>
+          </div>
         </div>
       </section>
 
@@ -188,7 +207,8 @@ export function WisdomExperience({ focus, initialLanguage = 'en' }: { focus: Foc
         </div>
         <div className="pillar-grid">
           {PILLARS.map((item) => (
-            <div className="pillar-card reveal" key={item.slug} style={{ '--tone': item.tone, background: item.gradient } as React.CSSProperties}>
+            <div className="pillar-card reveal legacy-pillar-card" key={item.slug} style={{ '--tone': item.tone, background: item.gradient } as React.CSSProperties}>
+              <img src={LEGACY_ASSETS[item.slug]} alt={`${item.name[language]} pillar`} />
               <b>{item.symbol}</b>
               <h3>{item.name[language]}</h3>
               <span>{item.english}</span>
@@ -269,7 +289,7 @@ function Footer() {
     <footer className="site-footer">
       <div>
         <strong>{BRAND.siteName}</strong>
-        <p>Free daily wisdom by {BRAND.team}. Built mobile-first for Indian families.</p>
+        <p>{HERITAGE_COPY.footerTagline.en} Built mobile-first for Indian families.</p>
       </div>
       <div>
         <a href={BRAND.youtube} target="_blank" rel="noreferrer">YouTube</a>

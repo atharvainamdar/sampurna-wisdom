@@ -58,9 +58,9 @@ export const PILLARS: Pillar[] = [
     gradient: 'linear-gradient(135deg, #e5f8eb, #87d6b3)',
     name: { en: 'Arogya', hi: 'आरोग्य', mr: 'आरोग्य' },
     description: {
-      en: 'Energy, rhythm, food, sleep, and daily body discipline.',
-      hi: 'ऊर्जा, दिनचर्या, भोजन, नींद और शरीर की साधना।',
-      mr: 'ऊर्जा, दिनचर्या, आहार, झोप आणि शरीराची साधना.',
+      en: "Your body is your first home. Let's make it strong and vibrant together.",
+      hi: 'शरीर आपका पहला घर है। आइए मिलकर इसे मज़बूत और ऊर्जावान बनाएँ।',
+      mr: 'शरीर हे तुमचं पहिलं घर आहे. चला मिळून ते मजबूत आणि ऊर्जावान बनवूया.',
     },
   },
   {
@@ -71,9 +71,9 @@ export const PILLARS: Pillar[] = [
     gradient: 'linear-gradient(135deg, #fff3bd, #e4a12b)',
     name: { en: 'Sampatti', hi: 'संपत्ति', mr: 'संपत्ती' },
     description: {
-      en: 'Money beliefs, disciplined action, value creation, and abundance.',
-      hi: 'धन के संस्कार, अनुशासन, मूल्य निर्माण और समृद्धि।',
-      mr: 'धनाचे संस्कार, शिस्त, मूल्यनिर्मिती आणि समृद्धी.',
+      en: "Money is energy. Learn to attract, respect, and grow it through value creation.",
+      hi: 'पैसा ऊर्जा है। मूल्य निर्माण के साथ उसे आकर्षित, सम्मान और विकसित करना सीखें।',
+      mr: 'पैसा ही ऊर्जा आहे. मूल्यनिर्मितीतून त्याला आकर्षित, सन्मान आणि वाढवायला शिका.',
     },
   },
   {
@@ -84,9 +84,9 @@ export const PILLARS: Pillar[] = [
     gradient: 'linear-gradient(135deg, #ffe3ef, #e78aa7)',
     name: { en: 'Sambandh', hi: 'संबंध', mr: 'संबंध' },
     description: {
-      en: 'Family, communication, forgiveness, trust, and emotional prosperity.',
-      hi: 'परिवार, संवाद, क्षमा, विश्वास और भावनात्मक समृद्धि।',
-      mr: 'कुटुंब, संवाद, क्षमा, विश्वास आणि भावनिक समृद्धी.',
+      en: 'Our connections define our happiness. Learn to nurture the relationships that matter.',
+      hi: 'रिश्ते हमारी खुशी तय करते हैं। जो संबंध महत्वपूर्ण हैं, उन्हें सँजोना सीखें।',
+      mr: 'नाती आपला आनंद ठरवतात. महत्त्वाची नाती कशी जपायची ते शिका.',
     },
   },
   {
@@ -97,9 +97,9 @@ export const PILLARS: Pillar[] = [
     gradient: 'linear-gradient(135deg, #dce9ff, #8db1ff)',
     name: { en: 'Karya', hi: 'कार्य', mr: 'कार्य' },
     description: {
-      en: 'Purposeful work, focus, service, skill, and professional excellence.',
-      hi: 'उद्देश्यपूर्ण कार्य, ध्यान, सेवा, कौशल और उत्कृष्टता।',
-      mr: 'उद्देशपूर्ण कार्य, लक्ष, सेवा, कौशल्य आणि उत्कृष्टता.',
+      en: "Work should feel like purpose, not punishment. Find focus, service, and skill in your calling.",
+      hi: 'काम सज़ा नहीं, उद्देश्य होना चाहिए। अपने कार्य में ध्यान, सेवा और कौशल खोजें।',
+      mr: 'काम शिक्षा नाही, उद्देश असायला हवं. तुमच्या कार्यात लक्ष, सेवा आणि कौशल्य शोधा.',
     },
   },
   {
@@ -110,9 +110,9 @@ export const PILLARS: Pillar[] = [
     gradient: 'linear-gradient(135deg, #eee7ff, #b695e6)',
     name: { en: 'Adhyatma', hi: 'अध्यात्म', mr: 'अध्यात्म' },
     description: {
-      en: 'Silence, surrender, source connection, devotion, and inner clarity.',
-      hi: 'मौन, समर्पण, स्रोत से जुड़ाव, भक्ति और आंतरिक स्पष्टता।',
-      mr: 'मौन, समर्पण, स्रोताशी जोड, भक्ती आणि अंतर्गत स्पष्टता.',
+      en: 'Inner peace is the foundation of outer success. This is where complete prosperity begins.',
+      hi: 'आंतरिक शांति बाहरी सफलता की नींव है। संपूर्ण समृद्धि यहीं से शुरू होती है।',
+      mr: 'आतली शांती बाहेरच्या यशाचा पाया आहे. संपूर्ण समृद्धी इथूनच सुरू होते.',
     },
   },
 ];
@@ -240,3 +240,52 @@ export const DEFAULT_POSTS: WisdomPost[] = [
 
 export const getPillar = (slug: PillarSlug) => PILLARS.find((pillar) => pillar.slug === slug) ?? PILLARS[0];
 export const todayPost = DEFAULT_POSTS.find((post) => post.featured) ?? DEFAULT_POSTS[0];
+
+export const TRUST_STATS: Array<{ value: string; label: Record<Language, string> }> = [
+  { value: '20+', label: { en: 'years of experience', hi: 'वर्षों का अनुभव', mr: 'वर्षांचा अनुभव' } },
+  { value: '10K+', label: { en: 'students guided', hi: 'विद्यार्थियों का मार्गदर्शन', mr: 'विद्यार्थ्यांना मार्गदर्शन' } },
+  { value: '60+', label: { en: 'courses created earlier', hi: 'पहले बनाए गए कोर्स', mr: 'पूर्वी तयार केलेले कोर्सेस' } },
+  { value: '15+', label: { en: 'countries reached', hi: 'देशों तक पहुँच', mr: 'देशांमध्ये पोहोच' } },
+];
+
+export const HERITAGE_COPY = {
+  heroBadge: {
+    en: 'The Complete Prosperity Relay Channel',
+    hi: 'द कम्प्लीट प्रोस्पॅरीटी रिले चॅनल',
+    mr: 'द कम्प्लीट प्रॉस्पेरिटी रिले चॅनल',
+  },
+  heroDescription: {
+    en: 'Transform your life across 5 dimensions of prosperity with daily wisdom from Samruddhi Upasana Team.',
+    hi: 'समृद्धि उपासना टीम के दैनिक ज्ञान से जीवन के पाँच आयामों में संपूर्ण समृद्धि की ओर बढ़ें।',
+    mr: 'समृद्धी उपासना टीमच्या दैनिक ज्ञानातून आयुष्याच्या पाच आयामांमध्ये संपूर्ण समृद्धीकडे चला.',
+  },
+  founderIntro: {
+    en: "Namaste, I'm Ramesh Inamdar. For 20 years, I have helped people find balance in health, wealth, relationships, career, and spirituality. Now this wisdom is being rebuilt as a free, simple, mobile-first platform.",
+    hi: 'नमस्ते, मैं रमेश इनामदार हूँ। २० वर्षों से मैंने लोगों को स्वास्थ्य, धन, रिश्ते, कार्य और अध्यात्म में संतुलन खोजने में मदद की है। अब यही ज्ञान एक सरल, मोबाइल-फर्स्ट और निःशुल्क मंच पर आ रहा है।',
+    mr: 'नमस्कार, मी रमेश इनामदार. २० वर्षांपासून मी लोकांना आरोग्य, संपत्ती, संबंध, कार्य आणि अध्यात्मात संतुलन शोधायला मदत केली आहे. आता हेच ज्ञान सोप्या, मोबाइल-फर्स्ट आणि मोफत व्यासपीठावर येत आहे.',
+  },
+  mission: {
+    en: 'Sampurna means complete, and Samruddhi means prosperity. Together, they represent one vision: helping every person move toward wholeness in every dimension of life.',
+    hi: 'संपूर्ण का अर्थ है पूरा, और समृद्धि का अर्थ है खुशहाली। साथ मिलकर यह एक दृष्टि है: हर व्यक्ति को जीवन के हर आयाम में पूर्णता की ओर ले जाना।',
+    mr: 'संपूर्ण म्हणजे सर्वसमावेशक, आणि समृद्धी म्हणजे प्रचुरता. एकत्रितपणे ही एक दृष्टी आहे: प्रत्येक व्यक्तीला जीवनाच्या प्रत्येक आयामात परिपूर्णतेकडे नेणे.',
+  },
+  dailyGift: {
+    en: 'A small gift to start your day right. New wisdom unlocks every morning at 6 AM — free forever, no credit card required.',
+    hi: 'दिन की सही शुरुआत के लिए एक छोटी भेंट। हर सुबह ६ बजे नया ज्ञान — हमेशा निःशुल्क, कोई क्रेडिट कार्ड नहीं।',
+    mr: 'दिवसाची योग्य सुरुवात करण्यासाठी एक छोटी भेट. दररोज सकाळी ६ वाजता नवीन ज्ञान — कायम मोफत, क्रेडिट कार्ड नाही.',
+  },
+  footerTagline: {
+    en: 'Helping Indian families find balance and prosperity, one step at a time.',
+    hi: 'भारतीय परिवारों को एक-एक कदम संतुलन और समृद्धि की ओर ले जाना।',
+    mr: 'भारतीय कुटुंबांना एक-एक पाऊल संतुलन आणि समृद्धीकडे नेणे.',
+  },
+};
+
+export const LEGACY_ASSETS: Record<PillarSlug | 'founder', string> = {
+  founder: '/legacy-assets/ramesh-inamdar.jpg',
+  arogya: '/legacy-assets/pillar-arogya.jpg',
+  sampatti: '/legacy-assets/pillar-sampatti.jpg',
+  sambandh: '/legacy-assets/pillar-sambandh.jpg',
+  karya: '/legacy-assets/pillar-karya.jpg',
+  adhyatma: '/legacy-assets/pillar-adhyatma.jpg',
+};
