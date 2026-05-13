@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createServerClient } from '@supabase/ssr';
+import { ADMIN_TOKEN_COOKIE } from '@/lib/supabase/server';
 
 function loginRedirect(request: NextRequest, message?: string) {
   const url = request.nextUrl.clone();
@@ -43,6 +44,14 @@ export async function POST(request: NextRequest) {
   if (!adminRole) {
     await supabase.auth.signOut();
     response = loginRedirect(request, 'Only approved admins can sign in.');
+  } else if (data.session?.access_token) {
+    response.cookies.set(ADMIN_TOKEN_COOKIE, data.session.access_token, {
+      httpOnly: true,
+      maxAge: data.session.expires_in,
+      path: '/',
+      sameSite: 'lax',
+      secure: true,
+    });
   }
 
   return response;
