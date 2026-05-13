@@ -677,3 +677,6 @@ button { cursor: pointer; }
   .daily-calendar-card { position: static; }
   .daily-card-head h2 { font-size: 1.9rem; }
 }
+.mode-pill { border: 0; background: transparent; text-align: left; cursor: pointer; font: inherit; padding: 0; }
+.mode-pill:hover > span { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(14, 65, 55, .18); }
+.mode-pill > span { transition: transform .18s ease, box-shadow .18s ease; }

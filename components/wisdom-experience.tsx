@@ -85,8 +85,7 @@ function DailyContentPage({ language, posts }: { language: Language; posts: Wisd
   const [activeMode, setActiveMode] = useState<Mode>('read');
   const selectedPost = postsByDate.get(selectedDate);
   const selectedUnlocked = selectedPost ? isUnlocked(selectedPost.date) : false;
-  const availableModes = selectedPost && selectedUnlocked ? getAvailableModes(selectedPost, language) : [];
-  const safeMode = availableModes.includes(activeMode) ? activeMode : availableModes[0] || 'read';
+  const modes: Mode[] = ['read', 'watch', 'listen', 'pdf'];
 
   return (
     <>
@@ -95,7 +94,7 @@ function DailyContentPage({ language, posts }: { language: Language; posts: Wisd
         <div className="reference-hero-copy">
           <h1>{copy.titleA[language]} <span>{copy.titleB[language]}</span></h1>
           <p>{copy.subtitle[language]}</p>
-          <div className="hero-mode-row">{(Object.keys(modeMeta) as Mode[]).map((mode) => <ModePill key={mode} mode={mode} language={language} />)}</div>
+          <div className="hero-mode-row">{modes.map((mode) => <ModePill key={mode} mode={mode} language={language} onSelect={() => { setActiveMode(mode); document.getElementById('daily-content')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }} />)}</div>
           <div className="hero-actions clean-actions"><a href="#daily-content" className="green-cta"><Play size={18} /> {copy.start[language]}</a><span className="outline-cta">{copy.free[language]}</span></div>
         </div>
         <FounderVisual language={language} />
@@ -112,12 +111,12 @@ function DailyContentPage({ language, posts }: { language: Language; posts: Wisd
                 <p>{selectedPost.excerpt[language]}</p>
               </div>
               <div className="daily-mode-tabs">
-                {availableModes.map((mode) => {
+                {modes.map((mode) => {
                   const Icon = modeMeta[mode].icon;
-                  return <button key={mode} className={safeMode === mode ? 'active' : ''} onClick={() => setActiveMode(mode)}><Icon size={18} /> {copy[modeMeta[mode].label][language]}</button>;
+                  return <button key={mode} className={activeMode === mode ? 'active' : ''} onClick={() => setActiveMode(mode)}><Icon size={18} /> {copy[modeMeta[mode].label][language]}</button>;
                 })}
               </div>
-              <ModePanel post={selectedPost} mode={safeMode} language={language} />
+              <ModePanel post={selectedPost} mode={activeMode} language={language} />
               <Link className="full-day-link" href={`/${language}/wisdom/${selectedPost.id}`}>{copy.fullPage[language]} →</Link>
             </>
           ) : <LockedPanel language={language} hasPost={Boolean(selectedPost)} />}
@@ -151,7 +150,10 @@ function CalendarPanel({ language, postsByDate, selectedDate, currentMonth, onMo
 
 function ModePanel({ post, mode, language }: { post: WisdomPost; mode: Mode; language: Language }) {
   const media = post.media[language];
-  if (mode === 'read') return <div className="daily-reader">{post.body[language].split('\n').filter(Boolean).map((line) => <p key={line.slice(0, 48)}>{line}</p>)}</div>;
+  if (mode === 'read') {
+    const body = post.body[language];
+    return <div className="daily-reader">{body ? body.split('\n').filter(Boolean).map((line) => <p key={line.slice(0, 48)}>{line}</p>) : <p>{copy.noContent[language]}</p>}</div>;
+  }
   if (mode === 'watch') {
     const videoUrl = media.videoUrl || post.media.en.videoUrl;
     const embed = getYouTubeEmbedUrl(videoUrl);
@@ -176,9 +178,9 @@ function FounderVisual({ language }: { language: Language }) {
   return <div className="reference-founder-visual"><div className="founder-photo-card"><Image src="/legacy-assets/dad_photo.jpg" alt={copy.founderOne[language]} width={520} height={620} priority /><Image src="/legacy-assets/mom_photo.jpg" alt={copy.founderTwo[language]} width={420} height={560} priority /></div><div className="founder-name-strip"><div><strong>{copy.founderOne[language]}</strong><span>({copy.founderOneRole[language]})</span></div><div><strong>{copy.founderTwo[language]}</strong><span>({copy.founderTwoRole[language]})</span></div></div></div>;
 }
 
-function ModePill({ mode, language }: { mode: Mode; language: Language }) {
+function ModePill({ mode, language, onSelect }: { mode: Mode; language: Language; onSelect?: () => void }) {
   const Icon = modeMeta[mode].icon;
-  return <div className="mode-pill"><span><Icon size={24} /></span><div><strong>{copy[modeMeta[mode].label][language]}</strong><small>{copy[modeMeta[mode].subtitle][language]}</small></div></div>;
+  return <button type="button" className="mode-pill" onClick={onSelect}><span><Icon size={24} /></span><div><strong>{copy[modeMeta[mode].label][language]}</strong><small>{copy[modeMeta[mode].subtitle][language]}</small></div></button>;
 }
 
 function FeatureRow({ language }: { language: Language }) {
@@ -192,16 +194,6 @@ function ReferenceHeader({ focus, language, setLanguage }: { focus: Focus; langu
 
 function ReferenceFooter({ language }: { language: Language }) {
   return <footer className="reference-footer"><a href="https://fabselfhelp.com" target="_blank" rel="noreferrer"><Globe2 size={24} /><span>{copy.website[language]}<small>fabselfhelp.com</small></span></a><a href={`mailto:${BRAND.email}`}><Mail size={24} /><span>{copy.email[language]}<small>{BRAND.email}</small></span></a><a href={`https://wa.me/${BRAND.whatsapp}`} target="_blank" rel="noreferrer"><Phone size={24} /><span>{copy.contact[language]}<small>{BRAND.phone}</small></span></a></footer>;
-}
-
-function getAvailableModes(post: WisdomPost, language: Language): Mode[] {
-  const media = post.media[language];
-  const modes: Mode[] = [];
-  if (post.body[language]) modes.push('read');
-  if (media.videoUrl || post.media.en.videoUrl) modes.push('watch');
-  if (media.audioUrl || post.media.en.audioUrl) modes.push('listen');
-  if (media.resources.length) modes.push('pdf');
-  return modes.length ? modes : ['read'];
 }
 
 function getYouTubeEmbedUrl(url?: string) {
