@@ -10,6 +10,8 @@ Sampurna Samruddhi should be a free daily wisdom platform for Indian users.
 
 Public users should be able to:
 
+Public users can also land directly on language-first sections such as `/en`, `/hi`, `/mr`, `/hi/library`, and `/mr/wisdom/...`.
+
 - read the daily wisdom message
 - watch the video for their language
 - listen to audio for their language
@@ -33,6 +35,10 @@ Admin users should eventually be able to:
 - Tailwind CSS 4
 - TypeScript 6
 - Supabase-ready schema
+
+## Environment
+
+Copy `.env.example` to `.env.local` when a Supabase project is ready. Do not commit real keys.
 
 ## Local development
 

@@ -1,9 +1,11 @@
 'use client';
 
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useMemo, useState } from 'react';
 import { ArrowUpRight, BookOpen, CalendarDays, CheckCircle2, Download, Headphones, Library, Menu, Mic2, Play, Search, Settings2, Share2, Sparkles, UploadCloud, Youtube, type LucideIcon } from 'lucide-react';
 import { BRAND, DEFAULT_POSTS, LANGUAGES, Language, PILLARS, getPillar, todayPost } from '@/lib/content';
+import { localizedPath } from '@/lib/i18n';
 
 type Focus = 'today' | 'library' | 'pillars' | 'about' | 'community';
 type Mode = 'read' | 'watch' | 'listen' | 'download';
@@ -23,8 +25,8 @@ const modeCopy: Record<Mode, { label: Record<Language, string>; icon: LucideIcon
   download: { label: { en: 'Download', hi: 'डाउनलोड', mr: 'डाउनलोड' }, icon: Download },
 };
 
-export function WisdomExperience({ focus }: { focus: Focus }) {
-  const [language, setLanguage] = useState<Language>('en');
+export function WisdomExperience({ focus, initialLanguage = 'en' }: { focus: Focus; initialLanguage?: Language }) {
+  const [language, setLanguage] = useState<Language>(initialLanguage);
   const [activeMode, setActiveMode] = useState<Mode>('read');
   const [query, setQuery] = useState('');
   const pillar = getPillar(todayPost.pillar);
@@ -53,7 +55,7 @@ export function WisdomExperience({ focus }: { focus: Focus }) {
             A mobile-first wisdom library by {BRAND.team}. Read, watch, listen, and download your father&apos;s daily guidance without login walls or subscriptions.
           </p>
           <div className="hero-actions">
-            <a className="primary-action" href="#wisdom-card">Open today&apos;s wisdom <ArrowUpRight size={18} /></a>
+            <Link className="primary-action" href={`/${language}/wisdom/${todayPost.id}`}>Open today&apos;s wisdom <ArrowUpRight size={18} /></Link>
             <a className="secondary-action" href={BRAND.youtube} target="_blank" rel="noreferrer">YouTube channel</a>
           </div>
         </div>
@@ -221,12 +223,15 @@ export function WisdomExperience({ focus }: { focus: Focus }) {
         </div>
       </section>
 
+      <MobileDock focus={focus} language={language} />
       <Footer />
     </main>
   );
 }
 
 function Header({ focus, language, setLanguage }: { focus: Focus; language: Language; setLanguage: (language: Language) => void }) {
+  const router = useRouter();
+
   return (
     <header className="top-nav">
       <Link href="/" className="brand-mark">
@@ -234,15 +239,28 @@ function Header({ focus, language, setLanguage }: { focus: Focus; language: Lang
         <div><strong>{BRAND.siteName}</strong><small>{BRAND.suffix}</small></div>
       </Link>
       <nav>
-        {nav.map((item) => <Link className={focus === item.key ? 'active' : ''} href={item.href} key={item.key}>{item.label[language]}</Link>)}
+        {nav.map((item) => <Link className={focus === item.key ? 'active' : ''} href={localizedPath(language, item.key)} key={item.key}>{item.label[language]}</Link>)}
       </nav>
       <div className="nav-actions">
-        <select value={language} onChange={(event) => setLanguage(event.target.value as Language)} aria-label="Language">
+        <select value={language} onChange={(event) => { const nextLanguage = event.target.value as Language; setLanguage(nextLanguage); router.push(localizedPath(nextLanguage, focus)); }} aria-label="Language">
           {LANGUAGES.map((item) => <option value={item.code} key={item.code}>{item.native}</option>)}
         </select>
         <button className="menu-button" aria-label="Open menu"><Menu size={19} /></button>
       </div>
     </header>
+  );
+}
+
+
+function MobileDock({ focus, language }: { focus: Focus; language: Language }) {
+  return (
+    <nav className="mobile-dock" aria-label="Mobile navigation">
+      {nav.slice(0, 4).map((item) => (
+        <Link className={focus === item.key ? 'active' : ''} href={localizedPath(language, item.key)} key={item.key}>
+          {item.label[language]}
+        </Link>
+      ))}
+    </nav>
   );
 }
 
