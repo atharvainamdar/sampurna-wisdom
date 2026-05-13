@@ -724,3 +724,87 @@ button { cursor: pointer; }
   .calendar-grid-mini { gap: 6px; }
   .calendar-grid-mini button, .calendar-grid-mini a, .calendar-grid-mini > span { min-height: 38px; }
 }
+
+/* About page founder portrait polish */
+.about-reference-page { display: grid; grid-template-columns: minmax(340px, .9fr) minmax(420px, 1fr); gap: clamp(28px, 5vw, 72px); align-items: center; padding: clamp(34px, 7vw, 90px) clamp(18px, 7vw, 96px); background: linear-gradient(135deg, #fff 0%, #f3faf6 100%); }
+.about-copy-panel .compact { margin-bottom: 18px; }
+.about-copy-panel h1 { margin: 0 0 18px; max-width: 820px; color: var(--ref-ink); font-size: clamp(2.4rem, 5vw, 5.2rem); line-height: 1.02; letter-spacing: -.05em; font-weight: 950; }
+.about-copy-panel p { color: #45555a; font-size: clamp(1rem, 1.35vw, 1.16rem); line-height: 1.75; font-weight: 650; }
+.about-copy-panel .lead { color: var(--ref-green); font-size: clamp(1.12rem, 1.6vw, 1.35rem); font-weight: 900; }
+.about-founders-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; align-items: stretch; }
+.founder-portrait-card { overflow: hidden; border: 1px solid var(--ref-line); border-radius: 30px; background: #fff; box-shadow: 0 24px 70px rgba(23, 78, 63, .12); }
+.founder-portrait-image { display: flex; align-items: flex-start; justify-content: center; min-height: 420px; background: radial-gradient(circle at 50% 12%, #edf8f1, #ffffff 62%); }
+.founder-portrait-image img { width: 100%; height: 430px; object-fit: contain; object-position: center bottom; padding: 18px 16px 0; filter: drop-shadow(0 16px 20px rgba(23,78,63,.12)); }
+.founder-portrait-card div:last-child { padding: 18px 20px 20px; background: var(--ref-green); color: #fff; text-align: center; }
+.founder-portrait-card strong, .founder-portrait-card span { display: block; }
+.founder-portrait-card strong { font-size: clamp(1.05rem, 1.4vw, 1.35rem); font-weight: 950; }
+.founder-portrait-card span { margin-top: 4px; opacity: .9; font-weight: 850; }
+.about-reference-page > .reference-trust-row { grid-column: 1 / -1; margin: 0; }
+@media (max-width: 980px) {
+  .about-reference-page, .about-founders-grid { grid-template-columns: 1fr; }
+  .about-reference-page { padding: 32px 16px; }
+  .founder-portrait-image { min-height: 360px; }
+  .founder-portrait-image img { height: 370px; }
+}
+
+/* Premium About page matching founder-story reference */
+.about-premium-page { background: linear-gradient(180deg, #fffaf2 0%, #ffffff 58%, #f3faf6 100%); color: var(--ref-ink); }
+.about-quote-bar { display: flex; align-items: center; justify-content: center; min-height: 34px; padding: 7px 18px; background: #063d31; color: #f7e4b2; font-family: Georgia, serif; font-size: .95rem; font-weight: 700; text-align: center; }
+.about-quote-bar strong { color: #d8a53d; margin-left: 6px; }
+.about-premium-hero { display: grid; grid-template-columns: minmax(460px, .95fr) minmax(420px, 1fr); gap: clamp(28px, 5vw, 76px); align-items: center; padding: clamp(34px, 6vw, 78px) clamp(18px, 7vw, 96px) 34px; }
+.about-photo-stage { position: relative; min-height: 520px; overflow: hidden; border-radius: 0 0 38px 38px; background: linear-gradient(135deg, #f2ecdf, #fff8ea); box-shadow: 0 24px 80px rgba(15, 58, 47, .16); }
+.about-arch { position: absolute; left: 10%; top: 0; width: 47%; height: 76%; border-radius: 999px 999px 0 0; background: radial-gradient(circle at 50% 24%, #1f775f 0%, #0c4d3f 64%, #07352c 100%); }
+.about-logo-medallion { position: absolute; left: 34%; top: 13%; z-index: 2; display: grid; place-items: center; width: 116px; height: 116px; border: 1px solid rgba(218,166,56,.7); border-radius: 999px; background: rgba(5,47,38,.82); box-shadow: 0 16px 44px rgba(5,47,38,.22); }
+.about-logo-medallion img { width: 84px; height: 84px; border-radius: 999px; object-fit: cover; }
+.about-people-row { position: absolute; inset: auto 0 74px; z-index: 3; display: flex; align-items: end; justify-content: center; gap: 0; padding: 0 22px; }
+.about-people-row img { width: 48%; max-height: 420px; object-fit: contain; object-position: bottom center; filter: drop-shadow(0 18px 24px rgba(5,47,38,.2)); }
+.about-people-row img + img { width: 42%; margin-left: -28px; }
+.about-name-glass { position: absolute; left: 8%; right: 8%; bottom: 24px; z-index: 4; display: grid; grid-template-columns: repeat(2, 1fr); overflow: hidden; border: 1px solid rgba(223,173,74,.5); border-radius: 20px; background: rgba(7, 54, 44, .9); color: #fff; box-shadow: 0 18px 42px rgba(4,40,33,.28); backdrop-filter: blur(16px); }
+.about-name-glass div { display: grid; gap: 3px; padding: 18px 20px; }
+.about-name-glass div + div { border-left: 1px solid rgba(223,173,74,.45); }
+.about-name-glass span { font-weight: 950; }
+.about-name-glass small { color: #f4e8c8; font-weight: 750; }
+.about-story-panel { position: relative; padding: 8px 0; }
+.about-story-panel::after { content: ''; position: absolute; right: 0; top: 8%; width: 45%; aspect-ratio: 1; background: url('/legacy-assets/logo.jpeg') center/contain no-repeat; opacity: .045; pointer-events: none; }
+.about-kicker { display: inline-flex; align-items: center; gap: 12px; color: #0d5f4e; font-size: .9rem; font-weight: 950; letter-spacing: .2em; text-transform: uppercase; }
+.about-story-panel h1 { position: relative; z-index: 1; display: grid; margin: 18px 0 22px; font-family: Georgia, 'Times New Roman', serif; font-size: clamp(3rem, 6vw, 5.8rem); line-height: .93; letter-spacing: -.055em; color: #072f27; }
+.about-story-panel h1 em { color: #a66f17; font-style: italic; font-weight: 500; }
+.about-story-panel p { position: relative; z-index: 1; max-width: 760px; color: #273b3a; font-size: clamp(1rem, 1.25vw, 1.16rem); line-height: 1.65; font-weight: 600; }
+.about-story-panel .lead { font-weight: 850; color: #132f2b; }
+.about-signature { margin-top: 22px; color: #0d5f4e; font-family: Georgia, serif; font-size: 1.55rem; font-style: italic; }
+.about-signature small { display: block; margin-left: 34px; color: #a66f17; font-family: var(--font-devanagari), sans-serif; font-size: .72rem; font-style: normal; font-weight: 950; letter-spacing: .12em; text-transform: uppercase; }
+.about-premium-page > .reference-trust-row { position: relative; z-index: 5; margin: 0 clamp(18px, 7vw, 96px) 42px; transform: translateY(18px); background: rgba(255,255,255,.9); box-shadow: 0 18px 60px rgba(16,68,55,.12); }
+@media (max-width: 980px) {
+  .about-premium-hero { grid-template-columns: 1fr; padding: 28px 16px; }
+  .about-photo-stage { min-height: 440px; }
+  .about-logo-medallion { left: 50%; transform: translateX(-50%); top: 10%; width: 92px; height: 92px; }
+  .about-logo-medallion img { width: 66px; height: 66px; }
+  .about-people-row { bottom: 84px; padding: 0 8px; }
+  .about-people-row img { max-height: 330px; }
+  .about-name-glass { left: 14px; right: 14px; bottom: 16px; }
+  .about-name-glass div { padding: 13px 10px; text-align: center; }
+  .about-name-glass small { font-size: .72rem; }
+  .about-story-panel h1 { font-size: clamp(3rem, 14vw, 4.5rem); }
+  .about-premium-page > .reference-trust-row { margin: 0 16px 28px; transform: none; }
+}
+
+/* Keep founder photos clean and protected from awkward overlap */
+.about-photo-stage { min-height: 548px; }
+.about-arch { left: 12%; width: 44%; height: 66%; opacity: .96; }
+.about-logo-medallion { left: 50%; top: 9%; transform: translateX(-50%); }
+.about-people-row { left: 7%; right: 7%; bottom: 88px; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; padding: 0; }
+.about-person-photo { display: flex; align-items: flex-end; justify-content: center; overflow: hidden; height: 315px; border-radius: 22px 22px 6px 6px; background: rgba(255,255,255,.5); box-shadow: 0 12px 34px rgba(5,47,38,.12); }
+.about-person-photo img { width: 100%; height: 100%; max-height: none; margin: 0; padding: 0; object-fit: contain; object-position: center bottom; filter: none; }
+.about-people-row img + img { width: 100%; margin-left: 0; }
+@media (max-width: 980px) {
+  .about-photo-stage { min-height: 535px; }
+  .about-people-row { left: 12px; right: 12px; bottom: 94px; gap: 10px; }
+  .about-person-photo { height: 300px; border-radius: 18px 18px 6px 6px; }
+}
+@media (max-width: 560px) {
+  .about-photo-stage { min-height: 670px; }
+  .about-people-row { grid-template-columns: 1fr; bottom: 132px; }
+  .about-person-photo { height: 235px; }
+  .about-name-glass { grid-template-columns: 1fr; }
+  .about-name-glass div + div { border-left: 0; border-top: 1px solid rgba(223,173,74,.45); }
+}

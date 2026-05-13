@@ -47,7 +47,13 @@ const copy = {
   openVideo: { en: 'Open video', hi: 'वीडियो खोलें', mr: 'व्हिडिओ उघडा' },
   fullPage: { en: 'Open full day page', hi: 'पूरा दिन पेज खोलें', mr: 'पूर्ण दिवसाचे पान उघडा' },
   aboutTitle: { en: 'About Sampurna Samruddhi Upasana', hi: 'संपूर्ण समृद्धि उपासना के बारे में', mr: 'संपूर्ण समृद्धी उपासना बद्दल' },
+  aboutHeroA: { en: 'Self Help.', hi: 'स्व-सहायता।', mr: 'स्व-मदत.' },
+  aboutHeroB: { en: 'Real Change.', hi: 'वास्तविक परिवर्तन।', mr: 'खरा बदल.' },
+  aboutHeroC: { en: 'Complete Prosperity.', hi: 'संपूर्ण समृद्धि।', mr: 'संपूर्ण समृद्धी.' },
+  birthright: { en: 'Complete prosperity is your birthright.', hi: 'संपूर्ण समृद्धि आपका जन्मसिद्ध अधिकार है।', mr: 'संपूर्ण समृद्धी हा तुमचा जन्मसिद्ध हक्क आहे.' },
   aboutSubtitle: { en: 'A simple mission: make complete prosperity wisdom available to every family.', hi: 'एक सरल मिशन: संपूर्ण समृद्धि का ज्ञान हर परिवार तक पहुँचाना।', mr: 'एक साधे ध्येय: संपूर्ण समृद्धीचे ज्ञान प्रत्येक कुटुंबापर्यंत पोहोचवणे.' },
+  founderStory: { en: 'Sampurna Samruddhi Upasana brings health, knowledge, prosperity and sadhana together in simple daily guidance.', hi: 'संपूर्ण समृद्धि उपासना स्वास्थ्य, ज्ञान, समृद्धि और साधना को सरल दैनिक मार्गदर्शन में जोड़ती है।', mr: 'संपूर्ण समृद्धी उपासना आरोग्य, ज्ञान, समृद्धी आणि साधना यांना सोप्या दैनिक मार्गदर्शनात एकत्र आणते.' },
+  founderGuidance: { en: 'Guidance rooted in study, lived experience and a desire to help families grow with clarity.', hi: 'अध्ययन, अनुभव और परिवारों की स्पष्ट प्रगति की भावना पर आधारित मार्गदर्शन।', mr: 'अभ्यास, अनुभव आणि कुटुंबांना स्पष्टतेने वाढण्यासाठी मदत करण्याच्या भावनेवर आधारित मार्गदर्शन.' },
   features: { en: 'Our speciality', hi: 'हमारी विशेषताएँ', mr: 'आमची वैशिष्ट्ये' },
   featureScience: { en: 'Scientific and research-based information', hi: 'वैज्ञानिक और शोध-आधारित जानकारी', mr: 'वैज्ञानिक आणि संशोधनआधारित माहिती' },
   featureSimple: { en: 'Simple guidance in your own language', hi: 'सरल भाषा में मार्गदर्शन', mr: 'सोप्या भाषेत सखोल मार्गदर्शन' },
@@ -179,7 +185,35 @@ function LockedPanel({ language, hasPost }: { language: Language; hasPost: boole
 }
 
 function AboutPage({ language }: { language: Language }) {
-  return <section className="about-page-functional"><FounderVisual language={language} /><div><span className="hero-leaf compact"><Leaf size={22} /> {copy.eyebrow[language]}</span><h1>{copy.aboutTitle[language]}</h1><p>{copy.aboutSubtitle[language]}</p><p>{HERITAGE_COPY.founderIntro[language]}</p><p>{HERITAGE_COPY.mission[language]}</p></div><FeatureRow language={language} /></section>;
+  return (
+    <section className="about-premium-page">
+      <div className="about-quote-bar">✧ — “{copy.birthright[language]}” — <strong>Sampurna Samruddhi Upasana</strong></div>
+      <div className="about-premium-hero">
+        <div className="about-photo-stage">
+          <div className="about-arch" />
+          <div className="about-logo-medallion"><Image src="/legacy-assets/logo.jpeg" alt={BRAND.siteName} width={120} height={120} /></div>
+          <div className="about-people-row">
+            <div className="about-person-photo"><Image src="/legacy-assets/dad_photo.jpg" alt={copy.founderOne[language]} width={520} height={620} priority /></div>
+            <div className="about-person-photo"><Image src="/legacy-assets/mom_photo.jpg" alt={copy.founderTwo[language]} width={430} height={560} priority /></div>
+          </div>
+          <div className="about-name-glass">
+            <div><span>{copy.founderOne[language]}</span><small>{copy.founderOneRole[language]} & Self Help Coach</small></div>
+            <div><span>{copy.founderTwo[language]}</span><small>{copy.founderTwoRole[language]}</small></div>
+          </div>
+        </div>
+        <div className="about-story-panel">
+          <div className="about-kicker"><Leaf size={18} /> {copy.eyebrow[language]}</div>
+          <h1><span>{copy.aboutHeroA[language]}</span><span>{copy.aboutHeroB[language]}</span><em>{copy.aboutHeroC[language]}</em></h1>
+          <p className="lead">{copy.aboutSubtitle[language]}</p>
+          <p>{copy.founderStory[language]}</p>
+          <p>{copy.founderGuidance[language]}</p>
+          <p>{HERITAGE_COPY.mission[language]}</p>
+          <div className="about-signature">— {copy.founderOne[language]} <small>Self Help Coach</small></div>
+        </div>
+      </div>
+      <FeatureRow language={language} />
+    </section>
+  );
 }
 
 function FounderVisual({ language }: { language: Language }) {
