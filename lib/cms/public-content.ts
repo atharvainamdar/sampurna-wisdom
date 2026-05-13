@@ -51,7 +51,7 @@ type LegacyDailyRow = {
   pillar: { slug?: string | null; name_en?: string | null } | null;
 };
 
-const fallbackPosts = [...mapLegacyRowsToPosts(legacyDailyContent as LegacyDailyRow[]), ...DEFAULT_POSTS];
+const fallbackPosts = sortPosts([...mapLegacyRowsToPosts(legacyDailyContent as LegacyDailyRow[]), ...DEFAULT_POSTS]);
 
 function blankRecord(defaultValue = ''): Record<Language, string> {
   return { en: defaultValue, hi: defaultValue, mr: defaultValue };
@@ -182,13 +182,17 @@ function mapRowToPost(row: PostRow): WisdomPost {
   };
 }
 
+function sortPosts(posts: WisdomPost[]) {
+  return [...posts].sort((a, b) => b.date.localeCompare(a.date));
+}
+
 function mergePosts(primary: WisdomPost[], archive: WisdomPost[]) {
   const seen = new Set<string>();
-  return [...primary, ...archive].filter((post) => {
+  return sortPosts([...primary, ...archive].filter((post) => {
     if (seen.has(post.id)) return false;
     seen.add(post.id);
     return true;
-  });
+  }));
 }
 
 export async function getPublishedWisdomPosts() {
