@@ -10,9 +10,10 @@ export function generateStaticParams() {
   return LANGUAGES.flatMap((language) => DEFAULT_POSTS.map((post) => ({ lang: language.code, slug: post.id })));
 }
 
-export function generateMetadata({ params }: { params: { lang: string; slug: string } }): Metadata {
-  const post = DEFAULT_POSTS.find((item) => item.id === params.slug);
-  const lang = isLanguage(params.lang) ? params.lang : 'en';
+export async function generateMetadata({ params }: { params: Promise<{ lang: string; slug: string }> }): Promise<Metadata> {
+  const { lang: rawLang, slug } = await params;
+  const post = DEFAULT_POSTS.find((item) => item.id === slug);
+  const lang = isLanguage(rawLang) ? rawLang : 'en';
 
   if (!post) return {};
 
@@ -33,13 +34,14 @@ export function generateMetadata({ params }: { params: { lang: string; slug: str
   };
 }
 
-export default function WisdomDetailPage({ params }: { params: { lang: string; slug: string } }) {
-  if (!isLanguage(params.lang)) notFound();
+export default async function WisdomDetailPage({ params }: { params: Promise<{ lang: string; slug: string }> }) {
+  const { lang: rawLang, slug } = await params;
+  if (!isLanguage(rawLang)) notFound();
 
-  const post = DEFAULT_POSTS.find((item) => item.id === params.slug);
+  const post = DEFAULT_POSTS.find((item) => item.id === slug);
   if (!post) notFound();
 
-  const language = params.lang;
+  const language = rawLang;
   const media = post.media[language];
   const pillar = getPillar(post.pillar);
 
