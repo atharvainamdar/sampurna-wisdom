@@ -1252,3 +1252,89 @@ button { cursor: pointer; }
   .daily-calendar-secondary:target { align-content: start; padding-top: 116px !important; }
   .daily-calendar-secondary:target .calendar-close { position: absolute; top: 34px; right: 42px; width: auto; min-width: 118px; }
 }
+
+/* Premium toolbar controls */
+.reference-actions {
+  gap: 10px;
+}
+.reference-actions .toolbar-calendar-link,
+.reference-actions select {
+  min-height: 46px !important;
+  border-radius: 999px !important;
+  border: 1px solid rgba(13, 95, 78, .18) !important;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.98), rgba(248,250,244,.94)) !important;
+  color: #0a5848 !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.9),
+    0 12px 28px rgba(20,44,38,.08) !important;
+  font-weight: 950 !important;
+  letter-spacing: .01em;
+}
+.reference-actions .toolbar-calendar-link {
+  position: relative;
+  overflow: hidden;
+  padding: 0 18px !important;
+}
+.reference-actions .toolbar-calendar-link::before {
+  content: '';
+  position: absolute;
+  inset: 5px auto 5px 6px;
+  width: 34px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, rgba(13,95,78,.13), rgba(216,165,61,.18));
+}
+.reference-actions .toolbar-calendar-link svg,
+.reference-actions .toolbar-calendar-link span {
+  position: relative;
+  z-index: 1;
+}
+.reference-actions .toolbar-calendar-link svg { margin-left: 2px; }
+.reference-actions select {
+  appearance: none;
+  min-width: 132px;
+  padding: 0 42px 0 20px !important;
+  background-image:
+    linear-gradient(45deg, transparent 50%, #0a5848 50%),
+    linear-gradient(135deg, #0a5848 50%, transparent 50%),
+    linear-gradient(180deg, rgba(255,255,255,.98), rgba(248,250,244,.94)) !important;
+  background-position:
+    calc(100% - 21px) 50%,
+    calc(100% - 15px) 50%,
+    0 0 !important;
+  background-size: 6px 6px, 6px 6px, 100% 100% !important;
+  background-repeat: no-repeat !important;
+}
+.reference-actions .toolbar-calendar-link:hover,
+.reference-actions select:hover {
+  border-color: rgba(13,95,78,.36) !important;
+  transform: translateY(-1px);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.9),
+    0 16px 34px rgba(20,44,38,.12) !important;
+}
+.reference-actions .toolbar-calendar-link:focus-visible,
+.reference-actions select:focus-visible {
+  outline: 3px solid rgba(216,165,61,.28);
+  outline-offset: 3px;
+}
+.daily-calendar-secondary:target .calendar-selected-date {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin: 6px 0 10px;
+  padding: 11px 15px;
+  border: 1px solid rgba(13,95,78,.13);
+  border-radius: 16px;
+  color: #0a5848;
+  background: rgba(255,255,255,.82);
+  box-shadow: 0 12px 28px rgba(20,44,38,.07);
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 1.02rem;
+  font-weight: 950;
+}
+@media (max-width: 1120px) {
+  .reference-actions .toolbar-calendar-link { padding: 0 14px !important; }
+  .reference-actions .toolbar-calendar-link { font-size: .86rem; }
+  .reference-actions select { min-width: 116px; }
+}
