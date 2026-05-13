@@ -30,7 +30,11 @@ const copy = {
   listen: { en: 'Audio', hi: 'ऑडिओ', mr: 'ऑडिओ' },
   listenSub: { en: 'Listen if available', hi: 'उपलब्ध हो तो सुनें', mr: 'उपलब्ध असल्यास ऐका' },
   pdf: { en: 'PDF', hi: 'PDF', mr: 'PDF' },
-  pdfSub: { en: 'Daily resources', hi: 'दैनिक संसाधन', mr: 'दैनिक साधने' },
+  pdfSub: { en: 'Download the PDF', hi: 'PDF डाउनलोड करें', mr: 'PDF डाउनलोड करा' },
+  readNow: { en: 'Read now', hi: 'अभी पढ़ें', mr: 'आता वाचा' },
+  watchNow: { en: 'Watch now', hi: 'अभी देखें', mr: 'आता पहा' },
+  listenNow: { en: 'Listen now', hi: 'अभी सुनें', mr: 'आता ऐका' },
+  downloadNow: { en: 'Download', hi: 'डाउनलोड', mr: 'डाउनलोड' },
   founderOne: { en: 'Shri. Ramesh Inamdar', hi: 'श्री. रमेश इनामदार', mr: 'श्री. रमेश इनामदार' },
   founderOneRole: { en: 'Founder', hi: 'संस्थापक', mr: 'संस्थापक' },
   founderTwo: { en: 'Smt. Sujata Inamdar', hi: 'सौ. सुजाता इनामदार', mr: 'सौ. सुजाता इनामदार' },
@@ -65,11 +69,11 @@ const copy = {
   contact: { en: 'Contact', hi: 'संपर्क', mr: 'संपर्क' },
 } satisfies Record<string, Record<Language, string>>;
 
-const modeMeta: Record<Mode, { icon: LucideIcon; label: keyof typeof copy; subtitle: keyof typeof copy }> = {
-  read: { icon: BookOpen, label: 'read', subtitle: 'readSub' },
-  watch: { icon: Video, label: 'watch', subtitle: 'watchSub' },
-  listen: { icon: Headphones, label: 'listen', subtitle: 'listenSub' },
-  pdf: { icon: FileText, label: 'pdf', subtitle: 'pdfSub' },
+const modeMeta: Record<Mode, { icon: LucideIcon; label: keyof typeof copy; subtitle: keyof typeof copy; action: keyof typeof copy }> = {
+  read: { icon: FileText, label: 'read', subtitle: 'readSub', action: 'readNow' },
+  watch: { icon: Video, label: 'watch', subtitle: 'watchSub', action: 'watchNow' },
+  listen: { icon: Headphones, label: 'listen', subtitle: 'listenSub', action: 'listenNow' },
+  pdf: { icon: FileText, label: 'pdf', subtitle: 'pdfSub', action: 'downloadNow' },
 };
 
 const featureIcons = [FlaskConical, BookOpen, Sprout, Leaf];
@@ -99,33 +103,29 @@ function DailyContentPage({ language, posts, initialDate, initialMode, initialMo
 
   return (
     <>
-      <section className="reference-hero daily-hero">
-        <div className="hero-leaf"><Leaf size={28} /> {copy.eyebrow[language]}</div>
-        <div className="reference-hero-copy">
-          <h1>{copy.titleA[language]} <span>{copy.titleB[language]}</span></h1>
-          <p>{copy.subtitle[language]}</p>
-          <div className="hero-mode-row">{modes.map((mode) => <ModePill key={mode} mode={mode} language={language} date={selectedDate} month={monthKey(currentMonth)} />)}</div>
-          <div className="hero-actions clean-actions"><a href="#daily-content" className="green-cta"><Play size={18} /> {copy.start[language]}</a><span className="outline-cta">{copy.free[language]}</span></div>
-        </div>
-        <FounderVisual language={language} />
-      </section>
-
       <section className="daily-section-shell" id="daily-content">
-        <div className="daily-section-heading"><span>{copy.free[language]}</span><h2>{copy.todayContent[language]}</h2><p>{copy.unlockNote[language]}</p></div>
+        <div className="daily-section-heading"><h2>{copy.todayContent[language]}</h2><div className="heading-ornament"><span /></div><p>{copy.unlockNote[language]}</p></div>
         <div className="daily-console">
         <CalendarPanel language={language} postsByDate={postsByDate} selectedDate={selectedDate} currentMonth={currentMonth} activeMode={activeMode} />
         <article className="daily-content-card">
           {selectedPost && selectedUnlocked ? (
             <>
               <div className="daily-card-head" style={{ '--tone': getPillar(selectedPost.pillar).tone } as React.CSSProperties}>
-                <span>{new Date(`${selectedPost.date}T00:00:00`).toLocaleDateString(localeFor(language), { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</span>
+                <span className="date-pill"><CalendarDays size={14} /> {new Date(`${selectedPost.date}T00:00:00`).toLocaleDateString(localeFor(language), { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</span>
                 <h2>{selectedPost.title[language]}</h2>
                 <p>{selectedPost.excerpt[language]}</p>
               </div>
               <div className="daily-mode-tabs">
                 {modes.map((mode) => {
-                  const Icon = modeMeta[mode].icon;
-                  return <Link key={mode} className={activeMode === mode ? 'active' : ''} href={dailyHref(language, selectedDate, mode, monthKey(currentMonth))}><Icon size={18} /> {copy[modeMeta[mode].label][language]}</Link>;
+                  const meta = modeMeta[mode];
+                  const Icon = meta.icon;
+                  return (
+                    <Link key={mode} className={`daily-mode-card daily-mode-card-${mode} ${activeMode === mode ? 'active' : ''}`} href={dailyHref(language, selectedDate, mode, monthKey(currentMonth))}>
+                      <span className="daily-mode-icon"><Icon size={28} /></span>
+                      <span className="daily-mode-copy"><strong>{copy[meta.label][language]}</strong><small>{copy[meta.subtitle][language]}</small></span>
+                      <em>{copy[meta.action][language]} →</em>
+                    </Link>
+                  );
                 })}
               </div>
               <ModePanel post={selectedPost} mode={activeMode} language={language} />

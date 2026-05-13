@@ -816,3 +816,124 @@ button { cursor: pointer; }
   .about-photo-stage.combined-founder-art { min-height: auto; border-radius: 20px; }
   .about-photo-stage.combined-founder-art img { border-radius: 20px; }
 }
+
+/* Daily Wisdom page: clean calendar-first layout */
+.daily-reference-shell .reference-header { min-height: 118px; padding-inline: clamp(20px, 5vw, 56px); background: rgba(255,255,255,.94); box-shadow: 0 12px 34px rgba(24,45,39,.06); }
+.daily-reference-shell .reference-brand img { width: 74px; height: 74px; border-radius: 999px; }
+.daily-reference-shell .reference-brand strong { font-size: clamp(1.35rem, 2.1vw, 2.1rem); line-height: .95; font-family: Georgia, 'Times New Roman', serif; color: #153e35; }
+.daily-reference-shell .reference-brand span { margin-top: 5px; color: #806222; font-size: .95rem; font-weight: 750; }
+.daily-reference-shell .reference-header nav { gap: 44px; }
+.daily-reference-shell .reference-header nav a { font-size: 1.02rem; padding: 43px 0 24px; color: #4f5558; }
+.daily-reference-shell .reference-header nav a.active { color: #0b5747; border-bottom: 2px solid #0b5747; }
+.daily-reference-shell .reference-actions select { min-height: 50px; padding: 0 44px 0 22px; border-radius: 999px; background: #fffaf3; box-shadow: 0 8px 24px rgba(20,44,38,.05); }
+.daily-reference-shell .reference-actions a { min-height: 50px; border-radius: 999px; padding: 0 24px; box-shadow: 0 14px 30px rgba(8,73,59,.22); }
+.daily-section-shell { position: relative; overflow: hidden; min-height: calc(100vh - 118px); padding: 48px clamp(18px, 6vw, 104px) 70px; background: radial-gradient(circle at 52% 8%, #fffdf8 0%, #fffaf2 44%, #fbf8ef 100%); }
+.daily-section-shell::after { content: ''; position: absolute; right: -44px; top: 0; width: min(34vw, 440px); height: min(46vw, 590px); background: radial-gradient(ellipse at center, rgba(196,166,104,.14), transparent 60%); mask: linear-gradient(135deg, transparent 8%, #000 35%, transparent 78%); opacity: .55; pointer-events: none; }
+.daily-section-heading { position: relative; z-index: 1; max-width: 860px; margin: 0 auto 32px; }
+.daily-section-heading span { display: none; }
+.daily-section-heading h2 { margin: 0; font-family: Georgia, 'Times New Roman', serif; font-size: clamp(2.55rem, 4.4vw, 4.25rem); font-weight: 500; color: #123f35; letter-spacing: -.035em; }
+.heading-ornament { display: flex; align-items: center; justify-content: center; gap: 12px; margin: 12px 0 14px; color: #b28235; }
+.heading-ornament::before, .heading-ornament::after { content: ''; width: 86px; height: 1px; background: linear-gradient(90deg, transparent, #b28235); }
+.heading-ornament::after { background: linear-gradient(90deg, #b28235, transparent); }
+.heading-ornament span { display: block; width: 18px; height: 18px; border-radius: 999px 0; background: #b28235; transform: rotate(45deg); opacity: .75; }
+.daily-section-heading p { color: #6b6d70; font-family: Georgia, 'Times New Roman', serif; font-size: 1.08rem; font-weight: 500; }
+.daily-console { position: relative; z-index: 1; grid-template-columns: 350px minmax(0, 690px); justify-content: center; gap: 22px; max-width: 1070px; }
+.daily-calendar-card, .daily-content-card { border: 1px solid rgba(183,151,88,.25); border-radius: 16px; background: rgba(255,255,255,.72); box-shadow: 0 18px 60px rgba(42,36,24,.08); backdrop-filter: blur(10px); }
+.daily-calendar-card { top: 138px; padding: 22px; }
+.calendar-card-top { align-items: start; padding-bottom: 14px; margin-bottom: 14px; color: #153f35; }
+.calendar-card-top strong { font-size: 1.35rem; font-family: Georgia, 'Times New Roman', serif; font-weight: 800; }
+.calendar-card-top small { color: #6b6d70; font-family: Georgia, 'Times New Roman', serif; font-weight: 500; }
+.calendar-card-top svg { padding: 8px; width: 34px; height: 34px; border-radius: 10px; background: #f4efe3; color: #0b5747; }
+.calendar-month-row { margin: 10px 0 20px; }
+.calendar-month-row b { font-family: Georgia, 'Times New Roman', serif; color: #173f36; }
+.calendar-month-row a { width: 34px; height: 34px; border-color: rgba(183,151,88,.32); background: #fffaf3; }
+.calendar-grid-mini.week-labels { margin-bottom: 10px; color: #656a6d; font-family: Georgia, 'Times New Roman', serif; font-size: .84rem; font-weight: 600; }
+.calendar-grid-mini { gap: 7px; }
+.calendar-grid-mini button, .calendar-grid-mini a, .calendar-grid-mini > span { min-height: 34px; border-radius: 9px; font-family: Georgia, 'Times New Roman', serif; font-size: 1rem; font-weight: 600; }
+.calendar-grid-mini a.has-post.unlocked { border: 1px solid #0b5747; background: rgba(255,255,255,.82); color: #173f36; }
+.calendar-grid-mini a.active { background: #327361; color: #fff; border-color: #327361; transform: none; }
+.calendar-grid-mini > span.locked, .calendar-grid-mini > span.muted { background: #f0eee9; color: #aaa49b; }
+.calendar-grid-mini > span.locked.has-post { background: #f7f1e6; color: #aa8a48; }
+.daily-calendar-card::after { content: '○  Unlocked     ●  Locked'; display: block; margin-top: 22px; color: #6b6d70; font-family: Georgia, 'Times New Roman', serif; font-size: .95rem; word-spacing: 10px; }
+.daily-content-card { min-height: 458px; overflow: hidden; }
+.daily-card-head { padding: 30px 36px 22px; background: linear-gradient(135deg, rgba(255,255,255,.92), rgba(255,250,239,.78)); }
+.daily-card-head .date-pill { display: inline-flex; align-items: center; gap: 8px; padding: 7px 12px; border-radius: 999px; background: #f3eadb; color: #9a6b26; font-family: Georgia, 'Times New Roman', serif; font-size: .86rem; font-weight: 700; }
+.daily-card-head h2 { margin: 22px 0 14px; font-family: Georgia, 'Times New Roman', serif; font-size: clamp(2rem, 3.1vw, 3.05rem); font-weight: 500; line-height: 1.08; color: #123f35; letter-spacing: -.035em; }
+.daily-card-head p { max-width: 580px; color: #6a6260; font-family: Georgia, 'Times New Roman', serif; font-size: 1.05rem; font-weight: 500; line-height: 1.55; }
+.daily-mode-tabs { padding: 22px 36px 18px; border-top: 1px solid rgba(190,159,99,.28); border-bottom: 0; background: transparent; }
+.daily-mode-tabs a { min-width: 92px; padding: 12px 18px; border-color: rgba(194,166,112,.36); background: rgba(255,255,255,.78); color: #143f36; font-family: Georgia, 'Times New Roman', serif; font-weight: 700; box-shadow: 0 12px 24px rgba(38,55,48,.05); }
+.daily-mode-tabs a.active { background: #0b5747; border-color: #0b5747; color: #fff; box-shadow: 0 12px 28px rgba(11,87,71,.24); }
+.daily-reader { position: relative; margin: 0 36px 18px; padding: 22px 28px 20px 60px; border-radius: 14px; background: linear-gradient(135deg, rgba(239,238,228,.86), rgba(247,246,238,.72)); color: #222; font-family: Georgia, 'Times New Roman', serif; font-size: 1.06rem; line-height: 1.55; }
+.daily-reader::before { content: '“'; position: absolute; left: 22px; top: 6px; color: #b28235; font-size: 4rem; line-height: 1; font-weight: 900; }
+.daily-reader p { max-width: 560px; margin-bottom: 0; }
+.daily-video-panel, .daily-audio-panel, .daily-resource-panel { padding: 0 36px 22px; }
+.daily-video-panel iframe { border-radius: 14px; }
+.full-day-link { margin: 0 36px 30px; padding: 11px 18px; background: #0b5747; font-family: Georgia, 'Times New Roman', serif; box-shadow: 0 12px 26px rgba(11,87,71,.22); }
+@media (max-width: 980px) {
+  .daily-reference-shell .reference-header { min-height: auto; }
+  .daily-reference-shell .reference-header nav a { padding: 14px 0; }
+  .daily-section-shell { padding: 34px 14px 46px; }
+  .daily-console { grid-template-columns: 1fr; max-width: 720px; }
+  .daily-calendar-card { position: static; }
+  .daily-card-head, .daily-mode-tabs, .daily-video-panel, .daily-audio-panel, .daily-resource-panel { padding-inline: 22px; }
+  .daily-reader { margin-inline: 22px; padding-left: 48px; }
+  .full-day-link { margin-inline: 22px; }
+}
+
+/* Daily mode cards matching selected reference */
+.daily-mode-tabs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; padding: 18px 36px 18px; }
+.daily-mode-tabs .daily-mode-card { position: relative; display: grid; grid-template-columns: 42px 1fr; grid-template-rows: 1fr auto; align-items: start; column-gap: 12px; min-height: 150px; min-width: 0; padding: 20px 18px 18px; border: 1px solid rgba(18,63,53,.08); border-radius: 16px; text-decoration: none; color: #123f35; background: linear-gradient(135deg, rgba(239,250,245,.88), rgba(255,255,255,.72)); box-shadow: 0 14px 32px rgba(36,48,42,.06); }
+.daily-mode-tabs .daily-mode-card:hover { transform: translateY(-2px); border-color: rgba(11,87,71,.25); box-shadow: 0 18px 36px rgba(36,48,42,.1); }
+.daily-mode-tabs .daily-mode-card.active { border-color: rgba(11,87,71,.18); background: linear-gradient(135deg, rgba(239,250,245,.88), rgba(255,255,255,.72)); color: #123f35; box-shadow: 0 14px 32px rgba(36,48,42,.06); }
+.daily-mode-icon { display: grid; grid-row: 1; grid-column: 1; place-items: center; width: 42px; height: 42px; border-radius: 999px; color: #0b5747; background: radial-gradient(circle, #d9f0e8, #edf8f4); }
+.daily-mode-copy { display: block; grid-row: 1; grid-column: 2; padding-left: 12px; border-left: 1px solid rgba(11,87,71,.28); }
+.daily-mode-copy strong { display: block; margin: 2px 0 8px; font-family: Georgia, 'Times New Roman', serif; font-size: 1.05rem; color: #123f35; }
+.daily-mode-copy small { display: block; color: #4f5b5d; font-family: Georgia, 'Times New Roman', serif; font-size: .93rem; line-height: 1.35; font-weight: 500; }
+.daily-mode-card em { grid-column: 1 / -1; grid-row: 2; align-self: end; margin-top: 18px; padding-top: 14px; border-top: 1px solid rgba(18,63,53,.08); color: #0b5747; font-family: Georgia, 'Times New Roman', serif; font-size: 1rem; font-style: normal; font-weight: 800; }
+.daily-mode-card-watch { background: linear-gradient(135deg, rgba(236,247,255,.9), rgba(255,255,255,.72)) !important; }
+.daily-mode-card-watch .daily-mode-icon { color: #1f6a96; background: radial-gradient(circle, #d6ecfb, #eef8ff); }
+.daily-mode-card-watch .daily-mode-copy { border-left-color: rgba(31,106,150,.28); }
+.daily-mode-card-watch em { color: #1f6a96; }
+.daily-mode-card-listen { background: linear-gradient(135deg, rgba(254,242,255,.92), rgba(255,255,255,.72)) !important; }
+.daily-mode-card-listen .daily-mode-icon { color: #7b2e83; background: radial-gradient(circle, #efd7f5, #fbf0ff); }
+.daily-mode-card-listen .daily-mode-copy { border-left-color: rgba(123,46,131,.24); }
+.daily-mode-card-listen em { color: #7b2e83; }
+.daily-mode-card-pdf { background: linear-gradient(135deg, rgba(255,246,235,.94), rgba(255,255,255,.72)) !important; }
+.daily-mode-card-pdf .daily-mode-icon { color: #b05d18; background: radial-gradient(circle, #f5dfc6, #fff2e5); }
+.daily-mode-card-pdf .daily-mode-copy { border-left-color: rgba(176,93,24,.24); }
+.daily-mode-card-pdf em { color: #a15114; }
+.daily-mode-tabs .daily-mode-card.active::after { content: ''; position: absolute; inset: 0; border-radius: 16px; border: 2px solid rgba(11,87,71,.36); pointer-events: none; }
+@media (max-width: 980px) {
+  .daily-mode-tabs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 560px) {
+  .daily-mode-tabs { grid-template-columns: 1fr; }
+}
+
+/* Final reference alignment for daily page */
+.daily-reference-shell { padding-bottom: 0; }
+.daily-reference-shell .reference-brand img { width: 62px; height: 62px; }
+.daily-reference-shell .reference-brand strong { font-size: clamp(1.25rem, 1.9vw, 1.75rem); }
+.daily-reference-shell .reference-header { min-height: 86px; }
+.daily-reference-shell .reference-header nav a { padding: 29px 0 18px; }
+.daily-section-shell { min-height: auto; padding-top: 40px; padding-bottom: 48px; }
+.daily-console { grid-template-columns: 330px minmax(0, 760px); max-width: 1120px; }
+.daily-calendar-card { padding: 20px 22px; }
+.calendar-grid-mini button, .calendar-grid-mini a, .calendar-grid-mini > span { min-height: 31px; font-size: .95rem; }
+.daily-content-card { min-height: auto; }
+.daily-card-head { padding: 26px 30px 18px; }
+.daily-card-head h2 { max-width: 620px; font-size: clamp(2.05rem, 3vw, 2.75rem); }
+.daily-card-head p { max-width: 610px; }
+.daily-mode-tabs { padding: 18px 30px; gap: 12px; }
+.daily-mode-tabs .daily-mode-card { min-height: 132px; padding: 18px 15px 14px; }
+.daily-mode-icon { width: 38px; height: 38px; }
+.daily-mode-copy strong { font-size: 1rem; }
+.daily-mode-copy small { font-size: .87rem; }
+.daily-mode-card em { margin-top: 12px; padding-top: 12px; }
+.daily-reader { margin: 0 30px 14px; padding: 18px 24px 18px 54px; }
+.full-day-link { margin: 0 30px 26px; }
+.daily-reference-shell .reference-footer { position: static; }
+@media (max-width: 980px) {
+  .daily-reference-shell .reference-brand img { width: 56px; height: 56px; }
+  .daily-console { grid-template-columns: 1fr; }
+}
