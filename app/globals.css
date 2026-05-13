@@ -1707,3 +1707,41 @@ button { cursor: pointer; }
   .daily-mode-block-read .daily-reader.daily-inline-player { padding: 24px 22px 26px 46px !important; }
   .daily-mode-block .daily-video-panel.daily-inline-player iframe { min-height: 230px !important; }
 }
+
+/* Cleaner homepage hero: no buttons, no founder photos, sharper image treatment */
+.daily-home-hero {
+  grid-template-columns: minmax(340px, 560px) 1fr !important;
+  min-height: 315px !important;
+  padding: 34px clamp(24px, 4vw, 64px) 58px !important;
+  background:
+    linear-gradient(90deg, rgba(255,253,247,.98) 0%, rgba(255,253,247,.86) 28%, rgba(255,253,247,.34) 55%, rgba(255,253,247,.08) 100%),
+    linear-gradient(180deg, rgba(11,87,71,.02), rgba(215,165,71,.08)),
+    image-set(url('/legacy-assets/sampurna-samruddhi-founders-light.png') 1x) center 42% / cover no-repeat !important;
+}
+.daily-home-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 75% 28%, rgba(255,218,126,.18), transparent 26%),
+    linear-gradient(90deg, transparent 0%, transparent 58%, rgba(7,38,31,.18) 100%);
+  pointer-events: none;
+}
+.daily-home-copy { max-width: 560px; }
+.daily-home-copy p { max-width: 430px !important; }
+.daily-home-actions,
+.daily-home-guides { display: none !important; }
+@media (max-width: 900px) {
+  .daily-home-hero {
+    grid-template-columns: 1fr !important;
+    min-height: 320px !important;
+    background-position: 62% center !important;
+  }
+}
+
+/* Final hero image: premium abstract background with no people */
+.daily-home-hero {
+  background:
+    linear-gradient(90deg, rgba(255,253,247,.99) 0%, rgba(255,253,247,.9) 30%, rgba(255,253,247,.42) 58%, rgba(255,253,247,.08) 100%),
+    url('/legacy-assets/daily-wisdom-hero.svg') center / cover no-repeat !important;
+}

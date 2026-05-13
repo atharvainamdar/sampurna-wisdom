@@ -110,17 +110,6 @@ function DailyContentPage({ language, posts, initialDate, initialMode, initialMo
           <div className="about-kicker"><Leaf size={18} /> {copy.eyebrow[language]}</div>
           <h1>{copy.titleA[language]} <span>{copy.titleB[language]}</span></h1>
           <p>{copy.subtitle[language]}</p>
-          <div className="daily-home-actions">
-            <a href="#daily-content"><Play size={16} /> {copy.start[language]}</a>
-            <a href="#daily-calendar-secondary">How it works</a>
-          </div>
-        </div>
-        <div className="daily-home-guides">
-          <span>— Guided by</span>
-          <div className="daily-guide-photos">
-            <figure><Image src="/legacy-assets/dad_photo.jpg" alt={copy.founderOne[language]} width={360} height={280} priority /><figcaption><strong>{copy.founderOne[language]}</strong><small>{copy.founderOneRole[language]}</small></figcaption></figure>
-            <figure><Image src="/legacy-assets/mom_photo.jpg" alt={copy.founderTwo[language]} width={360} height={280} priority /><figcaption><strong>{copy.founderTwo[language]}</strong><small>{copy.founderTwoRole[language]}</small></figcaption></figure>
-          </div>
         </div>
       </section>
 
