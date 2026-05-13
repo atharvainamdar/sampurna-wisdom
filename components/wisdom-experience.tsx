@@ -26,6 +26,48 @@ const modeCopy: Record<Mode, { label: Record<Language, string>; icon: LucideIcon
   download: { label: { en: 'Download', hi: 'डाउनलोड', mr: 'डाउनलोड' }, icon: Download },
 };
 
+const uiCopy = {
+  freeForever: { en: 'Free forever', hi: 'हमेशा निःशुल्क', mr: 'कायम मोफत' },
+  heroTitleA: { en: 'Daily wisdom for', hi: 'संपूर्ण समृद्धि के लिए', mr: 'संपूर्ण समृद्धीसाठी' },
+  heroTitleB: { en: 'complete prosperity', hi: 'दैनिक ज्ञान', mr: 'दैनिक ज्ञान' },
+  heroTitleC: { en: 'delivered with ease.', hi: 'सहज रूप से।', mr: 'सहजतेने.' },
+  openToday: { en: "Open today's wisdom", hi: 'आज का ज्ञान खोलें', mr: 'आजचे ज्ञान उघडा' },
+  youtube: { en: 'YouTube channel', hi: 'यूट्यूब चैनल', mr: 'यूट्यूब चॅनल' },
+  daysFree: { en: 'days of free wisdom', hi: 'दिनों का निःशुल्क ज्ञान', mr: 'दिवसांचे मोफत ज्ञान' },
+  heritageKicker: { en: '20 years of Sampurna Samruddhi wisdom', hi: 'संपूर्ण समृद्धि ज्ञान के २० वर्ष', mr: 'संपूर्ण समृद्धी ज्ञानाची २० वर्षे' },
+  todayKicker: { en: "Today's free wisdom", hi: 'आज का निःशुल्क ज्ञान', mr: 'आजचे मोफत ज्ञान' },
+  reflection: { en: "Today's reflection", hi: 'आज का चिंतन', mr: 'आजचे चिंतन' },
+  videoTitle: { en: 'Video wisdom connects here', hi: 'वीडियो ज्ञान यहाँ जुड़ता है', mr: 'व्हिडिओ ज्ञान येथे जोडले जाते' },
+  videoText: { en: 'Dad can paste separate YouTube links for English, Hindi, and Marathi. Users only see the video for their selected language.', hi: 'पिताजी अंग्रेज़ी, हिन्दी और मराठी के लिए अलग-अलग यूट्यूब लिंक जोड़ सकते हैं। उपयोगकर्ता केवल अपनी चुनी हुई भाषा का वीडियो देखेंगे।', mr: 'बाबा इंग्रजी, हिन्दी आणि मराठीसाठी वेगवेगळे यूट्यूब लिंक जोडू शकतात. वापरकर्त्यांना त्यांच्या निवडलेल्या भाषेचाच व्हिडिओ दिसेल.' },
+  openVideo: { en: 'Open video', hi: 'वीडियो खोलें', mr: 'व्हिडिओ उघडा' },
+  audioTitle: { en: 'Audio pravachan-ready', hi: 'ऑडियो प्रवचन के लिए तैयार', mr: 'ऑडिओ प्रवचनासाठी तयार' },
+  audioText: { en: 'Admin uploads separate audio for each language, so Marathi users hear Marathi, Hindi users hear Hindi, and English users hear English.', hi: 'एडमिन हर भाषा के लिए अलग ऑडियो जोड़ सकता है, इसलिए हिन्दी उपयोगकर्ता हिन्दी, मराठी उपयोगकर्ता मराठी और अंग्रेज़ी उपयोगकर्ता अंग्रेज़ी सुनेंगे।', mr: 'अ‍ॅडमिन प्रत्येक भाषेसाठी वेगळा ऑडिओ जोडू शकतो, त्यामुळे मराठी वापरकर्ते मराठी, हिन्दी वापरकर्ते हिन्दी आणि इंग्रजी वापरकर्ते इंग्रजी ऐकतील.' },
+  uploadSlots: { en: 'Separate PPT/PDF/audio upload slots per language', hi: 'हर भाषा के लिए अलग PPT/PDF/ऑडियो अपलोड स्थान', mr: 'प्रत्येक भाषेसाठी वेगळे PPT/PDF/ऑडिओ अपलोड स्थान' },
+  share: { en: 'Share on WhatsApp', hi: 'व्हाट्सऐप पर साझा करें', mr: 'व्हॉट्सअ‍ॅपवर शेअर करा' },
+  markRead: { en: 'Mark as read', hi: 'पढ़ा हुआ चिह्नित करें', mr: 'वाचले म्हणून चिन्हांकित करा' },
+  libraryKicker: { en: 'Wisdom library', hi: 'ज्ञान लाइब्रेरी', mr: 'ज्ञान लायब्ररी' },
+  libraryTitle: { en: 'Every message stays free and searchable.', hi: 'हर संदेश निःशुल्क और खोजने योग्य रहेगा।', mr: 'प्रत्येक संदेश मोफत आणि शोधता येण्यासारखा राहील.' },
+  searchPlaceholder: { en: 'Search wealth, health, family, source...', hi: 'धन, स्वास्थ्य, परिवार, स्रोत खोजें...', mr: 'संपत्ती, आरोग्य, कुटुंब, स्रोत शोधा...' },
+  pillarKicker: { en: 'The 5-pillar framework', hi: '५ स्तंभों का फ्रेमवर्क', mr: '५ स्तंभांचे फ्रेमवर्क' },
+  pillarTitle: { en: 'Indian wisdom, organized for daily life.', hi: 'भारतीय ज्ञान, दैनिक जीवन के लिए व्यवस्थित।', mr: 'भारतीय ज्ञान, दैनंदिन जीवनासाठी व्यवस्थित.' },
+  adminCms: { en: 'Admin CMS', hi: 'एडमिन CMS', mr: 'अ‍ॅडमिन CMS' },
+  createTomorrow: { en: "Create tomorrow's wisdom", hi: 'कल का ज्ञान बनाएँ', mr: 'उद्याचे ज्ञान तयार करा' },
+  date: { en: 'Date', hi: 'तारीख', mr: 'तारीख' },
+  contentModes: { en: 'Content modes', hi: 'सामग्री प्रकार', mr: 'सामग्री प्रकार' },
+  publishStatus: { en: 'Publish status', hi: 'प्रकाशन स्थिति', mr: 'प्रकाशन स्थिती' },
+  draft: { en: 'Draft', hi: 'ड्राफ्ट', mr: 'मसुदा' },
+  schedule: { en: 'Schedule for 6:00 AM', hi: 'सुबह ६:०० बजे के लिए शेड्यूल करें', mr: 'सकाळी ६:०० वाजता शेड्यूल करा' },
+  builtForDad: { en: 'Built for your dad', hi: 'पिताजी के लिए बनाया गया', mr: 'बाबांसाठी बनवलेले' },
+  noDeveloper: { en: 'No developer required for daily updates.', hi: 'दैनिक अपडेट के लिए डेवलपर की ज़रूरत नहीं।', mr: 'दैनिक अपडेटसाठी डेव्हलपरची गरज नाही.' },
+  adminText: { en: 'The admin panel lets him add blogs, YouTube links, audio, PPT/PDF, language versions, thumbnails, and scheduling from a simple mobile-friendly dashboard.', hi: 'एडमिन पैनल से वे सरल मोबाइल-फ्रेंडली डैशबोर्ड में ब्लॉग, यूट्यूब लिंक, ऑडियो, PPT/PDF, भाषा संस्करण, थंबनेल और शेड्यूलिंग जोड़ सकते हैं।', mr: 'अ‍ॅडमिन पॅनेलमधून ते सोप्या मोबाइल-फ्रेंडली डॅशबोर्डवर ब्लॉग, यूट्यूब लिंक, ऑडिओ, PPT/PDF, भाषा आवृत्ती, थंबनेल आणि शेड्यूलिंग जोडू शकतात.' },
+  workflow: { en: 'Draft → preview → publish workflow', hi: 'ड्राफ्ट → प्रीव्यू → प्रकाशित प्रक्रिया', mr: 'मसुदा → पूर्वावलोकन → प्रकाशित प्रक्रिया' },
+  calendar: { en: 'Calendar view for daily wisdom', hi: 'दैनिक ज्ञान के लिए कैलेंडर दृश्य', mr: 'दैनिक ज्ञानासाठी कॅलेंडर दृश्य' },
+  mediaLibrary: { en: 'Media library for audio, PPT, PDF, and images', hi: 'ऑडियो, PPT, PDF और चित्रों के लिए मीडिया लाइब्रेरी', mr: 'ऑडिओ, PPT, PDF आणि चित्रांसाठी मीडिया लायब्ररी' },
+  policies: { en: 'Admin-only Supabase policies from day one', hi: 'पहले दिन से केवल एडमिन के लिए Supabase सुरक्षा नियम', mr: 'पहिल्या दिवसापासून फक्त अ‍ॅडमिनसाठी Supabase सुरक्षा नियम' },
+  footerExtra: { en: 'Built mobile-first for Indian families.', hi: 'भारतीय परिवारों के लिए मोबाइल-फर्स्ट बनाया गया।', mr: 'भारतीय कुटुंबांसाठी मोबाइल-फर्स्ट बनवलेले.' },
+} satisfies Record<string, Record<Language, string>>;
+
+
 export function WisdomExperience({ focus, initialLanguage = 'en', posts }: { focus: Focus; initialLanguage?: Language; posts: WisdomPost[] }) {
   const [language, setLanguage] = useState<Language>(initialLanguage);
   const [activeMode, setActiveMode] = useState<Mode>('read');
@@ -49,15 +91,15 @@ export function WisdomExperience({ focus, initialLanguage = 'en', posts }: { foc
 
       <section className="hero-grid section-pad" id="today">
         <div className="hero-copy reveal">
-          <div className="eyebrow"><Sparkles size={16} /> {HERITAGE_COPY.heroBadge[language]} • Free forever</div>
+          <div className="eyebrow"><Sparkles size={16} /> {HERITAGE_COPY.heroBadge[language]} • {uiCopy.freeForever[language]}</div>
           <h1>
-            Daily wisdom for <span>complete prosperity</span>, delivered with ease.
+            {uiCopy.heroTitleA[language]} <span>{uiCopy.heroTitleB[language]}</span>, {uiCopy.heroTitleC[language]}
           </h1>
           <p>{HERITAGE_COPY.heroDescription[language]}</p>
           <p className="founder-line">{HERITAGE_COPY.founderIntro[language]}</p>
           <div className="hero-actions">
-            <Link className="primary-action" href={`/${language}/wisdom/${todayPost.id}`}>Open today&apos;s wisdom <ArrowUpRight size={18} /></Link>
-            <a className="secondary-action" href={BRAND.youtube} target="_blank" rel="noreferrer">YouTube channel</a>
+            <Link className="primary-action" href={`/${language}/wisdom/${todayPost.id}`}>{uiCopy.openToday[language]} <ArrowUpRight size={18} /></Link>
+            <a className="secondary-action" href={BRAND.youtube} target="_blank" rel="noreferrer">{uiCopy.youtube[language]}</a>
           </div>
           <div className="legacy-stats" aria-label="Sampurna Samruddhi history">
             {TRUST_STATS.map((stat) => (
@@ -74,7 +116,7 @@ export function WisdomExperience({ focus, initialLanguage = 'en', posts }: { foc
           <div className="daily-seal">
             <span>{BRAND.siteNameDevanagari}</span>
             <strong>365</strong>
-            <small>days of free wisdom</small>
+            <small>{uiCopy.daysFree[language]}</small>
           </div>
           {PILLARS.map((item, index) => (
             <div className={`orbit-chip chip-${index}`} key={item.slug} style={{ '--tone': item.tone } as React.CSSProperties}>
@@ -89,7 +131,7 @@ export function WisdomExperience({ focus, initialLanguage = 'en', posts }: { foc
         <div className="founder-card reveal">
           <Image src={LEGACY_ASSETS.founder} alt={`${BRAND.founder} - Sampurna Samruddhi founder`} width={260} height={260} />
           <div>
-            <span className="section-kicker">20 years of Sampurna Samruddhi wisdom</span>
+            <span className="section-kicker">{uiCopy.heritageKicker[language]}</span>
             <h2>{BRAND.founder}</h2>
             <p>{HERITAGE_COPY.mission[language]}</p>
             <p>{HERITAGE_COPY.dailyGift[language]}</p>
@@ -99,7 +141,7 @@ export function WisdomExperience({ focus, initialLanguage = 'en', posts }: { foc
 
       <section className="today-stage section-pad" id="wisdom-card">
         <div className="section-heading reveal">
-          <span className="section-kicker"><CalendarDays size={15} /> Today&apos;s free wisdom</span>
+          <span className="section-kicker"><CalendarDays size={15} /> {uiCopy.todayKicker[language]}</span>
           <h2>{todayPost.title[language]}</h2>
           <p>{todayPost.excerpt[language]}</p>
         </div>
@@ -134,7 +176,7 @@ export function WisdomExperience({ focus, initialLanguage = 'en', posts }: { foc
                 <div className="reflection-box">
                   <Mic2 size={18} />
                   <div>
-                    <span>Today&apos;s reflection</span>
+                    <span>{uiCopy.reflection[language]}</span>
                     <strong>{todayPost.reflection[language]}</strong>
                   </div>
                 </div>
@@ -143,16 +185,16 @@ export function WisdomExperience({ focus, initialLanguage = 'en', posts }: { foc
             {activeMode === 'watch' && (
               <div className="media-panel">
                 <Youtube size={34} />
-                <h4>Video wisdom connects here</h4>
-                <p>Dad can paste separate YouTube links for English, Hindi, and Marathi. Users only see the video for their selected language.</p>
-                <a href={currentMedia.videoUrl || BRAND.youtube} target="_blank" rel="noreferrer">Open {language.toUpperCase()} video <ArrowUpRight size={16} /></a>
+                <h4>{uiCopy.videoTitle[language]}</h4>
+                <p>{uiCopy.videoText[language]}</p>
+                <a href={currentMedia.videoUrl || BRAND.youtube} target="_blank" rel="noreferrer">{uiCopy.openVideo[language]} <ArrowUpRight size={16} /></a>
               </div>
             )}
             {activeMode === 'listen' && (
               <div className="media-panel audio-wave">
                 <Headphones size={34} />
-                <h4>Audio pravachan-ready</h4>
-                <p>Admin uploads separate audio for each language, so Marathi users hear Marathi, Hindi users hear Hindi, and English users hear English.</p>
+                <h4>{uiCopy.audioTitle[language]}</h4>
+                <p>{uiCopy.audioText[language]}</p>
                 <div className="wave-bars">{Array.from({ length: 22 }).map((_, i) => <span key={i} style={{ '--i': i } as React.CSSProperties} />)}</div>
               </div>
             )}
@@ -165,26 +207,26 @@ export function WisdomExperience({ focus, initialLanguage = 'en', posts }: { foc
                     <strong>{resource.label}</strong>
                   </a>
                 ))}
-                <div className="download-tile muted"><UploadCloud size={20} /><span>{language.toUpperCase()} Admin</span><strong>Separate PPT/PDF/audio upload slots per language</strong></div>
+                <div className="download-tile muted"><UploadCloud size={20} /><span>{language.toUpperCase()} Admin</span><strong>{uiCopy.uploadSlots[language]}</strong></div>
               </div>
             )}
           </div>
 
           <div className="wisdom-actions">
-            <a href={`https://wa.me/?text=${encodeURIComponent(todayPost.title[language] + ' — ' + BRAND.siteName)}`} target="_blank" rel="noreferrer"><Share2 size={17} /> Share on WhatsApp</a>
-            <button><CheckCircle2 size={17} /> Mark as read</button>
+            <a href={`https://wa.me/?text=${encodeURIComponent(todayPost.title[language] + ' — ' + BRAND.siteName)}`} target="_blank" rel="noreferrer"><Share2 size={17} /> {uiCopy.share[language]}</a>
+            <button><CheckCircle2 size={17} /> {uiCopy.markRead[language]}</button>
           </div>
         </article>
       </section>
 
       <section className="library-stage section-pad" id="library">
         <div className="section-heading compact reveal">
-          <span className="section-kicker"><Library size={15} /> Wisdom library</span>
-          <h2>Every message stays free and searchable.</h2>
+          <span className="section-kicker"><Library size={15} /> {uiCopy.libraryKicker[language]}</span>
+          <h2>{uiCopy.libraryTitle[language]}</h2>
         </div>
         <div className="search-card reveal delay-1">
           <Search size={18} />
-          <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search wealth, health, family, source..." />
+          <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder={uiCopy.searchPlaceholder[language]} />
           <Settings2 size={18} />
         </div>
         <div className="post-strip">
@@ -204,8 +246,8 @@ export function WisdomExperience({ focus, initialLanguage = 'en', posts }: { foc
 
       <section className="pillar-stage section-pad" id="pillars">
         <div className="section-heading reveal">
-          <span className="section-kicker">The 5-pillar framework</span>
-          <h2>Indian wisdom, organized for daily life.</h2>
+          <span className="section-kicker">{uiCopy.pillarKicker[language]}</span>
+          <h2>{uiCopy.pillarTitle[language]}</h2>
         </div>
         <div className="pillar-grid">
           {PILLARS.map((item) => (
@@ -223,30 +265,30 @@ export function WisdomExperience({ focus, initialLanguage = 'en', posts }: { foc
       <section className="admin-preview section-pad" id="admin">
         <div className="admin-phone reveal">
           <div className="phone-top" />
-          <span>Admin CMS</span>
-          <h3>Create tomorrow&apos;s wisdom</h3>
-          <label>Date</label>
+          <span>{uiCopy.adminCms[language]}</span>
+          <h3>{uiCopy.createTomorrow[language]}</h3>
+          <label>{uiCopy.date[language]}</label>
           <div className="fake-input">14 May 2026</div>
-          <label>Content modes</label>
+          <label>{uiCopy.contentModes[language]}</label>
           <div className="admin-toggles"><button>Blog</button><button>Video</button><button>Audio</button><button>PPT</button></div>
-          <label>Publish status</label>
-          <div className="publish-row"><span>Draft</span><strong>Schedule for 6:00 AM</strong></div>
+          <label>{uiCopy.publishStatus[language]}</label>
+          <div className="publish-row"><span>{uiCopy.draft[language]}</span><strong>{uiCopy.schedule[language]}</strong></div>
         </div>
         <div className="admin-copy reveal delay-1">
-          <span className="section-kicker">Built for your dad</span>
-          <h2>No developer required for daily updates.</h2>
-          <p>The admin panel will let him add blogs, YouTube links, audio, PPT/PDF, language versions, thumbnails, and scheduling from a simple mobile-friendly dashboard.</p>
+          <span className="section-kicker">{uiCopy.builtForDad[language]}</span>
+          <h2>{uiCopy.noDeveloper[language]}</h2>
+          <p>{uiCopy.adminText[language]}</p>
           <ul>
-            <li>Draft → preview → publish workflow</li>
-            <li>Calendar view for daily wisdom</li>
-            <li>Media library for audio, PPT, PDF, and images</li>
-            <li>Admin-only Supabase policies from day one</li>
+            <li>{uiCopy.workflow[language]}</li>
+            <li>{uiCopy.calendar[language]}</li>
+            <li>{uiCopy.mediaLibrary[language]}</li>
+            <li>{uiCopy.policies[language]}</li>
           </ul>
         </div>
       </section>
 
       <MobileDock focus={focus} language={language} />
-      <Footer />
+      <Footer language={language} />
     </main>
   );
 }
@@ -286,12 +328,12 @@ function MobileDock({ focus, language }: { focus: Focus; language: Language }) {
   );
 }
 
-function Footer() {
+function Footer({ language }: { language: Language }) {
   return (
     <footer className="site-footer">
       <div>
         <strong>{BRAND.siteName}</strong>
-        <p>{HERITAGE_COPY.footerTagline.en} Built mobile-first for Indian families.</p>
+        <p>{HERITAGE_COPY.footerTagline[language]} {uiCopy.footerExtra[language]}</p>
       </div>
       <div>
         <a href={BRAND.youtube} target="_blank" rel="noreferrer">YouTube</a>
