@@ -1087,3 +1087,47 @@ button { cursor: pointer; }
 .daily-home-content-card { max-width: none !important; width: min(1280px, calc(100vw - 48px)) !important; margin-left: 50% !important; margin-right: 0 !important; transform: translateX(-50%); }
 @media (max-width: 560px) { .daily-home-content-card { width: calc(100vw - 28px) !important; } }
 .daily-home-content-card { width: calc(100vw - 48px) !important; max-width: 1280px !important; }
+
+/* 100% browser zoom correction: compact desktop proportions */
+@media (min-width: 981px) {
+  .daily-reference-shell .reference-header { height: 72px; min-height: 72px; padding: 8px 46px; }
+  .daily-reference-shell .reference-brand img { width: 50px; height: 50px; }
+  .daily-reference-shell .reference-brand strong { font-size: 1.42rem; }
+  .daily-reference-shell .reference-brand span { font-size: .76rem; }
+  .daily-reference-shell .reference-header nav a { padding: 22px 0 15px; font-size: .92rem; }
+  .daily-reference-shell .reference-actions select,
+  .daily-reference-shell .reference-actions a { min-height: 42px; }
+
+  .daily-home-hero { grid-template-columns: minmax(300px, 450px) minmax(360px, 1fr); min-height: 330px; padding: 26px 48px 56px; gap: 38px; background-position: center 43%; }
+  .daily-home-copy .about-kicker { margin-bottom: 8px; font-size: .74rem; letter-spacing: .18em; }
+  .daily-home-copy h1 { max-width: 430px; font-size: clamp(2.55rem, 3.25vw, 3.35rem); line-height: 1.02; letter-spacing: -.04em; }
+  .daily-home-copy p { max-width: 350px; margin-top: 14px; font-size: .98rem; line-height: 1.42; }
+  .daily-home-actions { margin-top: 16px; gap: 10px; }
+  .daily-home-actions a { min-height: 38px; padding: 0 18px; font-size: .86rem; }
+
+  .daily-home-guides { width: 330px; padding: 14px; border-radius: 14px; }
+  .daily-home-guides > span { margin-bottom: 10px; font-size: .82rem; }
+  .daily-guide-photos { gap: 10px; }
+  .daily-guide-photos img { height: 112px; border-radius: 8px; }
+  .daily-guide-photos figcaption { padding-top: 7px; }
+  .daily-guide-photos strong { font-size: .78rem; line-height: 1.12; }
+  .daily-guide-photos small { font-size: .72rem; }
+
+  .daily-home-content { margin-top: -44px; padding-bottom: 26px; }
+  .daily-home-content-card { width: min(1080px, calc(100vw - 64px)) !important; max-width: 1080px !important; margin-left: auto !important; margin-right: auto !important; transform: none; border-radius: 18px 18px 0 0; }
+  .daily-home-content .daily-section-heading { padding: 14px 18px 8px; }
+  .daily-home-content .daily-section-heading h2 { font-size: clamp(1.8rem, 2.35vw, 2.28rem); }
+  .daily-home-content .heading-ornament { margin: 8px 0 8px; }
+  .daily-home-content .daily-section-heading p { margin-top: 2px; font-size: .82rem; }
+  .daily-home-content .daily-mode-tabs { gap: 10px; padding: 12px 22px 12px; }
+  .daily-home-content .daily-mode-tabs .daily-mode-card { min-height: 160px; padding: 14px 12px 12px; grid-template-columns: 32px 1fr; column-gap: 9px; border-radius: 12px; }
+  .daily-home-content .daily-mode-icon { width: 32px; height: 32px; }
+  .daily-home-content .daily-mode-icon svg { width: 20px; height: 20px; }
+  .daily-home-content .daily-mode-copy { padding-left: 9px; }
+  .daily-home-content .daily-mode-copy strong { margin: 0 0 5px; font-size: .92rem; }
+  .daily-home-content .daily-mode-copy small { font-size: .78rem; line-height: 1.25; }
+  .daily-home-content .daily-card-preview { height: 72px; margin-top: 10px; border-radius: 8px; }
+  .daily-home-content .daily-mode-card em { margin-top: 8px; padding-top: 8px; font-size: .88rem; }
+  .daily-home-content .daily-reader { margin: 0 22px 16px; padding: 14px 20px 14px 46px; font-size: .95rem; line-height: 1.45; }
+  .daily-video-panel.daily-inline-player iframe { min-height: 300px; }
+}
