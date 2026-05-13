@@ -21,7 +21,7 @@ export async function createSupabaseServerClient() {
       },
       setAll(cookiesToSet) {
         try {
-          cookiesToSet.forEach(({ name, value, options }) => cookieStore.set(name, value, options));
+          cookiesToSet.forEach(({ name, value, options }) => cookieStore.set(name, value, { ...options, path: '/', secure: true, sameSite: 'lax' }));
         } catch {
           // Server Components cannot set cookies. Auth routes/server actions can.
         }
