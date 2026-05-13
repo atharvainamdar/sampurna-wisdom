@@ -165,11 +165,12 @@ function DailyContentPage({ language, posts, initialDate, initialMode, initialMo
         </div>
       </section>
 
-      <section className="daily-calendar-secondary" id="daily-calendar-secondary">
+      <FeatureRow language={language} />
+      <section className="daily-calendar-secondary" id="daily-calendar-secondary" aria-label={copy.calendarTitle[language]}>
+        <a className="calendar-close" href="#daily-content">× Close</a>
         <div className="daily-calendar-secondary-head"><span>{copy.unlockNote[language]}</span><h2>{copy.calendarTitle[language]}</h2><p>{copy.chooseDay[language]}</p></div>
         <CalendarPanel language={language} postsByDate={postsByDate} selectedDate={selectedDate} currentMonth={currentMonth} activeMode={expandedMode || activeMode} />
       </section>
-      <FeatureRow language={language} />
     </>
   );
 }
@@ -272,7 +273,8 @@ function FeatureRow({ language }: { language: Language }) {
 
 function ReferenceHeader({ focus, language, setLanguage }: { focus: Focus; language: Language; setLanguage: (language: Language) => void }) {
   const router = useRouter();
-  return <header className="reference-header"><Link href={`/${language}`} className="reference-brand"><Image src="/legacy-assets/logo.jpeg" alt={BRAND.siteName} width={62} height={62} /><div><strong>Sampurna Samruddhi Upasana</strong><span>{BRAND.siteNameDevanagari}, समृद्ध आणि आनंदी जीवन</span></div></Link><nav>{nav.map((item) => <Link className={focus === item.key ? 'active' : ''} href={localizedPath(language, item.key)} key={item.key}>{item.label[language]}</Link>)}</nav><div className="reference-actions"><select value={language} onChange={(event) => { const next = event.target.value as Language; setLanguage(next); router.push(localizedPath(next, focus)); }} aria-label="Language">{LANGUAGES.map((item) => <option value={item.code} key={item.code}>{item.native}</option>)}</select><a href={`https://wa.me/${BRAND.whatsapp}`} target="_blank" rel="noreferrer"><Mail size={16} /> {copy.updates[language]}</a><button><Menu size={24} /></button></div></header>;
+  const calendarHref = focus === 'today' ? '#daily-calendar-secondary' : `/${language}#daily-calendar-secondary`;
+  return <header className="reference-header"><Link href={`/${language}`} className="reference-brand"><Image src="/legacy-assets/logo.jpeg" alt={BRAND.siteName} width={62} height={62} /><div><strong>Sampurna Samruddhi Upasana</strong><span>{BRAND.siteNameDevanagari}, समृद्ध आणि आनंदी जीवन</span></div></Link><nav>{nav.map((item) => <Link className={focus === item.key ? 'active' : ''} href={localizedPath(language, item.key)} key={item.key}>{item.label[language]}</Link>)}</nav><div className="reference-actions"><a className="toolbar-calendar-link" href={calendarHref}><CalendarDays size={16} /> {copy.calendarTitle[language]}</a><select value={language} onChange={(event) => { const next = event.target.value as Language; setLanguage(next); router.push(localizedPath(next, focus)); }} aria-label="Language">{LANGUAGES.map((item) => <option value={item.code} key={item.code}>{item.native}</option>)}</select><a href={`https://wa.me/${BRAND.whatsapp}`} target="_blank" rel="noreferrer"><Mail size={16} /> {copy.updates[language]}</a><button><Menu size={24} /></button></div></header>;
 }
 
 function ReferenceFooter({ language }: { language: Language }) {
