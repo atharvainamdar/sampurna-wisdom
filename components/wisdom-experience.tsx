@@ -190,7 +190,7 @@ function AboutPage({ language }: { language: Language }) {
       <div className="about-quote-bar">✧ — “{copy.birthright[language]}” — <strong>Sampurna Samruddhi Upasana</strong></div>
       <div className="about-premium-hero">
         <div className="about-photo-stage combined-founder-art">
-          <Image src="/legacy-assets/inamdar-self-help-coaching.png" alt={`${copy.founderOne[language]} and ${copy.founderTwo[language]}`} width={1567} height={1004} priority />
+          <Image src="/legacy-assets/sampurna-samruddhi-founders.png" alt={`${copy.founderOne[language]} and ${copy.founderTwo[language]}`} width={1544} height={1019} priority />
         </div>
         <div className="about-story-panel">
           <div className="about-kicker"><Leaf size={18} /> {copy.eyebrow[language]}</div>
