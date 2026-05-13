@@ -97,7 +97,7 @@ function DailyContentPage({ language, posts, initialDate, initialMode, initialMo
   const selectedDate = initialDate && postsByDate.has(initialDate) ? initialDate : fallbackDate;
   const selectedPost = postsByDate.get(selectedDate);
   const selectedUnlocked = selectedPost ? isUnlocked(selectedPost.date) : false;
-  const modes: Mode[] = ['read', 'watch', 'listen', 'pdf'];
+  const modes: Mode[] = ['read', 'watch'];
   const activeMode = initialMode && modes.includes(initialMode) ? initialMode : 'read';
   const currentMonth = monthStart(parseMonth(initialMonth) || parseDate(selectedDate));
   const selectedMode = initialExpandedMode || activeMode;
@@ -201,7 +201,7 @@ function ModePanel({ post, mode, language, autoplay = false }: { post: WisdomPos
   const media = post.media[language];
   if (mode === 'read') {
     const body = post.body[language];
-    return <div className="daily-reader daily-inline-player">{body ? body.split('\n').filter(Boolean).map((line) => <p key={line.slice(0, 48)}>{line}</p>) : <p>{copy.noContent[language]}</p>}</div>;
+    return <div className="daily-reader daily-inline-player"><h3>{post.title[language]}</h3>{body ? body.split('\n').filter(Boolean).map((line) => <p key={line.slice(0, 48)}>{line}</p>) : <p>{copy.noContent[language]}</p>}</div>;
   }
   if (mode === 'watch') {
     const videoUrl = media.videoUrl || post.media.en.videoUrl;
