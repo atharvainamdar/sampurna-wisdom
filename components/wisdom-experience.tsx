@@ -36,7 +36,10 @@ const copy = {
   founderTwo: { en: 'Smt. Sujata Inamdar', hi: 'सौ. सुजाता इनामदार', mr: 'सौ. सुजाता इनामदार' },
   founderTwoRole: { en: 'Co-founder', hi: 'सह-संस्थापक', mr: 'सह-संस्थापक' },
   calendarTitle: { en: 'Content calendar', hi: 'सामग्री कैलेंडर', mr: 'साहित्य दिनदर्शिका' },
+  todayContent: { en: 'Today’s free content', hi: 'आज की निःशुल्क सामग्री', mr: 'आजचे मोफत साहित्य' },
   unlockNote: { en: 'New content unlocks every morning at 6 AM. Future dates stay locked.', hi: 'नई सामग्री हर सुबह ६ बजे खुलती है। भविष्य की तारीखें लॉक रहती हैं।', mr: 'नवीन साहित्य दररोज सकाळी ६ वाजता उघडते. पुढील तारखा लॉक राहतात.' },
+  chooseDay: { en: 'Choose an unlocked day', hi: 'खुला हुआ दिन चुनें', mr: 'उघडलेला दिवस निवडा' },
+  selectedDay: { en: 'Selected day', hi: 'चुना हुआ दिन', mr: 'निवडलेला दिवस' },
   locked: { en: 'This day is locked.', hi: 'यह दिन लॉक है।', mr: 'हा दिवस लॉक आहे.' },
   noContent: { en: 'No content is available for this day.', hi: 'इस दिन के लिए सामग्री उपलब्ध नहीं है।', mr: 'या दिवसासाठी साहित्य उपलब्ध नाही.' },
   noAudio: { en: 'Audio is not available for this day yet.', hi: 'इस दिन का ऑडियो अभी उपलब्ध नहीं है।', mr: 'या दिवसाचा ऑडिओ अद्याप उपलब्ध नाही.' },
@@ -101,7 +104,9 @@ function DailyContentPage({ language, posts, initialDate, initialMode, initialMo
         <FounderVisual language={language} />
       </section>
 
-      <section className="daily-console" id="daily-content">
+      <section className="daily-section-shell" id="daily-content">
+        <div className="daily-section-heading"><span>{copy.free[language]}</span><h2>{copy.todayContent[language]}</h2><p>{copy.unlockNote[language]}</p></div>
+        <div className="daily-console">
         <CalendarPanel language={language} postsByDate={postsByDate} selectedDate={selectedDate} currentMonth={currentMonth} activeMode={activeMode} />
         <article className="daily-content-card">
           {selectedPost && selectedUnlocked ? (
@@ -122,6 +127,7 @@ function DailyContentPage({ language, posts, initialDate, initialMode, initialMo
             </>
           ) : <LockedPanel language={language} hasPost={Boolean(selectedPost)} />}
         </article>
+        </div>
       </section>
       <FeatureRow language={language} />
     </>
@@ -134,7 +140,7 @@ function CalendarPanel({ language, postsByDate, selectedDate, currentMonth, acti
   const weekDays = language === 'en' ? ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'] : language === 'hi' ? ['रवि', 'सोम', 'मंगल', 'बुध', 'गुरु', 'शुक्र', 'शनि'] : ['रवि', 'सोम', 'मंगळ', 'बुध', 'गुरु', 'शुक्र', 'शनि'];
   return (
     <aside className="daily-calendar-card">
-      <div className="calendar-card-top"><div><strong>{copy.calendarTitle[language]}</strong><small>{copy.unlockNote[language]}</small></div><CalendarDays size={26} /></div>
+      <div className="calendar-card-top"><div><strong>{copy.calendarTitle[language]}</strong><small>{copy.chooseDay[language]}</small></div><CalendarDays size={26} /></div>
       <div className="calendar-month-row"><Link href={dailyHref(language, selectedDate, activeMode, monthKey(addMonths(currentMonth, -1)))} aria-label="Previous month"><ChevronLeft size={18} /></Link><b>{label}</b><Link href={dailyHref(language, selectedDate, activeMode, monthKey(addMonths(currentMonth, 1)))} aria-label="Next month"><ChevronRight size={18} /></Link></div>
       <div className="calendar-grid-mini week-labels">{weekDays.map((day) => <span key={day}>{day}</span>)}</div>
       <div className="calendar-grid-mini">
