@@ -169,7 +169,7 @@ function CalendarPanel({ language, postsByDate, selectedDate, currentMonth, acti
   return (
     <aside className="daily-calendar-card">
       <div className="calendar-card-top"><div><strong>{copy.calendarTitle[language]}</strong><small>{copy.chooseDay[language]}</small></div><CalendarDays size={26} /></div>
-      <div className="calendar-month-row"><Link href={dailyHref(language, selectedDate, activeMode, monthKey(addMonths(currentMonth, -1)))} aria-label="Previous month"><ChevronLeft size={18} /></Link><b>{label}</b><Link href={dailyHref(language, selectedDate, activeMode, monthKey(addMonths(currentMonth, 1)))} aria-label="Next month"><ChevronRight size={18} /></Link></div>
+      <div className="calendar-month-row"><Link href={calendarMonthHref(language, selectedDate, activeMode, monthKey(addMonths(currentMonth, -1)))} aria-label="Previous month"><ChevronLeft size={18} /></Link><b>{label}</b><Link href={calendarMonthHref(language, selectedDate, activeMode, monthKey(addMonths(currentMonth, 1)))} aria-label="Next month"><ChevronRight size={18} /></Link></div>
       <div className="calendar-grid-mini week-labels">{weekDays.map((day) => <span key={day}>{day}</span>)}</div>
       <div className="calendar-grid-mini">
         {days.map((date) => {
@@ -300,6 +300,7 @@ function parseDate(date: string) { return new Date(`${date}T00:00:00`); }
 function parseMonth(month?: string) { return month && /^\d{4}-\d{2}$/.test(month) ? new Date(`${month}-01T00:00:00`) : null; }
 function monthKey(date: Date) { return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`; }
 function dailyHref(language: Language, date: string, mode: Mode, month: string) { return `/${language}?date=${date}&mode=${mode}&month=${month}#daily-content`; }
+function calendarMonthHref(language: Language, date: string, mode: Mode, month: string) { return `/${language}?date=${date}&mode=${mode}&month=${month}#daily-calendar-secondary`; }
 function monthStart(date: Date) { return new Date(date.getFullYear(), date.getMonth(), 1); }
 function addMonths(date: Date, amount: number) { return new Date(date.getFullYear(), date.getMonth() + amount, 1); }
 function calendarDays(month: Date) { const start = new Date(month.getFullYear(), month.getMonth(), 1); start.setDate(start.getDate() - start.getDay()); return Array.from({ length: 42 }, (_, index) => { const date = new Date(start); date.setDate(start.getDate() + index); return date; }); }
