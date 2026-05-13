@@ -8,9 +8,9 @@ This repository is intentionally separate from the current live website so the l
 
 Sampurna Samruddhi should be a free daily wisdom platform for Indian users.
 
-Public users should be able to:
-
 Public users can also land directly on language-first sections such as `/en`, `/hi`, `/mr`, `/hi/library`, and `/mr/wisdom/...`.
+
+Public users should be able to:
 
 - read the daily wisdom message
 - watch the video for their language
@@ -39,6 +39,15 @@ Admin users should eventually be able to:
 ## Environment
 
 Copy `.env.example` to `.env.local` when a Supabase project is ready. Do not commit real keys.
+
+Use these environment variables when connecting the website to Supabase:
+
+```bash
+NEXT_PUBLIC_SUPABASE_URL=https://lprsgafivalqxgusagln.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-public-key
+```
+
+Never commit database passwords, service-role keys, or Supabase personal access tokens.
 
 ## Local development
 
