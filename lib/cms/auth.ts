@@ -6,11 +6,11 @@ export type AdminGate =
   | { status: 'not-admin'; email?: string }
   | { status: 'admin'; email?: string; userId: string };
 
-export async function getAdminGate(): Promise<AdminGate> {
+export async function getAdminGate(token?: string): Promise<AdminGate> {
   if (!hasSupabaseEnv()) return { status: 'missing-env' };
 
-  const supabase = await createSupabaseServerClient();
-  const adminToken = await getAdminAccessToken();
+  const adminToken = token || await getAdminAccessToken();
+  const supabase = await createSupabaseServerClient(adminToken);
   const { data: userData } = adminToken ? await supabase.auth.getUser(adminToken) : await supabase.auth.getUser();
   const user = userData.user;
 
