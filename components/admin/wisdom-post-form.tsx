@@ -21,10 +21,12 @@ export function WisdomPostForm() {
 
     try {
       const form = event.currentTarget;
+      const token = localStorage.getItem('sw-admin-token');
       const response = await fetch('/admin/content/save', {
         method: 'POST',
         body: new FormData(form),
         credentials: 'same-origin',
+        headers: token ? { Authorization: `Bearer ${token}` } : undefined,
       });
       const result = (await response.json()) as SaveWisdomState;
 

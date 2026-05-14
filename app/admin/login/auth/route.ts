@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createServerClient } from '@supabase/ssr';
-import { ADMIN_TOKEN_COOKIE } from '@/lib/supabase/server';
+import { ADMIN_CLIENT_TOKEN_COOKIE, ADMIN_TOKEN_COOKIE } from '@/lib/supabase/server';
 
 function loginRedirect(request: NextRequest, message?: string) {
   const url = request.nextUrl.clone();
@@ -8,6 +8,30 @@ function loginRedirect(request: NextRequest, message?: string) {
   if (message) url.searchParams.set('message', message);
   else url.searchParams.delete('message');
   return NextResponse.redirect(url, { status: 303 });
+}
+
+function safeJson(value: string) {
+  return JSON.stringify(value).replace(/</g, '\\u003c');
+}
+
+function loginCompleteResponse(request: NextRequest, token: string, maxAge: number) {
+  const destination = new URL('/admin/content', request.url).toString();
+  return new NextResponse(`<!doctype html>
+<html><head><meta charset="utf-8"><meta name="robots" content="noindex"><title>Signing in…</title></head>
+<body><p>Signing you in…</p><script>
+const token = ${safeJson(token)};
+const maxAge = ${Math.max(0, maxAge)};
+try {
+  localStorage.setItem('sw-admin-token', token);
+  document.cookie = '${ADMIN_CLIENT_TOKEN_COOKIE}=' + token + '; Max-Age=' + maxAge + '; Path=/; SameSite=Lax; Secure';
+} catch (error) {}
+window.location.replace(${safeJson(destination)});
+</script><noscript><a href="${destination}">Continue to admin</a></noscript></body></html>`, {
+    headers: {
+      'cache-control': 'no-store',
+      'content-type': 'text/html; charset=utf-8',
+    },
+  });
 }
 
 export async function POST(request: NextRequest) {
@@ -20,7 +44,7 @@ export async function POST(request: NextRequest) {
   const email = String(formData.get('email') || '').trim();
   const password = String(formData.get('password') || '');
 
-  let response = NextResponse.redirect(new URL('/admin/content', request.url), { status: 303 });
+  const response = NextResponse.next();
   const supabase = createServerClient(url, anonKey, {
     cookies: {
       getAll() {
@@ -43,17 +67,27 @@ export async function POST(request: NextRequest) {
 
   if (!adminRole) {
     await supabase.auth.signOut();
-    response = loginRedirect(request, 'Only approved admins can sign in.');
-  } else if (data.session?.access_token) {
-    response.cookies.set(ADMIN_TOKEN_COOKIE, data.session.access_token, {
-      httpOnly: true,
-      maxAge: data.session.expires_in,
-      partitioned: true,
-      path: '/',
-      sameSite: 'none',
-      secure: true,
-    });
+    return loginRedirect(request, 'Only approved admins can sign in.');
   }
 
-  return response;
+  if (!data.session?.access_token) return loginRedirect(request, 'Login failed.');
+
+  const completeResponse = loginCompleteResponse(request, data.session.access_token, data.session.expires_in);
+  response.cookies.getAll().forEach((cookie) => completeResponse.cookies.set(cookie));
+  completeResponse.cookies.set(ADMIN_TOKEN_COOKIE, data.session.access_token, {
+    httpOnly: true,
+    maxAge: data.session.expires_in,
+    partitioned: true,
+    path: '/',
+    sameSite: 'none',
+    secure: true,
+  });
+  completeResponse.cookies.set(ADMIN_CLIENT_TOKEN_COOKIE, data.session.access_token, {
+    maxAge: data.session.expires_in,
+    path: '/',
+    sameSite: 'lax',
+    secure: true,
+  });
+
+  return completeResponse;
 }

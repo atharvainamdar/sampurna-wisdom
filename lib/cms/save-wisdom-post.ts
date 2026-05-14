@@ -28,9 +28,9 @@ function requireValue(value: string, label: string) {
   return value;
 }
 
-export async function createWisdomPostFromForm(formData: FormData): Promise<SaveWisdomState> {
+export async function createWisdomPostFromForm(formData: FormData, token?: string): Promise<SaveWisdomState> {
   try {
-    const gate = await getAdminGate();
+    const gate = await getAdminGate(token);
     if (gate.status !== 'admin') throw new Error('Only approved admins can save content.');
 
     const contentDate = requireValue(text(formData, 'content_date'), 'Content date');
@@ -43,7 +43,7 @@ export async function createWisdomPostFromForm(formData: FormData): Promise<Save
     if (!pillars.includes(pillar)) throw new Error('Please choose a valid pillar.');
 
     const now = new Date().toISOString();
-    const supabase = await createSupabaseServerClient();
+    const supabase = await createSupabaseServerClient(token);
     const { data: post, error: postError } = await supabase
       .from('wisdom_posts')
       .insert({
