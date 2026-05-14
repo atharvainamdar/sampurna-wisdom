@@ -21,8 +21,8 @@ type WisdomRow = {
   }> | null;
 };
 
-async function getPosts() {
-  const supabase = await createSupabaseServerClient();
+async function getPosts(token?: string) {
+  const supabase = await createSupabaseServerClient(token);
   const { data, error } = await supabase
     .from('wisdom_posts')
     .select('id, slug, content_date, pillar, status, published_at, wisdom_translations(language, title, video_url, audio_url, resources)')
@@ -33,14 +33,27 @@ async function getPosts() {
   return (data ?? []) as WisdomRow[];
 }
 
-export default async function AdminContentPage() {
-  const gate = await getAdminGate();
+type AdminContentPageProps = {
+  searchParams?: Promise<{ sw_admin_token?: string }>;
+};
+
+export default async function AdminContentPage({ searchParams }: AdminContentPageProps) {
+  const params = await searchParams;
+  const queryToken = params?.sw_admin_token;
+  const gate = await getAdminGate(queryToken);
   if (gate.status !== 'admin') return <AdminGateCard gate={gate} />;
 
-  const posts = await getPosts();
+  const posts = await getPosts(queryToken);
 
   return (
     <AdminFrame title="Daily wisdom editor" eyebrow="Create / edit content" email={gate.email}>
+      {queryToken ? (
+        <script
+          dangerouslySetInnerHTML={{
+            __html: "try { const url = new URL(window.location.href); url.searchParams.delete('sw_admin_token'); history.replaceState(null, '', url.toString()); } catch (error) {}",
+          }}
+        />
+      ) : null}
       <section className="admin-board single-board content-editor-board">
         <WisdomPostForm />
         <WisdomPostList posts={posts} />
