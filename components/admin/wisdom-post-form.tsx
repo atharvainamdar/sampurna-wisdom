@@ -21,10 +21,12 @@ export function WisdomPostForm() {
 
     try {
       const form = event.currentTarget;
+      const formData = new FormData(form);
       const token = localStorage.getItem('sw-admin-token');
+      if (token) formData.set('admin_token', token);
       const response = await fetch('/admin/content/save', {
         method: 'POST',
-        body: new FormData(form),
+        body: formData,
         credentials: 'same-origin',
         headers: token ? { Authorization: `Bearer ${token}` } : undefined,
       });
