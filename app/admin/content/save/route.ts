@@ -7,6 +7,8 @@ function bearerToken(request: Request) {
 }
 
 export async function POST(request: Request) {
-  const result = await createWisdomPostFromForm(await request.formData(), bearerToken(request));
+  const formData = await request.formData();
+  const formToken = formData.get('admin_token');
+  const result = await createWisdomPostFromForm(formData, bearerToken(request) || (typeof formToken === 'string' ? formToken : undefined));
   return NextResponse.json(result, { status: result.ok ? 200 : 400 });
 }
