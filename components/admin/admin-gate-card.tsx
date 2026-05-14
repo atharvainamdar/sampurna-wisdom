@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ADMIN_CLIENT_TOKEN_COOKIE } from '@/lib/supabase/server';
+import { AdminSessionFallbackEditor } from '@/components/admin/admin-session-fallback-editor';
 import type { AdminGate } from '@/lib/cms/auth';
 
 export function AdminGateCard({ gate }: { gate: Exclude<AdminGate, { status: 'admin' }> }) {
@@ -28,16 +28,10 @@ export function AdminGateCard({ gate }: { gate: Exclude<AdminGate, { status: 'ad
         <span className="section-kicker">Protected admin area</span>
         <h1>{copy.title}</h1>
         <p>{copy.body}</p>
-        {gate.status === 'signed-out' ? (
-          <script
-            dangerouslySetInnerHTML={{
-              __html: `try {\n  const token = localStorage.getItem('sw-admin-token');\n  const restored = sessionStorage.getItem('sw-admin-restored');\n  if (token && !restored) {\n    sessionStorage.setItem('sw-admin-restored', '1');\n    document.cookie = '${ADMIN_CLIENT_TOKEN_COOKIE}=' + token + '; Max-Age=3600; Path=/; SameSite=Lax; Secure';\n    const url = new URL(window.location.href);\n    url.searchParams.set('sw_admin_token', token);\n    window.location.replace(url.toString());\n  }\n} catch (error) {}`,
-            }}
-          />
-        ) : null}
         {gate.status === 'not-admin' && gate.email ? <p className="admin-note">Signed in as {gate.email}</p> : null}
         {copy.action ? <Link className="primary-action" href={copy.action.href}>{copy.action.label}</Link> : null}
       </section>
+      {gate.status === 'signed-out' ? <AdminSessionFallbackEditor /> : null}
     </main>
   );
 }
