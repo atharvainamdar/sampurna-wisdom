@@ -9,10 +9,18 @@ export type AdminGate =
 export async function getAdminGate(token?: string): Promise<AdminGate> {
   if (!hasSupabaseEnv()) return { status: 'missing-env' };
 
-  const adminToken = token || await getAdminAccessToken();
-  const supabase = await createSupabaseServerClient(adminToken);
-  const { data: userData } = adminToken ? await supabase.auth.getUser(adminToken) : await supabase.auth.getUser();
-  const user = userData.user;
+  let supabase = await createSupabaseServerClient(undefined, { useAdminCookie: false });
+  let { data: userData } = await supabase.auth.getUser();
+  let user = userData.user;
+
+  if (!user) {
+    const adminToken = token || await getAdminAccessToken();
+    if (adminToken) {
+      supabase = await createSupabaseServerClient(adminToken);
+      const tokenUser = await supabase.auth.getUser(adminToken);
+      user = tokenUser.data.user;
+    }
+  }
 
   if (!user) return { status: 'signed-out' };
 

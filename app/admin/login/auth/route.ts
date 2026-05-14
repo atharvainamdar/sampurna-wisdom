@@ -51,7 +51,7 @@ export async function POST(request: NextRequest) {
         return request.cookies.getAll();
       },
       setAll(cookiesToSet) {
-        cookiesToSet.forEach(({ name, value, options }) => response.cookies.set(name, value, { ...options, partitioned: true, path: '/', secure: true, sameSite: 'none' }));
+        cookiesToSet.forEach(({ name, value, options }) => response.cookies.set(name, value, { ...options, path: '/', secure: true, sameSite: 'lax' }));
       },
     },
   });
@@ -77,9 +77,8 @@ export async function POST(request: NextRequest) {
   completeResponse.cookies.set(ADMIN_TOKEN_COOKIE, data.session.access_token, {
     httpOnly: true,
     maxAge: data.session.expires_in,
-    partitioned: true,
     path: '/',
-    sameSite: 'none',
+    sameSite: 'lax',
     secure: true,
   });
   completeResponse.cookies.set(ADMIN_CLIENT_TOKEN_COOKIE, data.session.access_token, {
