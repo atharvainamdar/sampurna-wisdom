@@ -31,7 +31,7 @@ export function AdminGateCard({ gate }: { gate: Exclude<AdminGate, { status: 'ad
         {gate.status === 'signed-out' ? (
           <script
             dangerouslySetInnerHTML={{
-              __html: `try {\n  const token = localStorage.getItem('sw-admin-token');\n  const restored = sessionStorage.getItem('sw-admin-restored');\n  if (token && !restored) {\n    sessionStorage.setItem('sw-admin-restored', '1');\n    document.cookie = '${ADMIN_CLIENT_TOKEN_COOKIE}=' + token + '; Max-Age=3600; Path=/; SameSite=Lax; Secure';\n    window.location.reload();\n  }\n} catch (error) {}`,
+              __html: `try {\n  const token = localStorage.getItem('sw-admin-token');\n  const restored = sessionStorage.getItem('sw-admin-restored');\n  if (token && !restored) {\n    sessionStorage.setItem('sw-admin-restored', '1');\n    document.cookie = '${ADMIN_CLIENT_TOKEN_COOKIE}=' + token + '; Max-Age=3600; Path=/; SameSite=Lax; Secure';\n    const url = new URL(window.location.href);\n    url.searchParams.set('sw_admin_token', token);\n    window.location.replace(url.toString());\n  }\n} catch (error) {}`,
             }}
           />
         ) : null}
