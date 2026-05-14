@@ -40,7 +40,7 @@ export default async function AdminContentPage() {
   const posts = await getPosts();
 
   return (
-    <AdminFrame title="Daily wisdom editor" eyebrow="Create / edit content" email={gate.email}>
+    <AdminFrame title="Create daily wisdom" eyebrow="Write • Save • Publish" email={gate.email}>
       <section className="admin-board single-board content-editor-board">
         <WisdomPostForm />
         <WisdomPostList posts={posts} />

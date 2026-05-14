@@ -1,21 +1,30 @@
-import { AdminChrome } from '@/components/admin-chrome';
+import Link from 'next/link';
 import { FileAudio, FileText, ImageIcon, Video } from 'lucide-react';
+import { AdminChrome } from '@/components/admin-chrome';
 
 const cards = [
-  { icon: Video, title: 'Language videos', text: 'Paste YouTube links separately for English, Hindi, and Marathi.' },
-  { icon: FileAudio, title: 'Audio library', text: 'Upload pravachan/audio files per language for mobile listening.' },
-  { icon: FileText, title: 'PPT / PDF', text: 'Attach downloadable study material and presentation decks.' },
-  { icon: ImageIcon, title: 'Thumbnails', text: 'Manage visual covers for daily posts and library cards.' },
+  { icon: Video, title: 'YouTube video', text: 'Paste one video URL per language inside the Create Wisdom form.' },
+  { icon: FileAudio, title: 'Audio link', text: 'Add MP3/audio links per language in the same content form.' },
+  { icon: FileText, title: 'PDF / PPT resources', text: 'Use the Resources box: Label | https://example.com/file.pdf' },
+  { icon: ImageIcon, title: 'Thumbnails', text: 'Public video thumbnails come from YouTube automatically for now.' },
 ];
 
 export default function AdminMediaPage() {
   return (
-    <AdminChrome title="Media library" eyebrow="Upload once, reuse easily">
+    <AdminChrome title="Media links" eyebrow="Video • Audio • PDF">
       <section className="admin-board single-board">
-        <div className="media-grid expanded-media-grid">
+        <div className="admin-command-card">
+          <div>
+            <span className="section-kicker">Simple media system</span>
+            <h2>Add media while creating wisdom.</h2>
+            <p>No separate confusing upload panel. Paste video, audio, and PDF links in the post form for English, Hindi, and Marathi.</p>
+          </div>
+          <Link className="primary-action" href="/admin/content">Open content form</Link>
+        </div>
+        <div className="admin-action-grid">
           {cards.map((card) => {
             const Icon = card.icon;
-            return <button key={card.title}><Icon /><strong>{card.title}</strong><span>{card.text}</span></button>;
+            return <article className="admin-action-card" key={card.title}><span><Icon size={24} /></span><h3>{card.title}</h3><p>{card.text}</p></article>;
           })}
         </div>
       </section>
