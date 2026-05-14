@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { AdminSessionFallbackEditor } from '@/components/admin/admin-session-fallback-editor';
+import { AdminSessionRestorer } from '@/components/admin/admin-session-restorer';
 import type { AdminGate } from '@/lib/cms/auth';
 
 export function AdminGateCard({ gate }: { gate: Exclude<AdminGate, { status: 'admin' }> }) {
@@ -31,6 +32,7 @@ export function AdminGateCard({ gate }: { gate: Exclude<AdminGate, { status: 'ad
         {gate.status === 'not-admin' && gate.email ? <p className="admin-note">Signed in as {gate.email}</p> : null}
         {copy.action ? <Link className="primary-action" href={copy.action.href}>{copy.action.label}</Link> : null}
       </section>
+      {gate.status === 'signed-out' ? <AdminSessionRestorer /> : null}
       {gate.status === 'signed-out' ? <AdminSessionFallbackEditor /> : null}
     </main>
   );

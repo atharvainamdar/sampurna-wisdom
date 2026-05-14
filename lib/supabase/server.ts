@@ -13,11 +13,11 @@ export async function getAdminAccessToken() {
   return cookieStore.get(ADMIN_TOKEN_COOKIE)?.value || cookieStore.get(ADMIN_CLIENT_TOKEN_COOKIE)?.value;
 }
 
-export async function createSupabaseServerClient(accessToken?: string) {
+export async function createSupabaseServerClient(accessToken?: string, options?: { useAdminCookie?: boolean }) {
   const cookieStore = await cookies();
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-  const adminToken = accessToken || cookieStore.get(ADMIN_TOKEN_COOKIE)?.value || cookieStore.get(ADMIN_CLIENT_TOKEN_COOKIE)?.value;
+  const adminToken = accessToken || (options?.useAdminCookie === false ? undefined : cookieStore.get(ADMIN_TOKEN_COOKIE)?.value || cookieStore.get(ADMIN_CLIENT_TOKEN_COOKIE)?.value);
 
   if (!url || !anonKey) {
     throw new Error('Supabase server client needs NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY.');
@@ -31,7 +31,7 @@ export async function createSupabaseServerClient(accessToken?: string) {
       },
       setAll(cookiesToSet) {
         try {
-          cookiesToSet.forEach(({ name, value, options }) => cookieStore.set(name, value, { ...options, partitioned: true, path: '/', secure: true, sameSite: 'none' }));
+          cookiesToSet.forEach(({ name, value, options }) => cookieStore.set(name, value, { ...options, path: '/', secure: true, sameSite: 'lax' }));
         } catch {
           // Server Components cannot set cookies. Auth routes/server actions can.
         }

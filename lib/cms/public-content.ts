@@ -199,7 +199,7 @@ export async function getPublishedWisdomPosts() {
   if (!hasSupabaseEnv()) return fallbackPosts;
 
   try {
-    const supabase = await createSupabaseServerClient();
+    const supabase = await createSupabaseServerClient(undefined, { useAdminCookie: false });
     const { data, error } = await supabase
       .from('wisdom_posts')
       .select('slug, content_date, pillar, status, featured, tags, wisdom_translations(language, title, excerpt, body, reflection_prompt, video_url, audio_url, resources)')
