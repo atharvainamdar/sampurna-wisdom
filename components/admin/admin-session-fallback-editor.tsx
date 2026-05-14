@@ -22,8 +22,8 @@ export function AdminSessionFallbackEditor() {
       <div className="admin-panel saved-posts-panel">
         <div className="editor-header-row">
           <div>
-            <h2>Session restored for saving</h2>
-            <p>You can save new draft wisdom here while the preview browser finishes restoring the full admin page.</p>
+            <h2>Create daily wisdom</h2>
+            <p>Your admin session is active in this browser. Use this simple editor to save content safely.</p>
           </div>
         </div>
       </div>

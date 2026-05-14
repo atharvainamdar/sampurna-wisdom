@@ -20,11 +20,12 @@ type WisdomRow = {
 
 export function WisdomPostList({ posts }: { posts: WisdomRow[] }) {
   return (
-    <div className="admin-panel saved-posts-panel">
-      <div className="editor-header-row">
+    <div className="admin-panel saved-posts-panel" id="saved-posts">
+      <div className="editor-header-row saved-posts-heading">
         <div>
+          <span className="section-kicker">Review</span>
           <h2>Saved wisdom</h2>
-          <p>{posts.length ? 'Recent posts from Supabase.' : 'No saved posts yet. Create the first one above.'}</p>
+          <p>{posts.length ? 'Recent drafts and published posts from Supabase.' : 'No saved posts yet. Create the first one above.'}</p>
         </div>
       </div>
       <div className="saved-post-list">
@@ -33,14 +34,18 @@ export function WisdomPostList({ posts }: { posts: WisdomRow[] }) {
           const title = post.wisdom_translations?.find((item) => item.language === 'en')?.title || post.wisdom_translations?.[0]?.title || post.slug;
           return (
             <article className="saved-post-row" key={post.id}>
-              <div>
+              <div className="saved-date-chip">
+                <strong>{new Date(`${post.content_date}T00:00:00`).toLocaleDateString('en-IN', { day: '2-digit' })}</strong>
+                <span>{new Date(`${post.content_date}T00:00:00`).toLocaleDateString('en-IN', { month: 'short' })}</span>
+              </div>
+              <div className="saved-post-copy">
                 <span>{post.content_date} • {post.pillar}</span>
                 <h3>{title}</h3>
                 <small>{languages}</small>
               </div>
               <div className="saved-post-actions">
                 <b className={`status-badge ${post.status}`}>{post.status}</b>
-                {post.status === 'published' ? <Link href={`/en/wisdom/${post.slug}`}>View</Link> : null}
+                {post.status === 'published' ? <Link href={`/en/wisdom/${post.slug}`}>View public page</Link> : null}
               </div>
             </article>
           );
